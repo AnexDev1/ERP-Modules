@@ -1,0 +1,31 @@
+name: Deploy Custom Addons to Production VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            echo "==> Pulling latest changes from GitHub..."
+            cd /opt/odoo/instances/odoo19/addons
+            git pull origin main
+
+            echo "==> Restarting Odoo 19 container..."
+            docker restart odoo19-odoo-1
+
+            echo "==> Checking container status..."
+            docker ps --filter "name=odoo19-odoo-1" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            echo "==> Deployment completed successfully!"

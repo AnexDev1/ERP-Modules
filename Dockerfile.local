@@ -1,0 +1,4 @@
+FROM odoo:19
+USER root
+RUN pip3 install --break-system-packages qifparse
+USER odoo

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Extend Sale Order Form View to Add Sale Type -->
+    <record id="view_order_form_inherit_credit_cash" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.credit.cash</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]/group[1]" position="inside">
+                <field name="sale_type"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_sale_type_orders_tree" model="ir.ui.view">
+        <field name="name">sale.order.type.list</field>
+        <field name="model">sale.order</field>
+        <!--field name="inherit_id" ref="sale.view_order_tree"/-->
+        <field name="arch" type="xml">
+            <list string="Sales Orders" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="sale_type"/>
+                <field name="amount_total"/>
+                <field name="invoice_status"
+                    decoration-success="invoice_status == 'invoiced'"
+                    decoration-info="invoice_status == 'to invoice'"
+                    decoration-warning="invoice_status == 'upselling'"
+                    widget="badge" optional="show"/>
+                <field name="state"
+                    decoration-success="state == 'sale' or state == 'done'"
+                    decoration-info="state == 'draft' or state == 'sent'"
+                    widget="badge" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Actions for Cash and Credit Orders -->
+    <record id="action_cash_orders" model="ir.actions.act_window">
+        <field name="name">Cash Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_type_orders_tree"/>
+        <field name="domain">
+            [('sale_type', '=', 'cash'),
+            ('state', 'in', ('sale', 'done'))]</field>
+    </record>
+
+    <record id="action_credit_orders" model="ir.actions.act_window">
+        <field name="name">Credit Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_type_orders_tree"/>
+        <field name="domain">
+            [('sale_type', '=', 'credit'),
+            ('state', 'in', ('sale', 'done'))]</field>
+    </record>
+    </data>
+</odoo>

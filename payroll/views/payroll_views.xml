@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.list</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="number"/>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="basic_wage" optional="hide"/>
+                <field name="gross_wage"/>
+                <field name="net_wage"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hr_payslip_form" model="ir.ui.view">
+        <field name="name">hr.payslip.form</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="compute_sheet" type="object" string="Compute Sheet" class="btn-primary" invisible="state == 'done'"/>
+                    <button name="action_payslip_verify" type="object" string="Verify" invisible="state != 'draft'"/>
+                    <button name="action_payslip_done" type="object" string="Confirm" class="btn-primary" invisible="state not in ('draft', 'verify')"/>
+                    <button name="action_payslip_draft" type="object" string="Set to Draft" invisible="state == 'draft'"/>
+                    <button name="action_payslip_cancel" type="object" string="Cancel" invisible="state == 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verify,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="contract_id"/>
+                            <field name="struct_id"/>
+                            <field name="number"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="payslip_run_id"/>
+                            <field name="basic_wage"/>
+                            <field name="gross_wage"/>
+                            <field name="net_wage"/>
+                            <field name="paid"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary Computation">
+                            <field name="line_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="quantity"/>
+                                    <field name="amount"/>
+                                    <field name="rate"/>
+                                    <field name="total"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_payslip_search" model="ir.ui.view">
+        <field name="name">hr.payslip.search</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="number"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_run_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.run.list</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hr_payslip_run_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_validate" type="object" string="Validate" class="btn-primary" invisible="state == 'close'"/>
+                    <button name="action_draft" type="object" string="Set to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="struct_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <field name="slip_ids"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_payroll_structure_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.list</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hr_payroll_structure_form" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.form</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="parent_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <field name="rule_ids"/>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_salary_rule_tree" model="ir.ui.view">
+        <field name="name">hr.salary.rule.list</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="amount_select"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hr_salary_rule_form" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="category_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Computation">
+                        <field name="amount_select"/>
+                        <field name="amount_fix" invisible="amount_select != 'fix'"/>
+                        <field name="amount_percentage" invisible="amount_select != 'percentage'"/>
+                        <field name="amount_percentage_base" invisible="amount_select != 'percentage'"/>
+                        <field name="amount_python_compute" invisible="amount_select != 'code'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip" model="ir.actions.act_window">
+        <field name="name">Employee Payslips</field>
+        <field name="res_model">hr.payslip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_hr_payslip_run" model="ir.actions.act_window">
+        <field name="name">Payslip Batches</field>
+        <field name="res_model">hr.payslip.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_hr_payroll_structure" model="ir.actions.act_window">
+        <field name="name">Salary Structures</field>
+        <field name="res_model">hr.payroll.structure</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_hr_salary_rule" model="ir.actions.act_window">
+        <field name="name">Salary Rules</field>
+        <field name="res_model">hr.salary.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_payroll_root" name="Payroll" sequence="45"/>
+    <menuitem id="menu_hr_payslip" name="Employee Payslips" parent="menu_payroll_root" action="action_hr_payslip" sequence="1"/>
+    <menuitem id="menu_hr_payslip_run" name="Payslip Batches" parent="menu_payroll_root" action="action_hr_payslip_run" sequence="2"/>
+    <menuitem id="menu_payroll_config" name="Configuration" parent="menu_payroll_root" sequence="100"/>
+    <menuitem id="menu_hr_payroll_structure" name="Salary Structures" parent="menu_payroll_config" action="action_hr_payroll_structure" sequence="1"/>
+    <menuitem id="menu_hr_salary_rule" name="Salary Rules" parent="menu_payroll_config" action="action_hr_salary_rule" sequence="2"/>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <data>
+    <record id="view_users_form_sales_target" model="ir.ui.view">
+        <field name="name">res.users.form.sales.target</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']" position="inside">
+                <group string="Sales Targets">
+                    <!--field name="daily_sales_target"/-->
+                    <!--field name="current_weekly_target" readonly="1"/-->
+                    <!--field name="current_monthly_target" readonly="1"/-->
+                </group>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>

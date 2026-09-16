@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Record Rules for Warehouse Restriction -->
+        
+        <!-- Warehouse: Restrict to allowed warehouses for normal users -->
+        <record id="stock_warehouse_user_restriction_rule" model="ir.rule">
+            <field name="name">Warehouse: Allowed Warehouses Only</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[('id', 'in', user.allowed_warehouse_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="0"/>
+        </record>
+
+        <!-- Warehouse: Admin can see all warehouses -->
+        <record id="stock_warehouse_admin_bypass_rule" model="ir.rule">
+            <field name="name">Warehouse: Admin All Access</field>
+            <field name="model_id" ref="stock.model_stock_warehouse"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <!-- Picking Type (Operations Types): Restrict to allowed warehouses -->
+        <record id="stock_picking_type_user_restriction_rule" model="ir.rule">
+            <field name="name">Operation Types: Allowed Warehouses Only</field>
+            <field name="model_id" ref="stock.model_stock_picking_type"/>
+            <field name="domain_force">['|', ('warehouse_id', '=', False), ('warehouse_id', 'in', user.allowed_warehouse_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+           
+        </record>
+
+        <!-- Picking Type (Operations Types): Admin can see all -->
+        <record id="stock_picking_type_admin_bypass_rule" model="ir.rule">
+            <field name="name">Operation Types: Admin All Access</field>
+            <field name="model_id" ref="stock.model_stock_picking_type"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <!-- Picking (Transfers): Restrict to allowed warehouses -->
+        <record id="stock_picking_user_restriction_rule" model="ir.rule">
+            <field name="name">Transfers: Allowed Warehouses Only</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="domain_force">['|', ('picking_type_id.warehouse_id', '=', False), ('picking_type_id.warehouse_id', 'in', user.allowed_warehouse_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Picking (Transfers): Admin can see all -->
+        <record id="stock_picking_admin_bypass_rule" model="ir.rule">
+            <field name="name">Transfers: Admin All Access</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_discount"
+              name="Sales Discount Rule"
+              parent="sale.menu_sale_config"
+              sequence="17"/>
+
+    <menuitem id="menu_discount_per_customer_type"
+              name="Discount Per Customer Type"
+              parent="menu_discount"
+              action="action_discount_per_customer_type"
+              sequence="1"/>
+
+    <menuitem id="menu_discount_per_sales_amount"
+              name="Discount Per Sales Amount"
+              parent="menu_discount"
+              action="action_discount_per_sales_amount"
+              sequence="2"/>
+
+    <menuitem id="menu_discount_per_quantity_order"
+              name="Discount Per Quantity Order"
+              parent="menu_discount"
+              action="action_discount_per_quantity_order"
+              sequence="3"/>
+
+    <menuitem id="menu_discount_per_customer_and_product"
+              name="Discount Per Customer And Product"
+              parent="menu_discount"
+              action="action_discount_per_customer_and_product"
+              sequence="4"/>
+</odoo>

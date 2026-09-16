@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_team_view_form_inherit_target" model="ir.ui.view">
+            <field name="name">crm.team.view.form.inherit.target</field>
+            <field name="model">crm.team</field>
+            <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoiced_target']" position="after">
+                    <field name="monthly_team_target" string="Sales Target"/>
+                    <button name="action_distribute_target" string="Distribute Target to Members" type="object"
+                            class="oe_highlight" invisible="monthly_team_target &lt;= 0"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

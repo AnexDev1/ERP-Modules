@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sales_target_config_form" model="ir.ui.view">
+            <field name="name">sales.target.config.form</field>
+            <field name="model">sales.target.config</field>
+            <field name="arch" type="xml">
+                <form string="Sales Target">
+                    <header>
+                        <button name="action_active" string="active" type="object"
+                                groups="Yohannes_sales_person_target_management.group_sales_target_manager"
+                                invisible="state != 'draft'"/>
+                        <button name="action_expire" string="expire" type="object"
+                                groups="Yohannes_sales_person_target_management.group_sales_target_manager"
+                                invisible="state != 'active'"/>
+                        <button name="action_reset_to_draft" string="Reset to draft" type="object"
+                                groups="Yohannes_sales_person_target_management.group_sales_target_manager"
+                                invisible="state != 'expire'"/>
+                        <field name="state" widget="statusbar"/>
+
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="reference"/>
+                                <field name="user_id"/>
+                                <field name="week1_sales_target"/>
+                                <field name="week2_sales_target"/>
+                                <field name="week3_sales_target"/>
+                            </group>
+                            <group>
+                                <field name="month_start_date"/>
+                                <field name="month_end_date"/>
+                                <field name="month_name"/>
+                                <field name="week4_sales_target"/>
+                                <field name="monthly_sales_target"/>
+                                <field name="date" invisible="1"/>
+                                <field name="daily_sales_target" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Daily Sales Targets">
+                                <field name="daily_sale_ids">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="daily_sales_target"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record id="view_sales_target_config_list" model="ir.ui.view">
+            <field name="name">sales.target.config.list</field>
+            <field name="model">sales.target.config</field>
+            <field name="arch" type="xml">
+                <list string="Sales Targets">
+                    <field name="reference"/>
+                    <field name="user_id"/>
+                    <field name="month_name"/>
+                    <field name="month_start_date"/>
+                    <field name="month_end_date"/>
+                    <field name="monthly_sales_target"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+    </data>
+</odoo>

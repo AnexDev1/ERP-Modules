@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="seq_consignment_return" model="ir.sequence">
+        <field name="name">Consignment Return</field>
+        <field name="code">consignment.return</field>
+        <field name="prefix">CON/RECEIPT/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+    </data>
+</odoo>

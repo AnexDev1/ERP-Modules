@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_tree_inherit_custom" model="ir.ui.view">
+            <field name="name">sale.order.tree.inherit.custom</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="daily_sales_amount" widget="monetary"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Report Template for Print Dropdown -->
+        <record id="action_report_sale_order_custom" model="ir.actions.report">
+            <field name="name">Custom Sale Quotation</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">Yohannes_sales_person_target_management.report_sale_order_custom</field>
+            <field name="report_file">Yohannes_sales_person_target_management.report_sale_order_custom</field>
+            <field name="print_report_name">('Sale Quotation - %s' % (object.name))</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_sale_order_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Sale Quotation
+                                <span t-field="o.name"/>
+                            </h2>
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <strong>Customer:</strong>
+                                    <span t-field="o.partner_id"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Sale Type:</strong>
+                                    <span t-field="o.sale_type"/>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <strong>Date:</strong>
+                                    <span t-field="o.date_order" t-options='{"format": "MM/dd/yyyy"}'/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Salesperson:</strong>
+                                    <span t-field="o.user_id"/>
+                                </div>
+                            </div>
+                            <table class="table table-sm mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Batch Number</th>
+                                        <th>Expiration Date</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.order_line" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <span t-field="line.product_id"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.lot_id" t-options="{'widget': 'text'}"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.expiration_date"
+                                                      t-options='{"format": "MM/dd/yyyy"}'/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.price_unit" t-options="{'widget': 'monetary'}"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.price_subtotal" t-options="{'widget': 'monetary'}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6 offset-6">
+                                    <strong>Total:</strong>
+                                    <span t-field="o.amount_total" t-options="{'widget': 'monetary'}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

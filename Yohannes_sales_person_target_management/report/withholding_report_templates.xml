@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_withholding_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size: 14px;">
+                        <div class="text-center" style="border-bottom: 2px solid black; margin-bottom: 20px;">
+                            <h2 style="font-weight: bold; text-transform: uppercase;">Withholding Printout</h2>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-12">
+                                <p><strong>የተቆራጭ ታክስ ማስወገጃ</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="row mt16">
+                            <div class="col-12">
+                                <p><strong>የተከፋይ ስም / Tax Payer's Name:- </strong> <span t-field="o.move_id_wh.partner_id.name"/></p>
+                                <p><strong>የግብር መክፈያ ቁጥር / Tax Payer Identification No:- </strong> <span t-field="o.move_id_wh.partner_id.vat"/></p>
+                            </div>
+                        </div>
+
+                        <div class="row mt16">
+                            <div class="col-3">
+                                <strong>አድራሻ / Address:</strong>
+                            </div>
+                            <div class="col-2 text-center">
+                                <strong>ክልል / Region:</strong><br/>
+                                <span t-field="o.move_id_wh.partner_id.state_id.name"/>
+                            </div>
+                            <div class="col-2 text-center">
+                                <strong>ክፍለ ከተማ / Sub-City:</strong><br/>
+                                <span t-field="o.move_id_wh.partner_id.city"/>
+                            </div>
+                            <div class="col-2 text-center">
+                                <strong>ቀበሌ / Kebele:</strong><br/>
+                                <span t-field="o.move_id_wh.partner_id.street2"/>
+                            </div>
+                            <div class="col-3 text-center">
+                                <strong>የቤት ቁጥር / House No:-</strong><br/>
+                                <span t-field="o.move_id_wh.partner_id.street"/> <!-- Using street as placeholder for House No -->
+                            </div>
+                        </div>
+
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <p><strong>የግብይት አይነት / Type of Transaction: </strong> ___________________________</p>
+                                <p><strong>የግብይት መጠን / Amount:- </strong> <span t-field="o.before_value"/></p>
+                            </div>
+                        </div>
+
+                        <div class="row mt16" style="border: 1px solid gray; padding: 10px; background-color: #f9f9f9;">
+                            <div class="col-12 text-right">
+                                <strong>ብር / Birr: <span t-field="o.before_value" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong><br/>
+                                <span t-field="o.amount_in_words"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <p t-if="o.tax_type == '2'">
+                                    <strong>ተቀናሽ የተደረገ 2% ግብር ብር / 2% withhold birr:- </strong> <span t-field="o.tax_amount"/>
+                                </p>
+                                <p t-if="o.tax_type == '30'">
+                                    <strong>ተቀናሽ የተደረገ 30% ግብር ብር / 30% withhold birr:- </strong> <span t-field="o.tax_amount"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mt32">
+                            <div class="col-4">
+                                <strong>የባንክ ሰነድ ቁጥር / Bank Voucher:</strong><br/>
+                                <span t-field="o.reference"/>
+                            </div>
+                            <div class="col-4 text-center">
+                                <strong>የሽያጭ ደረሰኝ ቁጥር / Sales Invoice No:</strong><br/>
+                                <span t-field="o.move_id_wh.name"/>
+                            </div>
+                            <div class="col-4 text-right">
+                                <strong>የቼክ ቁጥር / Check No:</strong><br/>
+                                ___________________________
+                            </div>
+                        </div>
+
+                        <div class="row mt64">
+                            <div class="col-12" style="font-size: 12px; line-height: 1.2;">
+                                <p>በገቢ ግብር አዋጅ ቁጥር 979/2008 አንቀጽ 92/1 መሠረት ከላይ ስማቸው ለተጠቀሰው ግብር ከፋይ ከፈጀናው ክፍያ ላይ ለግብር ሰብሳቢው መ/ቤት የሚከፈል 2% ብር ____ ቀንሶ ማስቀረታችንን እናረጋግጣለን።</p>
+                                <p>We have withold from the above named Taxpayer representing 2% tax payable to the Tax Authority as per the article 92/1 of the income tax proclaimtion No.979/2008.</p>
+                                <p style="margin-top: 10px;">በገቢ ግብር አዋጅ ቁጥር 979/2008 አንቀጽ 92/1 መሠረት ከላይ ስማቸው ለተጠቀሰው ግብር ከፋይ ከፈጀናው ክፍያ ላይ ለግብር ሰብሳቢው መ/ቤት የሚከፈል 30% ብር ____ ቀንሶ ማስቀረታችንን እናረጋግጣለን።</p>
+                                <p>We have withold from the above named Taxpayer representing 30% tax payable to the Tax Authority as per the article 92/1 of the income tax proclaimtion No.979/2008.</p>
+                            </div>
+                        </div>
+
+                        <div class="row mt64">
+                            <div class="col-6">
+                                <strong>ስም / Name:- </strong> <span t-field="user_id.name"/><br/>
+                                <strong>ፊርማ / Signature: ________________</strong>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>የሥራ ኃላፊነት / Position:- </strong> accountant<br/>
+                                <strong>ማህተም / Seal: ________________</strong>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

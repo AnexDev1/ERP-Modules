@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <!-- Sequence for Local Purchase Request -->
+        <record id="seq_sales_target_config" model="ir.sequence">
+            <field name="name">Sales Target</field>
+            <field name="code">sales.target.config</field>
+            <field name="prefix">ST-%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

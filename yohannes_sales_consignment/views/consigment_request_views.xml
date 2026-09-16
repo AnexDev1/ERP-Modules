@@ -1,0 +1,109 @@
+<odoo>
+    <data>
+
+
+    <record id="view_consignment_request_form" model="ir.ui.view">
+        <field name="name">consignment.request.form</field>
+        <field name="model">consignment.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Submit"
+                            invisible="state != 'draft'"
+                            groups="yohannes_sales_sample_request.group_sample_request_initiator"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            invisible="state != 'Operations_store_manager'"
+                            groups="yohannes_sales_sample_request.group_sample_request_approver"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state != 'Operations_store_manager'"
+                            groups="yohannes_sales_sample_request.group_sample_request_approver"
+                            confirm="Reject this request?"/>
+                    <button name="action_convert_to_sale" type="object" string="Convert to Sale"
+                            class="oe_highlight"
+                            invisible="settlement_type != 'pending' or state != 'requested' or consignment_role != 'giver'"
+                            confirm="This will create a Sale Order. Proceed?"/>
+                    <button name="action_convert_to_purchase" type="object" string="Convert to Purchase"
+                            class="oe_highlight"
+                            invisible="settlement_type != 'pending' or state != 'requested' or consignment_role != 'receiver'"
+                            confirm="This will create a Purchase Order. Proceed?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,Operations_store_manager,requested,proceed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_delivery" type="object"
+                                class="oe_stat_button" icon="fa-truck"
+                                invisible="picking_count == 0">
+                            <div class="o_stat_info">
+                                <field name="picking_count" widget="statinfo"
+                                       string="Move(s)"/>
+                            </div>
+                        </button>
+                        <button name="action_view_sales" type="object"
+                                class="oe_stat_button" icon="fa-usd"
+                                invisible="sale_count == 0">
+                            <div class="o_stat_info">
+                                <field name="sale_count" widget="statinfo"
+                                       string="Sales"/>
+                            </div>
+                        </button>
+                        <button name="action_view_purchases" type="object"
+                                class="oe_stat_button" icon="fa-credit-card"
+                                invisible="local_purchase_count == 0">
+                            <div class="o_stat_info">
+                                <field name="local_purchase_count" widget="statinfo"
+                                       string="Local Purchases"/>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id" string="Partner"/>
+                            <field name="issue_type"/>
+                            <field name="settlement_type" widget="badge" decoration-info="settlement_type == 'pending'" decoration-success="settlement_type == 'sold'" decoration-warning="settlement_type == 'returned'"/>
+                            <field name="consignment_role"/>
+                        </group>
+                        <group>
+                            <field name="requested_by"/>
+                            <field name="issue_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="line_ids" readonly="context.get('readonly_lines', False)">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="uom_id" readonly="1"/>
+                                    <field name="quantity_requested" readonly="parent.state not in ['draft']"/>
+                                    <field name="warehouse_id"/>
+                                    <field name="balance_store" readonly="1" column_invisible="parent.state not in ('Operations_store_manager', 'requested')"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+      <!-- Tree View -->
+    <record id="view_consignment_request_list" model="ir.ui.view">
+        <field name="name">consignment.request.list</field>
+        <field name="model">consignment.request</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="issue_type"/>
+                <field name="requested_by"/>
+                <field name="issue_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    </data>
+</odoo>

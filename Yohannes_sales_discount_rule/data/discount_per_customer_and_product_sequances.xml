@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_discount_per_customer_and_product" model="ir.sequence">
+        <field name="name">Discount Per Customer and Product</field>
+        <field name="code">discount.per.customer.and.product.seq</field>
+        <field name="prefix">DPCP/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

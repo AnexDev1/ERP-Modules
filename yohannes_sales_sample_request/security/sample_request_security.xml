@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="sample_request_category" model="ir.module.category">
+        <field name="name">Sample Request</field>
+        <field name="sequence">13</field>
+    </record>
+    <record id="sample_request_initiator_privilege" model="res.groups.privilege">
+        <field name="name">Sample Request Initiator</field>
+        <field name="category_id" ref="sample_request_category"/>
+    </record>
+    <record id="group_sample_request_initiator" model="res.groups">
+        <field name="name">Sales Approval Initiator</field>
+        <field name="privilege_id" ref="sample_request_initiator_privilege"/>
+    </record>
+    <record id="sample_request_approver_privilege" model="res.groups.privilege">
+        <field name="name">Sample Request Approver</field>
+        <field name="category_id" ref="sample_request_category"/>
+    </record>
+    <record id="group_sample_request_approver" model="res.groups">
+        <field name="name">Sample Request Approver</field>
+        <field name="privilege_id" ref="sample_request_approver_privilege"/>
+    </record>
+    </data>
+    <data noupdate="1">
+        <!-- Multi-Company Rules for Sample Request Models -->
+        <record id="free_sample_request_comp_rule" model="ir.rule">
+            <field name="name">Free Sample Request Multi-Company</field>
+            <field name="model_id" ref="model_free_sample_request"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="return_sample_request_comp_rule" model="ir.rule">
+            <field name="name">Return Sample Request Multi-Company</field>
+            <field name="model_id" ref="model_return_sample_request"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="return_sample_comp_rule" model="ir.rule">
+            <field name="name">Return Sample Multi-Company</field>
+            <field name="model_id" ref="model_return_sample"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Custom Tree View for Stock Move Valuation (Odoo 19) -->
+        <record id="view_stock_move_valuation_tree_custom" model="ir.ui.view">
+            <field name="name">stock.move.valuation.tree.custom</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <list string="Stock transactions - ALL" create="false" edit="false" delete="false">
+                    <field name="id" string="ID"/>
+                    <field name="date" string="Date"/>
+                    <field name="reference"/>
+                    <field name="account_move_id" string="Journal Entry"/>
+                    <field name="product_id"/>
+                    <field name="product_categ_id" string="Product Category"/>
+                    <field name="product_uom" string="Unit of Measure"/>
+                    <field name="quantity"/>
+                    <field name="price_unit" string="Unit Value"/>
+                    <field name="value" string="Total Value" sum="Total Value"/>
+                    <field name="remaining_qty"/>
+                    <field name="remaining_value" sum="Total Remaining Value"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Action for Stock Valuation (Odoo 19) -->
+        <record id="action_stock_valuation_by_type" model="ir.actions.act_window">
+            <field name="name">Stock transactions - ALL</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">list</field>
+            <field name="domain">['|', ('is_in', '=', True), ('is_out', '=', True)]</field>
+            <field name="view_id" ref="view_stock_move_valuation_tree_custom"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Stock Valuation Records Found
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item (under existing Reports parent) -->
+        <menuitem id="menu_stock_valuation_by_type"
+                  name="Stock valuation by type"
+                  parent="Yohannes_sales_person_target_management.menu_accounting_reports_customers"
+                  action="action_stock_valuation_by_type"
+                  sequence="30"/>
+    </data>
+</odoo>

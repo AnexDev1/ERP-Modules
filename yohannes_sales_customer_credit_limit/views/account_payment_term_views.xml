@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_term_form_inherit_yohannes" model="ir.ui.view">
+        <field name="name">account.payment.term.form.inherit.yohannes</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='early_discount']" position="after">
+                <!--div class="o_horizontal_separator">Custom Settings</div-->
+                <div class="o_row d-flex flex-wrap gap-3">
+                    <label for="display_terms_on_invoice"/>
+                    <field name="display_terms_on_invoice"/>
+                    
+                    <label for="apply_credit_limit"/>
+                    <field name="apply_credit_limit"/>
+                    
+                    <label for="delivery_after_payment"/>
+                    <field name="delivery_after_payment"/>
+                    
+                    <label for="minimum_order_amount"/>
+                    <field name="minimum_order_amount" class="oe_inline"/>
+                    
+                    <label for="term_used_under"/>
+                    <field name="term_used_under" class="oe_inline"/>
+                    
+                    <label for="related_payment_term_id"/>
+                    <field name="related_payment_term_id" class="oe_inline"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

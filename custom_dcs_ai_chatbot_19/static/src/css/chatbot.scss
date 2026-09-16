@@ -1,0 +1,929 @@
+// ============================================================
+//  DCS AI Chatbot — Premium Floating Widget Styles
+//  Module: custom_dcs_ai_chatbot_19
+// ============================================================
+
+// ----- Variables (Dark Theme — Default) -----
+$dcs-cb-primary: #1D8CCC;
+$dcs-cb-primary-dark: #166999;
+$dcs-cb-primary-light: #4bb3e6;
+$dcs-cb-accent: #0ea5e9;
+$dcs-cb-surface: #1e1e2e;
+$dcs-cb-surface-light: #2a2a3e;
+$dcs-cb-surface-hover: #33334a;
+$dcs-cb-text: #e2e8f0;
+$dcs-cb-text-muted: #94a3b8;
+$dcs-cb-border: rgba(255, 255, 255, 0.08);
+$dcs-cb-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+$dcs-cb-radius: 16px;
+$dcs-cb-radius-sm: 12px;
+$dcs-cb-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// =============================================
+//  CONTAINER
+// =============================================
+.dcs-cb-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10000;
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+    &--fullpage {
+        inset: 0;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+// =============================================
+//  FLOATING ACTION BUTTON
+// =============================================
+.dcs-cb-fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba($dcs-cb-primary, 0.05);
+    transition: all $dcs-cb-transition;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+
+    &:hover {
+        transform: scale(1.08);
+        box-shadow: 0 15px 40px rgba($dcs-cb-primary, 0.2),
+            0 0 0 4px rgba($dcs-cb-primary, 0.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &--open {
+        background: white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    &--hidden {
+        display: none !important;
+    }
+}
+
+.dcs-cb-fab-icon-wrap {
+    transform: scale(0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dcs-cb-fab-icon {
+    width: 26px;
+    height: 26px;
+    transition: transform $dcs-cb-transition;
+
+    .dcs-cb-fab:hover & {
+        transform: rotate(15deg);
+    }
+
+    .dcs-cb-fab--open & {
+        transform: rotate(0deg);
+    }
+
+    .dcs-cb-fab--open:hover & {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes dcs-cb-pulse {
+    0% {
+        box-shadow: 0 8px 32px rgba($dcs-cb-primary, 0.4), 0 0 0 0 rgba($dcs-cb-primary, 0.3);
+    }
+
+    70% {
+        box-shadow: 0 8px 32px rgba($dcs-cb-primary, 0.4), 0 0 0 12px rgba($dcs-cb-primary, 0);
+    }
+
+    100% {
+        box-shadow: 0 8px 32px rgba($dcs-cb-primary, 0.4), 0 0 0 0 rgba($dcs-cb-primary, 0);
+    }
+}
+
+.dcs-cb-fab:not(.dcs-cb-fab--open):not(:hover) {
+    animation: dcs-cb-pulse 2.5s ease-in-out infinite;
+}
+
+// =============================================
+//  CHAT PANEL — Size Modes
+// =============================================
+.dcs-cb-panel {
+    position: absolute;
+    bottom: 76px;
+    right: 0;
+    width: 420px;
+    height: 600px;
+    max-height: calc(100vh - 120px);
+    background: $dcs-cb-surface;
+    border-radius: $dcs-cb-radius;
+    border: 1px solid $dcs-cb-border;
+    box-shadow: $dcs-cb-shadow;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+    pointer-events: none;
+    transition: all $dcs-cb-transition;
+
+    &--open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+
+    // BROAD MODE
+    &--broad {
+        width: 700px;
+        height: 650px;
+        max-height: calc(100vh - 120px);
+    }
+
+    // FULL PAGE MODE
+    &--full {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        z-index: 10001;
+    }
+}
+
+// =============================================
+//  HEADER
+// =============================================
+.dcs-cb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba($dcs-cb-primary, 0.15), rgba($dcs-cb-accent, 0.08));
+    border-bottom: 1px solid $dcs-cb-border;
+    flex-shrink: 0;
+}
+
+.dcs-cb-header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dcs-cb-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    svg {
+        width: 80%;
+        height: 80%;
+    }
+}
+
+.dcs-cb-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: $dcs-cb-text;
+    letter-spacing: -0.01em;
+}
+
+.dcs-cb-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #10b981;
+    font-weight: 500;
+}
+
+.dcs-cb-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    animation: dcs-cb-status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dcs-cb-status-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.dcs-cb-header-actions {
+    display: flex;
+    gap: 2px;
+}
+
+.dcs-cb-btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: $dcs-cb-text-muted;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        background: $dcs-cb-surface-hover;
+        color: $dcs-cb-text;
+    }
+}
+
+// =============================================
+//  PROACTIVE INSIGHTS CARD
+// =============================================
+.dcs-cb-insights {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid $dcs-cb-border;
+    background: rgba($dcs-cb-primary, 0.04);
+    flex-shrink: 0;
+    overflow-x: auto;
+}
+
+.dcs-cb-insight-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: $dcs-cb-surface-light;
+    border: 1px solid $dcs-cb-border;
+    flex: 1;
+    min-width: 0;
+
+    &--warn {
+        border-color: rgba(#f59e0b, 0.2);
+        background: rgba(#f59e0b, 0.06);
+    }
+}
+
+.dcs-cb-insight-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.dcs-cb-insight-data {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.dcs-cb-insight-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: $dcs-cb-text;
+    line-height: 1.1;
+}
+
+.dcs-cb-insight-label {
+    font-size: 10px;
+    color: $dcs-cb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// =============================================
+//  MESSAGES AREA
+// =============================================
+.dcs-cb-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    }
+}
+
+// =============================================
+//  MESSAGE BUBBLES
+// =============================================
+.dcs-cb-msg {
+    display: flex;
+    gap: 8px;
+    max-width: 100%;
+
+    &--user {
+        flex-direction: row-reverse;
+    }
+
+    &--bot {
+        flex-direction: row;
+    }
+}
+
+.dcs-cb-msg-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $dcs-cb-primary-dark, $dcs-cb-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+
+    svg {
+        width: 20px;
+        height: 22px;
+    }
+}
+
+.dcs-cb-msg-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+
+    .dcs-cb-msg--user & {
+        align-items: flex-end;
+    }
+
+    .dcs-cb-msg--bot & {
+        align-items: flex-start;
+    }
+
+    // In full mode, allow wider content
+    .dcs-cb-panel--full & {
+        max-width: 70%;
+    }
+}
+
+.dcs-cb-msg-bubble {
+    padding: 10px 14px;
+    border-radius: $dcs-cb-radius-sm;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: $dcs-cb-text;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    &--user {
+        background: linear-gradient(135deg, $dcs-cb-primary, $dcs-cb-primary-dark);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    &--bot {
+        background: $dcs-cb-surface-light;
+        border: 1px solid $dcs-cb-border;
+        border-bottom-left-radius: 4px;
+    }
+
+    .dcs-cb-msg--error & {
+        border-color: rgba(#ef4444, 0.3);
+        background: rgba(#ef4444, 0.1);
+    }
+
+    strong {
+        color: $dcs-cb-primary-light;
+        font-weight: 600;
+    }
+
+    em {
+        font-style: italic;
+        color: $dcs-cb-text-muted;
+    }
+}
+
+.dcs-cb-msg-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.dcs-cb-msg-time {
+    font-size: 10.5px;
+    color: $dcs-cb-text-muted;
+    opacity: 0.7;
+}
+
+// Export CSV button
+.dcs-cb-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border: 1px solid rgba($dcs-cb-primary, 0.2);
+    border-radius: 6px;
+    background: rgba($dcs-cb-primary, 0.08);
+    color: $dcs-cb-primary-light;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    &:hover {
+        background: rgba($dcs-cb-primary, 0.2);
+        border-color: rgba($dcs-cb-primary, 0.4);
+        transform: translateY(-1px);
+    }
+}
+
+// Code blocks
+.dcs-cb-code-block {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    color: #e2e8f0;
+}
+
+.dcs-cb-inline-code {
+    background: rgba(99, 102, 241, 0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    color: $dcs-cb-primary-light;
+}
+
+// Lists
+.dcs-cb-list {
+    margin: 6px 0;
+    padding-left: 20px;
+
+    .dcs-cb-list-item {
+        margin: 3px 0;
+        line-height: 1.5;
+    }
+}
+
+// Tables
+.dcs-cb-table-wrapper {
+    margin: 12px 0;
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid $dcs-cb-border;
+    background: rgba(0, 0, 0, 0.2);
+
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+}
+
+.dcs-cb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+    min-width: 300px;
+
+    th,
+    td {
+        padding: 10px 12px;
+        border-bottom: 1px solid $dcs-cb-border;
+    }
+
+    th {
+        background: rgba($dcs-cb-primary, 0.15);
+        color: $dcs-cb-primary-light;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 11px;
+    }
+
+    tbody tr {
+        transition: background 0.2s ease;
+
+        &:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        &:hover {
+            background: rgba($dcs-cb-primary, 0.05);
+        }
+
+        &:last-child td {
+            border-bottom: none;
+        }
+    }
+}
+
+// =============================================
+//  QUICK ACTION CHIPS
+// =============================================
+.dcs-cb-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 16px;
+    border-top: 1px solid $dcs-cb-border;
+    background: rgba($dcs-cb-primary, 0.03);
+    flex-shrink: 0;
+}
+
+.dcs-cb-quick-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid rgba($dcs-cb-primary, 0.2);
+    border-radius: 20px;
+    background: rgba($dcs-cb-primary, 0.06);
+    color: $dcs-cb-primary-light;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba($dcs-cb-primary, 0.15);
+        border-color: rgba($dcs-cb-primary, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($dcs-cb-primary, 0.15);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+// =============================================
+//  TYPING INDICATOR
+// =============================================
+.dcs-cb-typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 14px 18px !important;
+}
+
+.dcs-cb-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $dcs-cb-primary-light;
+    opacity: 0.5;
+    animation: dcs-cb-bounce 1.4s ease-in-out infinite;
+
+    &:nth-child(2) {
+        animation-delay: 0.15s;
+    }
+
+    &:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+}
+
+@keyframes dcs-cb-bounce {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+
+    30% {
+        transform: translateY(-8px);
+        opacity: 1;
+    }
+}
+
+// =============================================
+//  INPUT AREA
+// =============================================
+.dcs-cb-input-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid $dcs-cb-border;
+    background: rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.dcs-cb-input {
+    flex: 1;
+    border: 1px solid $dcs-cb-border;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: $dcs-cb-text;
+    background: $dcs-cb-surface-light;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+
+    &::placeholder {
+        color: $dcs-cb-text-muted;
+    }
+
+    &:focus {
+        border-color: rgba($dcs-cb-primary, 0.5);
+        box-shadow: 0 0 0 3px rgba($dcs-cb-primary, 0.1);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.dcs-cb-send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, $dcs-cb-primary, $dcs-cb-accent);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba($dcs-cb-primary, 0.4);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.95);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+// =============================================
+//  LIGHT THEME
+// =============================================
+.dcs-cb-container--light {
+    .dcs-cb-panel {
+        background: #ffffff;
+        border-color: #e5e7eb;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    }
+
+    .dcs-cb-header {
+        background: linear-gradient(135deg, rgba($dcs-cb-primary, 0.08), rgba($dcs-cb-accent, 0.04));
+        border-bottom-color: #e5e7eb;
+    }
+
+    .dcs-cb-title {
+        color: #1e293b;
+    }
+
+    .dcs-cb-btn-icon {
+        color: #64748b;
+
+        &:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+    }
+
+    .dcs-cb-insights {
+        background: rgba($dcs-cb-primary, 0.02);
+        border-bottom-color: #e5e7eb;
+    }
+
+    .dcs-cb-insight-item {
+        background: #f8fafc;
+        border-color: #e5e7eb;
+    }
+
+    .dcs-cb-insight-value {
+        color: #1e293b;
+    }
+
+    .dcs-cb-insight-label {
+        color: #64748b;
+    }
+
+    .dcs-cb-messages {
+        &::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .dcs-cb-msg-avatar {
+        background: linear-gradient(135deg, $dcs-cb-primary, $dcs-cb-accent);
+    }
+
+    .dcs-cb-msg-bubble {
+        color: #334155;
+
+        &--bot {
+            background: #f1f5f9;
+            border-color: #e5e7eb;
+        }
+
+        strong {
+            color: $dcs-cb-primary;
+        }
+
+        em {
+            color: #64748b;
+        }
+    }
+
+    .dcs-cb-msg-time {
+        color: #94a3b8;
+    }
+
+    .dcs-cb-export-btn {
+        background: rgba($dcs-cb-primary, 0.06);
+        border-color: rgba($dcs-cb-primary, 0.15);
+        color: $dcs-cb-primary;
+    }
+
+    .dcs-cb-quick-actions {
+        background: rgba($dcs-cb-primary, 0.02);
+        border-top-color: #e5e7eb;
+    }
+
+    .dcs-cb-quick-chip {
+        background: rgba($dcs-cb-primary, 0.04);
+        border-color: rgba($dcs-cb-primary, 0.15);
+        color: $dcs-cb-primary;
+
+        &:hover {
+            background: rgba($dcs-cb-primary, 0.1);
+            border-color: rgba($dcs-cb-primary, 0.3);
+        }
+    }
+
+    .dcs-cb-input-area {
+        background: #fafbfc;
+        border-top-color: #e5e7eb;
+    }
+
+    .dcs-cb-input {
+        background: #f1f5f9;
+        border-color: #e5e7eb;
+        color: #1e293b;
+
+        &::placeholder {
+            color: #94a3b8;
+        }
+
+        &:focus {
+            border-color: $dcs-cb-primary;
+        }
+    }
+
+    .dcs-cb-code-block {
+        background: #f1f5f9;
+        color: #334155;
+    }
+
+    .dcs-cb-inline-code {
+        background: rgba($dcs-cb-primary, 0.08);
+        color: $dcs-cb-primary-dark;
+    }
+
+    .dcs-cb-table-wrapper {
+        background: #fafbfc;
+        border-color: #e5e7eb;
+    }
+
+    .dcs-cb-table {
+        th {
+            background: rgba($dcs-cb-primary, 0.08);
+            color: $dcs-cb-primary;
+        }
+
+        th,
+        td {
+            border-bottom-color: #e5e7eb;
+        }
+
+        tbody tr {
+            &:nth-child(even) {
+                background: #f8fafc;
+            }
+
+            &:hover {
+                background: rgba($dcs-cb-primary, 0.04);
+            }
+        }
+    }
+
+    .dcs-cb-typing .dcs-cb-dot {
+        background: $dcs-cb-primary;
+    }
+}
+
+// =============================================
+//  RESPONSIVE
+// =============================================
+@media (max-width: 480px) {
+    .dcs-cb-panel {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 120px);
+        right: -8px;
+        bottom: 72px;
+    }
+
+    .dcs-cb-container {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .dcs-cb-fab {
+        width: 52px;
+        height: 52px;
+    }
+}

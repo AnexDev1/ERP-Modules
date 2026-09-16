@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_discount_per_order_quantity" model="ir.sequence">
+        <field name="name">Discount Per order quantity</field>
+        <field name="code">discount.per.order.quantity.seq</field>
+        <field name="prefix">DPQ/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

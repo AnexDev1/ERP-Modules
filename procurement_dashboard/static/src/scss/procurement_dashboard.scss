@@ -1,0 +1,492 @@
+// ================================================================
+// Procurement Dashboard — clean inventory-style SCSS
+// ================================================================
+
+// Root wrapper — NO min-height, NO overflow, let Odoo shell scroll
+.o_pd_root {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    height: 100%;
+    overflow-y: auto;
+}
+
+// ── Top Bar ──────────────────────────────────────────────────────
+.o_pd_topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    flex-shrink: 0;
+}
+
+.o_pd_topbar_left,
+.o_pd_topbar_right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.o_pd_topbar_title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #212529;
+}
+
+// Pill preset buttons
+.o_pd_preset_pills {
+    display: flex;
+    background: #f0f0f0;
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+}
+
+.o_pd_pill {
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &.active,
+    &:hover {
+        background: #fff;
+        color: #875a7b;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.o_pd_date {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #333;
+
+    &:focus {
+        outline: none;
+        border-color: #875a7b;
+    }
+}
+
+.o_pd_arrow {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.o_pd_btn {
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+        background: #f0f0f0;
+    }
+
+    &.o_pd_btn_primary {
+        background: #875a7b;
+        border-color: #875a7b;
+        color: #fff;
+
+        &:hover {
+            background: #6f4965;
+        }
+    }
+}
+
+// ── Scrollable Body ────────────────────────────────────────────
+.o_pd_body {
+    padding: 20px;
+    flex: 1;
+}
+
+// Section headers
+.o_pd_section_title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #999;
+    margin: 0 0 12px;
+}
+
+// ── Operation Cards (Inventory kanban style) ──────────────────
+.o_pd_ops_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.o_pd_op_card {
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent, #875a7b);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+}
+
+.o_pd_op_top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 16px 10px;
+    flex: 1;
+}
+
+.o_pd_op_icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.o_pd_op_nums {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.o_pd_op_count {
+    font-size: 30px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1;
+
+    &.o_pd_op_count_sm {
+        font-size: 20px;
+    }
+}
+
+.o_pd_op_label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_pd_op_bottom {
+    border-top: 1px solid #f5f5f5;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.o_pd_op_sub {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.o_pd_op_alert {
+    font-size: 11px;
+    font-weight: 600;
+    color: #b45309;
+    background: #fef3c7;
+    border-radius: 10px;
+    padding: 2px 8px;
+}
+
+.o_pd_op_link {
+    font-size: 11px;
+    font-weight: 700;
+    color: #875a7b;
+    white-space: nowrap;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// ── Chart Rows ────────────────────────────────────────────────
+.o_pd_charts_row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+
+    @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.o_pd_chart_card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    padding: 16px 18px;
+
+    &.o_pd_chart_lg {
+        grid-column: auto;
+    }
+
+    // already in the 2fr slot
+}
+
+.o_pd_chart_hd {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.o_pd_chart_name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.o_pd_chart_desc {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 2px;
+}
+
+// The canvas container — must have explicit height for Chart.js
+.o_pd_canvas_wrap {
+    position: relative;
+    height: 220px;
+    width: 100%;
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+// ── Chip / badge ─────────────────────────────────────────────
+.o_pd_chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 9px;
+    background: #e9ecef;
+    color: #555;
+    white-space: nowrap;
+
+    &.o_pd_chip_blue {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    &.o_pd_chip_amber {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    &.o_pd_chip_green {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    &.o_pd_chip_red {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+}
+
+// ── Tables Row ────────────────────────────────────────────────
+.o_pd_tables_row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 700px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.o_pd_tbl_card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.o_pd_topbar {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin-top: 32px;
+    border: 1px solid #eef2f7;
+    min-height: 80px;
+    box-shadow:
+        0 2px 4px rgba(15, 23, 42, 0.04),
+        0 8px 16px rgba(15, 23, 42, 0.06),
+        0 16px 32px rgba(15, 23, 42, 0.04);
+}
+
+.o_pd_tbl_hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.o_pd_tbl_name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.o_pd_tbl_badge {
+    background: #875a7b;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 9px;
+    min-width: 22px;
+    text-align: center;
+}
+
+.o_pd_tbl_body {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 260px;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+    thead tr {
+        background: #fafafa;
+        border-bottom: 1px solid #eee;
+    }
+
+    thead th {
+        padding: 7px 12px;
+        font-size: 10px;
+        font-weight: 700;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }
+
+    tbody td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #f5f5f5;
+        vertical-align: middle;
+    }
+}
+
+.o_pd_tbl_row {
+    cursor: pointer;
+    transition: background 0.1s;
+
+    &:hover {
+        background: #fafafa;
+    }
+
+    &:last-child td {
+        border-bottom: none;
+    }
+}
+
+.o_pd_tbl_empty {
+    text-align: center;
+    color: #bbb;
+    padding: 24px 12px !important;
+    font-style: italic;
+}
+
+.o_pd_tbl_ft {
+    padding: 10px 16px;
+    border-top: 1px solid #f0f0f0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #875a7b;
+    cursor: pointer;
+
+    &:hover {
+        color: #6f4965;
+    }
+}
+
+// ── Table cell helpers ─────────────────────────────────────────
+.o_pd_td_ref {
+    font-weight: 700;
+    color: #875a7b;
+    font-size: 11px;
+}
+
+.o_pd_td_num {
+    font-weight: 600;
+    color: #333;
+    font-size: 11px;
+}
+
+.o_pd_td_muted {
+    color: #777;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.o_pd_td_rank {
+    font-weight: 700;
+    color: #ccc;
+    font-size: 14px;
+    text-align: center;
+}
+
+.o_pd_td_center {
+    text-align: center;
+}
+
+// ── Footer ────────────────────────────────────────────────────
+.o_pd_footer {
+    text-align: right;
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 20px;
+    padding-bottom: 10px;
+}

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_with_approvals" model="ir.ui.view">
+            <field name="name">sale.order.form.with.approvals</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+
+                <!-- Hide all native action_quotation_send buttons -->
+                <xpath expr="//button[@id='quotation_send_primary']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@id='send_proforma']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@id='quotation_send']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Replace native Confirm button with our controlled one -->
+                <xpath expr="//button[@name='action_confirm'][@id='action_confirm']" position="attributes">
+                    <attribute name="invisible">state != 'approved' or not is_current_user_initiator</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][not(@id)]" position="replace"/>
+
+                <!-- Hide Print/Preview until approved -->
+                <xpath expr="//button[@name='action_preview_sale_order']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_preview_sale_order']" position="after">
+                    <button name="action_preview_proforma" string="Preview" type="object"
+                            invisible="state in ('draft', 'price_change_approval', 'operational_approval')"/>
+                </xpath>
+                <xpath expr="//button[@name='sale.action_report_saleorder']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Custom action buttons -->
+                <!-- Make native cancel button visible during approval states -->
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="invisible">state not in ('draft', 'sent', 'sale', 'price_change_approval', 'operational_approval', 'finance_approval', 'approved') or not id or locked</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="before">
+                    <button name="action_quotation_send" string="Send PRO-FORMA Invoice" type="object"
+                            context="{'proforma': True}" class="btn-primary"
+                            invisible="state not in ('approved', 'sale') or not is_current_user_initiator or invoice_count &gt; 0"/>
+
+                    <!-- Step 1: Promoter submits quotation -->
+                    <button name="action_submit_for_approval" string="Request Approval"
+                            type="object" class="btn-primary"
+                            groups="yohannes_sale_approval_workflow.group_sales_initiator"
+                            invisible="state != 'draft'"/>
+
+                    <!-- Step 2: GM/CEO approves discount -->
+                    <button name="action_approve_price_change" string="Approve Discount"
+                            type="object" class="btn-primary"
+                            invisible="state != 'price_change_approval' or not is_current_user_approver"/>
+
+                    <!-- Step 3: Sales Manager validates and confirms -->
+                    <button name="action_approve_operational" string="Approve"
+                            type="object" class="btn-primary"
+                            invisible="state != 'operational_approval' or not is_current_user_approver"/>
+
+                    <!-- Step 4: Finance Approves Credit -->
+                    <button name="action_approve_finance" string="Approve Credit"
+                            type="object" class="btn-primary"
+                            invisible="state != 'finance_approval' or not is_current_user_approver"/>
+
+                    <!-- Reject available at any approval step -->
+                    <button name="action_reject" type="object" string="Reject"
+                            class="btn-warning text-white font-weight-bold"
+                            invisible="state not in ('price_change_approval', 'operational_approval', 'finance_approval') or not is_current_user_approver"/>
+                </xpath>
+
+                <!-- Ensure both Create Invoice buttons are strictly for Cashier -->
+                <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d'][1]" position="attributes">
+                    <attribute name="groups">yohannes_sale_approval_workflow.group_sales_cashier</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d'][2]" position="attributes">
+                    <attribute name="groups">yohannes_sale_approval_workflow.group_sales_cashier</attribute>
+                </xpath>
+
+                <!-- Cancel only visible when not in draft -->
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="invisible">state in ('draft')</attribute>
+                </xpath>
+
+                <!-- Delivery Button Visibility Logic -->
+                <xpath expr="//button[@name='action_view_delivery']" position="attributes">
+                    <attribute name="invisible">not show_delivery_button</attribute>
+                    <attribute name="groups">yohannes_sale_approval_workflow.group_warehouse_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_view_delivery']" position="after">
+                    <field name="show_delivery_button" invisible="1"/>
+                </xpath>
+
+                <!-- Dynamic Statusbar: steps appear only when relevant -->
+                <xpath expr="//field[@name='state']" position="replace">
+                    <!-- 1. Standard Cash Sale (No discount) -->
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,operational_approval,approved,sale"
+                           invisible="manual_discount or sale_type == 'credit'"/>
+                    
+                    <!-- 2. Discounted Cash Sale -->
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,price_change_approval,operational_approval,approved,sale"
+                           invisible="not manual_discount or sale_type == 'credit'"/>
+                    
+                    <!-- 3. Standard Credit Sale (No discount) -->
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,operational_approval,finance_approval,approved,sale"
+                           invisible="manual_discount or sale_type != 'credit'"/>
+                    
+                    <!-- 4. Discounted Credit Sale -->
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,price_change_approval,operational_approval,finance_approval,approved,sale"
+                           invisible="not manual_discount or sale_type != 'credit'"/>
+                </xpath>
+
+                <!-- Hide Pricelist Field and its wrapper completely to avoid empty gaps -->
+                <xpath expr="//label[@for='pricelist_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[hasclass('o_row')][field[@name='pricelist_id']]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Add custom fields after payment_term_id -->
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="enable_order_source" invisible="1"/>
+                    <field name="order_source" invisible="not enable_order_source" required="enable_order_source" readonly="state != 'draft' and not is_current_user_approver"/>
+                    <field name="matured_outstanding" string="Overdue Balance" readonly="1"
+                           decoration-danger="matured_outstanding > 0"/>
+                    <field name="payment_attachment_name" invisible="1"/>
+                    <field name="payment_attachment" filename="payment_attachment_name"
+                           widget="binary" string="Payment Attachment"
+                           invisible="state in ('draft', 'price_change_approval', 'operational_approval') or sale_type == 'credit'"/>
+                    <field name="payment_remark" 
+                           invisible="state in ('draft', 'price_change_approval', 'operational_approval') or sale_type == 'credit'"/>
+                    <field name="manual_discount" groups="yohannes_sale_approval_workflow.group_allow_manual_discount" readonly="state != 'draft' and not is_current_user_approver"/>
+                    <field name="is_proforma" readonly="state != 'draft' and not is_current_user_approver"/>
+                    <field name="proforma_reservation_deadline" invisible="not is_proforma" required="is_proforma" readonly="state != 'draft' and not is_current_user_approver"/>
+                    <field name="is_manual_sale" readonly="1"/>
+                    <field name="manual_sale_reference" invisible="not is_manual_sale" required="is_manual_sale" readonly="state != 'draft'"/>
+                </xpath>
+
+
+
+
+
+                <!-- Customer info fields -->
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="context">{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': False}</attribute>
+                    <attribute name="readonly">state != 'draft' and not is_current_user_approver</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="is_current_user_approver" invisible="1"/>
+                    <field name="tin_no" string="TIN No" readonly="1"/>
+                    <field name="category_id" widget="many2many_tags" readonly="1"/>
+                    <field name="partner_customer_type" string="Customer Type" readonly="1"
+                           decoration-info="partner_customer_type == 'wholesale'"
+                           decoration-success="partner_customer_type == 'retail'"
+                           decoration-warning="partner_customer_type == 'both'"/>
+                    <field name="sale_type" string="Sale Type" readonly="state != 'draft' and not is_current_user_approver"/>
+                    <field name="delivery_status" string="Delivery Status" readonly="1"
+                           widget="badge"
+                           decoration-danger="delivery_status == 'pending'"
+                           decoration-warning="delivery_status == 'partial'"
+                           decoration-success="delivery_status == 'full'"/>
+                </xpath>
+
+                <!-- UI Readonly Overrides for core fields to prevent editing after draft unless approver -->
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="readonly">state != 'draft' and not is_current_user_approver</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="readonly">state != 'draft' and not is_current_user_approver</attribute>
+                </xpath>
+                <xpath expr="//field[@name='validity_date']" position="attributes">
+                    <attribute name="readonly">state != 'draft' and not is_current_user_approver</attribute>
+                </xpath>
+                <xpath expr="//field[@name='note']" position="attributes">
+                    <attribute name="readonly">state != 'draft' and not is_current_user_approver</attribute>
+                </xpath>
+
+                <!-- Make price_unit readonly except for manual sales -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='price_unit']" position="attributes">
+                    <attribute name="readonly">not parent.is_manual_sale</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <!-- Order line: add stock fields -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='price_unit']" position="after">
+                    <field name="show_discount_unit_price" column_invisible="1"/>
+                    <field name="discount_unit_price" sum="Discount Unit Price"
+                           invisible="not manual_discount_active"
+                           column_invisible="not parent.manual_discount"/>
+                    <field name="available_lot_ids" column_invisible="1"/>
+                    <field name="lot_id" optional="show" options="{'no_create': True}"/>
+                    <field name="expiry_date" optional="show" widget="date"/>
+                    <field name="warehouse_id" string="Warehouse" optional="show" required="1"
+                           options="{'no_create': True}"
+                           domain="[('wh_type', '=', parent.order_source)]"/>
+                    <field name="wh_available_qty" string="Quantity On Hand" readonly="1" optional="show"
+                           decoration-danger="product_uom_qty > wh_available_qty"/>
+                </xpath>
+
+                <!-- Dynamic product_id domain based on customer_type -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">[('sale_ok', '=', True)]</attribute>
+                    <attribute name="context">{'customer_type': parent.partner_customer_type, 'order_source': parent.order_source, 'enable_order_source': parent.enable_order_source, 'is_sale_order_line': True, 'warehouse_id': warehouse_id}</attribute>
+                    <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list//field[@name='product_template_id']" position="attributes">
+                    <attribute name="domain">[('sale_ok', '=', True)]</attribute>
+                    <attribute name="context">{'customer_type': parent.partner_customer_type, 'order_source': parent.order_source, 'enable_order_source': parent.enable_order_source, 'is_sale_order_line': True, 'warehouse_id': warehouse_id}</attribute>
+                    <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+                </xpath>
+
+                <!-- FORM VIEW Adjustments (used in mobile when adding products) -->
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">[('sale_ok', '=', True)]</attribute>
+                    <attribute name="context">{'customer_type': parent.partner_customer_type, 'order_source': parent.order_source, 'enable_order_source': parent.enable_order_source, 'is_sale_order_line': True, 'warehouse_id': warehouse_id}</attribute>
+                    <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
+                    <attribute name="readonly">not parent.is_manual_sale</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                    <field name="show_discount_unit_price" invisible="1"/>
+                    <field name="discount_unit_price" sum="Discount Unit Price"
+                           invisible="not manual_discount_active"/>
+                    <field name="available_lot_ids" invisible="1"/>
+                    <field name="lot_id" options="{'no_create': True}"/>
+                    <field name="expiry_date" widget="date"/>
+                    <field name="warehouse_id" string="Warehouse" required="1"
+                           options="{'no_create': True}"
+                           domain="[('wh_type', '=', parent.order_source)]"/>
+                    <field name="wh_available_qty" string="Quantity On Hand" readonly="1"
+                           decoration-danger="product_uom_qty > wh_available_qty"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='discount']" position="attributes">
+                    <attribute name="invisible">not show_discount_unit_price</attribute>
+                </xpath>
+
+                <!-- KANBAN VIEW Adjustments (used in mobile for listing products) -->
+                <xpath expr="//field[@name='order_line']/kanban//field[@name='product_id']" position="after">
+                    <field name="wh_available_qty"/>
+                    <field name="warehouse_id"/>
+                    <field name="lot_id"/>
+                    <field name="expiry_date"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/kanban/templates//field[@name='product_id']" position="after">
+                    <div class="text-info mt-1" t-if="!record.display_type.raw_value" style="font-size: 0.9em; font-weight: normal;">
+                        Avail: <t t-esc="record.wh_available_qty.value"/>
+                        <t t-if="record.warehouse_id.value"> | WH: <t t-esc="record.warehouse_id.value"/></t>
+                        <t t-if="record.lot_id.value"><br/>Lot: <t t-esc="record.lot_id.value"/></t>
+                        <t t-if="record.expiry_date.value"> | Exp: <t t-esc="record.expiry_date.value"/></t>
+                    </div>
+                </xpath>
+
+                <!-- Hide analytic distribution column -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='analytic_distribution']"
+                       position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='analytic_distribution']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Discount column visibility -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='discount']" position="attributes">
+                    <attribute name="invisible">not show_discount_unit_price</attribute>
+                    <attribute name="column_invisible">not parent.has_line_discounts</attribute>
+                </xpath>
+
+                <!-- Hide standard Odoo Discount buttons below order lines -->
+                <xpath expr="//div[@name='so_button_below_order_lines']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Hide the entire Other Info tab -->
+                <xpath expr="//page[@name='other_information']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- List view additions -->
+        <record id="view_order_list_with_approvals" model="ir.ui.view">
+            <field name="name">sale.order.list.with.approvals</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="city"/>
+                    <field name="tin_no"/>
+                    <field name="sale_type"/>
+                </xpath>
+                <xpath expr="//field[@name='activity_ids']" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_status']" position="attributes">
+                    <attribute name="optional"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Override standard Quotation actions to include our custom approval states but hide confirmed orders -->
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="domain">[('state', 'not in', ('sale', 'done', 'cancel'))]</field>
+        </record>
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="domain">[('state', 'not in', ('sale', 'done', 'cancel'))]</field>
+        </record>
+
+        <!-- Cancelled Orders Menu -->
+        <record id="action_cancelled_orders" model="ir.actions.act_window">
+            <field name="name">Cancelled Orders</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list,form,kanban,calendar,pivot,graph,activity</field>
+            <field name="domain">[('state', '=', 'cancel')]</field>
+            <field name="context">{}</field>
+        </record>
+        
+        <menuitem id="menu_cancelled_orders" name="Cancelled Orders" parent="Yohannes_sales_credit_cash.menu_sale_orders_parent" action="action_cancelled_orders" sequence="100"/>
+
+        <!-- Kanban view additions for mobile -->
+        <record id="view_order_kanban_with_approvals" model="ir.ui.view">
+            <field name="name">sale.order.kanban.with.approvals</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sale_order_kanban"/>
+            <field name="arch" type="xml">
+                <!-- Fetch custom fields -->
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="city"/>
+                    <field name="tin_no"/>
+                    <field name="sale_type"/>
+                </xpath>
+                <!-- Display custom fields beneath the partner name -->
+                <xpath expr="//t[@t-name='card']/div[1]" position="after">
+                    <div class="text-muted mb-1" style="font-size: 0.9em;">
+                        <span t-if="record.city.value"><i class="fa fa-map-marker"/> <t t-esc="record.city.value"/></span>
+                        <span t-if="record.tin_no.value" class="ms-2">TIN: <t t-esc="record.tin_no.value"/></span>
+                        <span t-if="record.sale_type.value" class="ms-2 badge rounded-pill text-bg-info"><t t-esc="record.sale_type.value"/></span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Menu Access for Cashier -->
+        <!-- Allows Cashiers to see the "To Invoice" and "Orders to Invoice" menus -->
+
+        <!-- Explicitly restore standard To Invoice menu visibility -->
+        <record id="sale.menu_sale_invoicing" model="ir.ui.menu">
+            <field name="active" eval="False"/>
+            <field name="parent_id" ref="sale.sale_menu_root"/>
+            <field name="sequence">20</field>
+        </record>
+    </data>
+</odoo>

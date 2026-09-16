@@ -1,0 +1,22 @@
+{
+    'name': 'Consignment Request',
+    'version': '19.0.1.0.0',
+    'summary': 'Manage consigment sales requests',
+    'depends': ['sale', 'purchase', 'stock', 'mail', 'yohannes_sales_sample_request', 'procurement_local_purchase'],
+    'author': '',
+    'license': 'AGPL-3',
+    'data': [
+        'security/consignment_request_security.xml',
+        'security/ir.model.access.csv',
+        'data/consignment_request_data.xml',
+        'data/consignment_return_data.xml',
+        'views/consigment_request_views.xml',
+        'views/consignment_return_view.xml',
+        'views/consignment_request_action_views.xml',
+        'views/consignment_request_menu_views.xml',
+        'views/sale_order_views.xml',
+        'views/purchase_order_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+}

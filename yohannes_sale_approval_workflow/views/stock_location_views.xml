@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warehouse_form_inherit_approval_workflow" model="ir.ui.view">
+        <field name="name">stock.warehouse.form.inherit.approval.workflow</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="inventory.view_warehouse_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='wh_type']" position="attributes">
+                <attribute name="invisible">not enable_order_source</attribute>
+            </xpath>
+            <xpath expr="//field[@name='wh_type']" position="before">
+                <field name="enable_order_source" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

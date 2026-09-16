@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consignment_request,consignment.request,model_consignment_request,,1,1,1,1
+access_consignment_request_line,consignment.request.line,model_consignment_request_line,,1,1,1,1
+access_consignment_return,consignment.return,model_consignment_return,,1,1,1,1
+access_consignment_return_line,consignment.return.line,model_consignment_return_line,,1,1,1,1

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend the Journal form to add Manual Sequence Limit settings -->
+    <record id="account_journal_form_inherit_manual_seq" model="ir.ui.view">
+        <field name="name">account.journal.form.inherit.manual.sequence</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <!-- Add after the Advanced tab's existing content -->
+            <xpath expr="//page[@name='advanced_settings']" position="inside">
+                <separator string="Manual Receipt Sequence Limit"/>
+                <group>
+                    <group>
+                        <field name="use_manual_sequence_limit"/>
+                        <field
+                            name="manual_sequence_limit"
+                            invisible="not use_manual_sequence_limit"
+                            required="use_manual_sequence_limit"
+                        />
+                    </group>
+                    <group invisible="not use_manual_sequence_limit">
+                        <div class="alert alert-info" role="alert" colspan="2">
+                            <strong>How this works:</strong>
+                            When enabled, digital invoices in this journal will be
+                            numbered starting from
+                            <em>Last Manual Receipt Number + 1</em>.
+                            This prevents overlap between physical receipt books and
+                            Odoo-generated invoice numbers.<br/>
+                            <strong>Example:</strong> Set to 100 → digital invoices
+                            start at 101, 102, 103 …
+                        </div>
+                    </group>
+                </group>
+                <group invisible="not use_manual_sequence_limit">
+                    <button
+                        name="action_apply_manual_sequence_now"
+                        string="Apply Sequence Limit Now"
+                        type="object"
+                        class="btn-secondary"
+                        icon="fa-refresh"
+                        help="Immediately push the journal sequence to start from manual_limit + 1."
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_price_update" model="ir.ui.view">
+        <field name="name">stock.picking.form.price.update</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_price_lines" string="Generate Price Lines" type="object" class="oe_highlight" invisible="picking_type_code != 'incoming' or prices_approved" groups="stock.group_stock_manager"/>
+                <button name="action_approve_prices" string="Approve Prices" type="object" class="oe_highlight" invisible="picking_type_code != 'incoming' or prices_approved or not price_update_line_ids" groups="stock.group_stock_manager"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="prices_approved" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Price Update" name="price_update" invisible="picking_type_code != 'incoming'">
+                    <field name="price_update_line_ids" readonly="prices_approved">
+                        <list editable="bottom" create="0">
+                            <field name="product_id" readonly="1"/>
+                            <field name="uom_id" readonly="1"/>
+                            <field name="cost_price" readonly="1"/>
+                            
+                            <field name="current_wholesale_price" readonly="1"/>
+                            <field name="wholesale_margin_percent"/>
+                            <field name="new_wholesale_price"/>
+                            
+                            <field name="current_retail_price" readonly="1"/>
+                            <field name="retail_margin_percent"/>
+                            <field name="new_retail_price"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

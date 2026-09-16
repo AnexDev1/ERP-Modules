@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_price_update_line_manager_local,procurement.price.update.line.manager.local,model_procurement_price_update_line,procurement_local_purchase.group_local_purchase_pr_manager,1,1,1,1
+access_price_update_line_ceo_local,procurement.price.update.line.ceo.local,model_procurement_price_update_line,procurement_local_purchase.group_local_purchase_ceo,1,1,1,1
+access_price_update_line_manager_foreign,procurement.price.update.line.manager.foreign,model_procurement_price_update_line,procurement_foreign_purchase.group_foreign_purchase_manager,1,1,1,1
+access_price_update_line_ceo_foreign,procurement.price.update.line.ceo.foreign,model_procurement_price_update_line,procurement_foreign_purchase.group_foreign_purchase_ceo,1,1,1,1
+access_price_update_line_user,procurement.price.update.line.user,model_procurement_price_update_line,base.group_user,1,0,0,0

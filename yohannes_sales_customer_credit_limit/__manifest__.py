@@ -1,0 +1,28 @@
+# __manifest__.py
+{
+    'name': 'Customer Credit Limit ',
+    'version': '19.0.1.0.0',
+    'category': 'Sales',
+    'summary': 'customer credit limits ',
+    'author': 'eden',
+    'license': 'AGPL-3',
+    'depends': ['base', 'contacts', 'sale_management', 'account',
+                'stock', 'mail', 'yohannes_sale_approval_workflow'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/credit_payment_security.xml',
+        'data/sequences.xml',
+        'views/sale_order_view.xml',
+        'wizard/credit_limit_import_views.xml',
+        'views/customer_credit_views.xml',
+        'views/credit_payment_views.xml',
+        'views/res_company_views.xml',
+        'views/res_partner_view.xml',
+        # 'views/sales_credit_report_views.xml',
+        #'views/account_move_views.xml',
+        'views/account_payment_term_views.xml',
+        'report/sales_credit_report_template.xml',
+    ],
+    'installable': True,
+    'application': False,
+}

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Kanban View for Request Dashboard -->
+        <record id="view_request_dashboard_kanban" model="ir.ui.view">
+            <field name="name">request.dashboard.kanban</field>
+            <field name="model">request.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors" create="0" edit="0" delete="0">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="color"/>
+                    <field name="count_draft"/>
+                    <field name="count_to_approve"/>
+                    <field name="count_approved"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)}">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <a type="object" name="action_open_all" class="text-truncate" style="font-size: 18px; font-weight: bold;">
+                                                <field name="name"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="container o_kanban_card_content mt-4 mb-2">
+                                    <div class="row">
+                                        <div class="col-4 o_kanban_primary_left text-center">
+                                            <button class="btn btn-primary btn-sm mb-2" name="action_open_all" type="object">
+                                                <span>View All</span>
+                                            </button>
+                                        </div>
+                                        <div class="col-8 o_kanban_primary_right">
+                                            <div t-if="record.count_draft.raw_value > 0" class="row">
+                                                <div class="col-9">
+                                                    <a class="oe_kanban_action oe_kanban_action_a" type="object" name="action_open_draft">
+                                                        Draft
+                                                    </a>
+                                                </div>
+                                                <div class="col-3 text-end">
+                                                    <field name="count_draft"/>
+                                                </div>
+                                            </div>
+                                            <div t-if="record.count_to_approve.raw_value > 0" class="row">
+                                                <div class="col-9">
+                                                    <a class="oe_kanban_action oe_kanban_action_a text-warning fw-bold" type="object" name="action_open_to_approve">
+                                                        To Approve
+                                                    </a>
+                                                </div>
+                                                <div class="col-3 text-end">
+                                                    <field name="count_to_approve"/>
+                                                </div>
+                                            </div>
+                                            <div t-if="record.count_approved.raw_value > 0" class="row">
+                                                <div class="col-9">
+                                                    <a class="oe_kanban_action oe_kanban_action_a text-success fw-bold" type="object" name="action_open_approved">
+                                                        Approved / Requested
+                                                    </a>
+                                                </div>
+                                                <div class="col-3 text-end">
+                                                    <field name="count_approved"/>
+                                                </div>
+                                            </div>
+                                            <div t-if="record.count_draft.raw_value == 0 and record.count_to_approve.raw_value == 0 and record.count_approved.raw_value == 0" class="text-muted text-center mt-2">
+                                                <em>No active requests</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Action for Request Dashboard -->
+        <record id="action_request_dashboard" model="ir.actions.act_window">
+            <field name="name">Requests Overview</field>
+            <field name="res_model">request.dashboard</field>
+            <field name="view_mode">kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No overview data found.
+                </p>
+                <p>
+                    Please ensure the request dashboard data is loaded properly.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

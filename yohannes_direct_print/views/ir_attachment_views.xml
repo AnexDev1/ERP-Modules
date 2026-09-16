@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Server action for contextual menu 'Print Attachment' -->
+        <record id="action_print_ir_attachment" model="ir.actions.server">
+            <field name="name">Print Attachment</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="binding_model_id" ref="base.model_ir_attachment"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+action = records.action_direct_print()
+            </field>
+        </record>
+
+        <!-- Inherit ir.attachment form view to add a prominent Print button in header -->
+        <record id="view_attachment_form_direct_print" model="ir.ui.view">
+            <field name="name">ir.attachment.form.direct.print</field>
+            <field name="model">ir.attachment</field>
+            <field name="inherit_id" ref="base.view_attachment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="action_direct_print" string="Print Attachment" type="object" class="btn-primary" icon="fa-print"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

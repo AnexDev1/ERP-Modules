@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="procurement_dashboard.DashboardMain">
+        <div class="o_pd_root">
+
+            <!-- ── Top Control Bar ── -->
+            <div class="o_pd_topbar">
+                <div class="o_pd_topbar_left">
+                    <div class="o_pd_preset_pills">
+                        <button t-att-class="'o_pd_pill' + (state.preset === 'last30' ? ' active' : '')"
+                            t-on-click="() => this.setPreset('last30')">30 Days</button>
+                        <button t-att-class="'o_pd_pill' + (state.preset === 'thisMonth' ? ' active' : '')"
+                            t-on-click="() => this.setPreset('thisMonth')">This Month</button>
+                        <button t-att-class="'o_pd_pill' + (state.preset === 'last3' ? ' active' : '')"
+                            t-on-click="() => this.setPreset('last3')">3 Months</button>
+                    </div>
+                </div>
+                <div class="o_pd_topbar_right">
+                    <input type="date" class="o_pd_date" t-model="state.dateFrom"/>
+                    <span class="o_pd_arrow">→</span>
+                    <input type="date" class="o_pd_date" t-model="state.dateTo"/>
+                    <button class="o_pd_btn o_pd_btn_primary" t-on-click="() => this.applyDateFilter()">
+                        <i class="fa fa-filter"/> Apply
+                    </button>
+                    <button class="o_pd_btn" t-on-click="() => this.refreshDashboard()">
+                        <i class="fa fa-refresh"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── Scrollable Body ── -->
+            <div class="o_pd_body">
+
+                <!-- ── KPI Operation Cards ── -->
+                <p class="o_pd_section_title">Operations</p>
+                <div class="o_pd_ops_grid">
+
+                    <div class="o_pd_op_card" style="--accent:#1f78b4"
+                        t-on-click="() => this.openListView('purchase.order', [['state','in',['purchase','done']]], 'Purchase Orders')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#e8f4fd;color:#1f78b4">
+                                <i class="fa fa-shopping-cart fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.po_count"/>
+                                <span class="o_pd_op_label">Purchase Orders</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <span class="o_pd_op_sub"><t t-esc="formatCompact(state.stats.po_total_amount)"/> ETB total</span>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <div class="o_pd_op_card" style="--accent:#875a7b"
+                        t-on-click="() => this.openListView('local.purchase.requisition', [], 'Requisitions')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#f5eef8;color:#875a7b">
+                                <i class="fa fa-file-text-o fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.pr_count"/>
+                                <span class="o_pd_op_label">Requisitions</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <span class="o_pd_op_sub">Total submitted</span>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <div class="o_pd_op_card" style="--accent:#f59e0b"
+                        t-on-click="() => this.openListView('local.rfq', [], 'Local RFQs')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#fef9e7;color:#f59e0b">
+                                <i class="fa fa-envelope-o fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.local_rfq_count"/>
+                                <span class="o_pd_op_label">Local RFQs</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <t t-if="state.stats.local_rfq_pending > 0">
+                                <span class="o_pd_op_alert"><i class="fa fa-clock-o"/> <t t-esc="state.stats.local_rfq_pending"/> pending</span>
+                            </t>
+                            <t t-else="">
+                                <span class="o_pd_op_sub">All up to date</span>
+                            </t>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <div class="o_pd_op_card" style="--accent:#10b981"
+                        t-on-click="() => this.openListView('purchase.order', [['state','=','draft']], 'Foreign RFQs')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#e8f8f3;color:#10b981">
+                                <i class="fa fa-globe fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.foreign_rfq_count"/>
+                                <span class="o_pd_op_label">Foreign RFQs</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <t t-if="state.stats.foreign_rfq_pending > 0">
+                                <span class="o_pd_op_alert"><i class="fa fa-clock-o"/> <t t-esc="state.stats.foreign_rfq_pending"/> pending</span>
+                            </t>
+                            <t t-else="">
+                                <span class="o_pd_op_sub">All up to date</span>
+                            </t>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <div class="o_pd_op_card" style="--accent:#22c55e">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#e8f8ed;color:#22c55e">
+                                <i class="fa fa-bar-chart fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count o_pd_op_count_sm" t-esc="formatCompact(state.stats.avg_order_value)"/>
+                                <span class="o_pd_op_label">Avg. Order Value</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <span class="o_pd_op_sub">ETB per confirmed PO</span>
+                            <span class="o_pd_op_link" t-on-click.stop="() => this.openListView('purchase.order', [['state','in',['purchase','done']]], 'Confirmed Orders')">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <!-- LC Need Card -->
+                    <div class="o_pd_op_card" style="--accent:#d97706"
+                        t-on-click="() => this.openListView('purchase.order', [['state','in',['purchase','done']],['request_type','=','foreign'],['lc_ids','=',false]], 'LC Need')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#fffbeb;color:#d97706">
+                                <i class="fa fa-bank fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.lc_need_count"/>
+                                <span class="o_pd_op_label">LC Need</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <span class="o_pd_op_sub">POs awaiting LC</span>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                    <!-- Expired LC Card -->
+                    <div class="o_pd_op_card" style="--accent:#dc2626"
+                        t-on-click="() => this.openListView('foreign.lc', this.expiredLCDomain, 'Expired LCs')">
+                        <div class="o_pd_op_top">
+                            <div class="o_pd_op_icon" style="background:#fef2f2;color:#dc2626">
+                                <i class="fa fa-exclamation-circle fa-lg"/>
+                            </div>
+                            <div class="o_pd_op_nums">
+                                <span class="o_pd_op_count" t-esc="state.stats.expired_lc_count"/>
+                                <span class="o_pd_op_label">Expired LCs</span>
+                            </div>
+                        </div>
+                        <div class="o_pd_op_bottom">
+                            <t t-if="state.stats.expired_lc_count > 0">
+                                <span class="o_pd_op_alert"><i class="fa fa-clock-o"/> <t t-esc="state.stats.expired_lc_count"/> expired</span>
+                            </t>
+                            <t t-else="">
+                                <span class="o_pd_op_sub">No expired LCs</span>
+                            </t>
+                            <span class="o_pd_op_link">View <i class="fa fa-arrow-right"/></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ── Charts Row 1 ── -->
+                <p class="o_pd_section_title">Analytics</p>
+                <div class="o_pd_charts_row">
+                    <div class="o_pd_chart_card o_pd_chart_lg">
+                        <div class="o_pd_chart_hd">
+                            <div>
+                                <div class="o_pd_chart_name">Purchase Value Trend</div>
+                                <div class="o_pd_chart_desc">Confirmed Orders vs RFQs (ETB)</div>
+                            </div>
+                            <span class="o_pd_chip">Monthly</span>
+                        </div>
+                        <div class="o_pd_canvas_wrap"><canvas t-ref="spendingCanvas"/></div>
+                    </div>
+                    <div class="o_pd_chart_card">
+                        <div class="o_pd_chart_hd">
+                            <div>
+                                <div class="o_pd_chart_name">PO Status</div>
+                                <div class="o_pd_chart_desc">Orders by workflow state</div>
+                            </div>
+                            <span class="o_pd_chip">This Period</span>
+                        </div>
+                        <div class="o_pd_canvas_wrap"><canvas t-ref="poStatusCanvas"/></div>
+                    </div>
+                </div>
+
+                <!-- ── Charts Row 2 ── -->
+                <div class="o_pd_charts_row">
+                    <div class="o_pd_chart_card">
+                        <div class="o_pd_chart_hd">
+                            <div>
+                                <div class="o_pd_chart_name">Spend by Vendor</div>
+                                <div class="o_pd_chart_desc">Top vendors by PO amount</div>
+                            </div>
+                            <span class="o_pd_chip">Top 5</span>
+                        </div>
+                        <div class="o_pd_canvas_wrap"><canvas t-ref="vendorSpendCanvas"/></div>
+                    </div>
+                    <div class="o_pd_chart_card o_pd_chart_lg">
+                        <div class="o_pd_chart_hd">
+                            <div>
+                                <div class="o_pd_chart_name">PR Spend by Department</div>
+                                <div class="o_pd_chart_desc">Local vs Foreign (Top 10)</div>
+                            </div>
+                            <span class="o_pd_chip">By Dept</span>
+                        </div>
+                        <div class="o_pd_canvas_wrap"><canvas t-ref="deptCanvas"/></div>
+                    </div>
+                </div>
+
+                <!-- ── Activity Tables ── -->
+                <p class="o_pd_section_title">Activity</p>
+                <div class="o_pd_tables_row">
+
+                    <!-- Pending Approvals -->
+                    <div class="o_pd_tbl_card">
+                        <div class="o_pd_tbl_hd">
+                            <span class="o_pd_tbl_name">Pending Approvals</span>
+                            <span class="o_pd_tbl_badge" t-esc="state.pendingRequisitions.length"/>
+                        </div>
+                        <div class="o_pd_tbl_body">
+                            <table>
+                                <thead><tr><th>Reference</th><th>Type</th><th>Amount</th><th>Status</th><th>Age</th></tr></thead>
+                                <tbody>
+                                    <t t-if="state.pendingRequisitions.length === 0">
+                                        <tr><td colspan="5" class="o_pd_tbl_empty">No pending approvals</td></tr>
+                                    </t>
+                                    <t t-foreach="state.pendingRequisitions" t-as="pr" t-key="pr.type + '_' + pr.id">
+                                        <tr class="o_pd_tbl_row" t-on-click="() => this.openRecord(pr.model, pr.id)">
+                                            <td class="o_pd_td_ref"><t t-esc="pr.name"/></td>
+                                            <td><span class="o_pd_chip" t-att-class="pr.type === 'Local PR' ? 'o_pd_chip_blue' : 'o_pd_chip_amber'"><t t-esc="pr.type"/></span></td>
+                                            <td class="o_pd_td_num"><t t-esc="formatCurrency(pr.amount_total)"/></td>
+                                            <td><span class="o_pd_chip o_pd_chip_amber"><t t-esc="pr.state_label"/></span></td>
+                                            <td class="o_pd_td_muted"><t t-esc="pr.aging_days"/>d</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="o_pd_tbl_ft" t-on-click="() => this.openListView('local.purchase.requisition', [['state','in',['submitted','verified','budget_approved','pr_manager_approved']]], 'Pending PRs')">
+                            View All <i class="fa fa-arrow-right"/>
+                        </div>
+                    </div>
+
+                    <!-- Recent POs -->
+                    <div class="o_pd_tbl_card">
+                        <div class="o_pd_tbl_hd">
+                            <span class="o_pd_tbl_name">Recent Purchase Orders</span>
+                            <span class="o_pd_tbl_badge" t-esc="state.recentPOs.length"/>
+                        </div>
+                        <div class="o_pd_tbl_body">
+                            <table>
+                                <thead><tr><th>PO Number</th><th>Type</th><th>Vendor</th><th>Total</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    <t t-if="state.recentPOs.length === 0">
+                                        <tr><td colspan="5" class="o_pd_tbl_empty">No recent orders</td></tr>
+                                    </t>
+                                    <t t-foreach="state.recentPOs" t-as="po" t-key="po.id">
+                                        <tr class="o_pd_tbl_row" t-on-click="() => this.openRecord('purchase.order', po.id)">
+                                            <td class="o_pd_td_ref"><t t-esc="po.name"/></td>
+                                            <td><span class="o_pd_chip" t-att-class="po.request_type === 'foreign' ? 'o_pd_chip_amber' : 'o_pd_chip_blue'"><t t-esc="po.request_type === 'foreign' ? 'Foreign' : 'Local'"/></span></td>
+                                            <td class="o_pd_td_muted"><t t-esc="po.partner"/></td>
+                                            <td class="o_pd_td_num"><t t-esc="formatCurrency(po.amount_total)"/></td>
+                                            <td><span class="o_pd_chip" t-att-class="po.state === 'purchase' || po.state === 'done' ? 'o_pd_chip_green' : po.state === 'sent' ? 'o_pd_chip_blue' : ''"><t t-esc="po.state_label"/></span></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="o_pd_tbl_ft" t-on-click="() => this.openListView('purchase.order', [], 'Purchase Orders')">
+                            View All <i class="fa fa-arrow-right"/>
+                        </div>
+                    </div>
+
+                    <!-- Top Vendors -->
+                    <div class="o_pd_tbl_card">
+                        <div class="o_pd_tbl_hd">
+                            <span class="o_pd_tbl_name">Top Vendors</span>
+                            <span class="o_pd_tbl_badge" t-esc="state.top_vendors.length"/>
+                        </div>
+                        <div class="o_pd_tbl_body">
+                            <table>
+                                <thead><tr><th>#</th><th>Vendor</th><th>Orders</th><th>Spend</th><th>On-Time</th></tr></thead>
+                                <tbody>
+                                    <t t-if="state.top_vendors.length === 0">
+                                        <tr><td colspan="5" class="o_pd_tbl_empty">No vendor data</td></tr>
+                                    </t>
+                                    <t t-foreach="state.top_vendors" t-as="vendor" t-key="vendor.name">
+                                        <tr class="o_pd_tbl_row">
+                                            <td class="o_pd_td_rank"><t t-esc="vendor.rank"/></td>
+                                            <td class="o_pd_td_muted"><t t-esc="vendor.name"/></td>
+                                            <td class="o_pd_td_center"><t t-esc="vendor.orders_count"/></td>
+                                            <td class="o_pd_td_num"><t t-esc="formatCompact(vendor.total_spend)"/></td>
+                                            <td><span class="o_pd_chip o_pd_chip_green"><t t-esc="vendor.on_time_rate"/></span></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="o_pd_tbl_ft" t-on-click="() => this.openListView('res.partner', [['supplier_rank','>',0]], 'All Vendors')">
+                            View All <i class="fa fa-arrow-right"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="o_pd_footer">Last updated: <t t-esc="state.lastUpdated"/></div>
+            </div>
+        </div>
+    </t>
+</templates>

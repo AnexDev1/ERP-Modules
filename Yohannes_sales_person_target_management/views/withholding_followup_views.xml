@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================
+             Withholding Followup List View
+             Shows posted customer invoices where withholding is involved:
+               - Invoice flagged as withholding invoice (invoice-level)
+               - Invoice has withholding records in account.move.withholding
+               - A reconciled payment has a withholding certificate no. (payment-level)
+        ============================================================ -->
+        <record id="view_withholding_followup_list" model="ir.ui.view">
+            <field name="name">withholding.followup.list</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <list string="Withholding Followup"
+                      default_order="invoice_date desc, id desc"
+                      create="false">
+
+                    <!-- Invoice Identity -->
+                    <field name="name" string="Invoice No." decoration-bf="1"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="tin_no" string="TIN No." optional="show"/>
+                    <field name="city" string="City" optional="show"/>
+
+                    <!-- Dates -->
+                    <field name="invoice_date" string="Invoice Date"/>
+                    <field name="invoice_date_due" string="Due Date" optional="show"/>
+
+                    <!-- Withholding Source Indicators (checkbox = helps identify invoice vs payment origin) -->
+                    <field name="has_negative_tax"
+                           string="WHT via Sales Order"
+                           widget="boolean"
+                           optional="show"/>
+                    <field name="has_payment_wht"
+                           string="WHT via Payment"
+                           widget="boolean"
+                           optional="show"/>
+
+                    <!-- Invoice Amounts -->
+                    <field name="amount_untaxed"
+                           string="Taxable Amount"
+                           optional="show"
+                           sum="Total Taxable"/>
+                    <field name="paid_amount_calculated"
+                           string="Paid Amount"
+                           sum="Total Paid"
+                           decoration-bf="1"/>
+
+                    <!-- Unified WHT Amount (Sales Order + Payment + Invoice-level) -->
+                    <field name="wht_total_amount"
+                           string="WHT Amount"
+                           sum="Total WHT"
+                           optional="show"/>
+
+                    <!-- Payment WHT Reference Number (certificate reference from Register Payment) -->
+                    <field name="payment_wht_cert_no"
+                           string="Payment WHT Reference No."
+                           optional="show"/>
+
+                    <!-- Balance & Payment Status -->
+                    <field name="amount_residual"
+                           string="Balance Due"
+                           sum="Total Balance"
+                           optional="show"/>
+                    <field name="payment_state"
+                           string="Payment Status"
+                           widget="badge"
+                           decoration-danger="payment_state == 'not_paid'"
+                           decoration-warning="payment_state in ('partial', 'in_payment')"
+                           decoration-success="payment_state in ('paid', 'reversed')"
+                           optional="show"/>
+
+                    <!-- Hidden fields for domain only -->
+                    <field name="move_type" column_invisible="1"/>
+                    <field name="state" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Withholding Followup Action
+             Domain: posted customer invoices where ANY withholding is present:
+               - Flagged as withholding invoice (invoice-level flag)
+               - Has computed withholding amount > 0 (invoice-level lines)
+               - Has a payment with withholding certificate (payment-level)
+        -->
+        <record id="action_withholding_followup" model="ir.actions.act_window">
+            <field name="name">Withholding Followup</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[
+                ('move_type', '=', 'out_invoice'),
+                ('state', '=', 'posted'),
+                '|', '|', '|',
+                    ('withholding_invoice', '=', True),
+                    ('withholding_amount', '&gt;', 0),
+                    ('has_payment_wht', '=', True),
+                    ('has_negative_tax', '=', True)
+            ]</field>
+            <field name="view_id" ref="view_withholding_followup_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Withholding Records Found
+                </p>
+                <p>
+                    This view shows posted customer invoices where withholding tax has been applied —
+                    either flagged at invoice level or recorded during payment registration.
+                </p>
+            </field>
+        </record>
+
+        <!-- Reports sub-menu under Customers (created once here) -->
+        <menuitem id="menu_accounting_reports_customers"
+                  name="Reports"
+                  parent="account.menu_finance_receivables"
+                  sequence="122"/>
+
+        <!-- Withholding Followup menu item -->
+        <menuitem id="menu_withholding_followup"
+                  name="Withholding Followup"
+                  parent="menu_accounting_reports_customers"
+                  action="action_withholding_followup"
+                  sequence="10"/>
+
+    </data>
+</odoo>

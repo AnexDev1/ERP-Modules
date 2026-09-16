@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_stock_adjustment_request_form" model="ir.ui.view">
+        <field name="name">stock.adjustment.request.form</field>
+        <field name="model">stock.adjustment.request</field>
+        <field name="arch" type="xml">
+            <form string="Inventory Adjustment">
+                <header>
+
+                    <button name="action_submit"
+                            string="Submit to Manager"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_manager_approve"
+                            string="Manager Approval"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'store_manager'"
+                            groups="stock.group_stock_manager"/>
+
+                    <button name="action_finance_approve"
+                            string="Finance Approval"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'finance_approver'"
+                            groups="account.group_account_invoice"/>
+
+                    <button name="action_load_inventory"
+                            string="Fetch Current Stock"
+                            type="object"
+                            invisible="state != 'draft' or not location_id or adjustment_purpose != 'reconciliation'"/>
+
+                    <button name="action_load_from_reference"
+                            string="Fetch Reference Lines"
+                            type="object"
+                            invisible="state != 'draft' or not reference_doc or adjustment_purpose != 'correction'"/>
+
+                    <button name="action_process"
+                            string="Validate Adjustment"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'approved'"/>
+
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            invisible="state in ('done','cancel')"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,store_manager,finance_approver,approved,done"/>
+
+                </header>
+
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_picking"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-exchange"
+                                invisible="not picking_id">
+                            <field name="picking_id" widget="statinfo"
+                                   string="Stock Move"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="adjustment_purpose"
+                                   readonly="state != 'draft'"/>
+                            <field name="location_id"
+                                   readonly="state != 'draft'"
+                                   force_save="1"
+                                   options="{'no_create': True}"/>
+
+
+                            <field name="reference_doc"
+                                   readonly="state != 'draft'"
+                                   invisible="adjustment_purpose != 'correction'"
+                                   required="adjustment_purpose == 'correction'"
+                                   options="{'no_create': True}"/>
+                            <field name="picking_id" 
+                                   readonly="1"
+                                   invisible="not picking_id"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="description"
+                                   placeholder="Ex: Sales initiated with wrong code..."
+                                   readonly="state != 'draft'"/>
+                            <field name="create_uid" string="Requested By" readonly="1"/>
+                            <field name="create_date" string="Request Date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Adjustment Lines">
+
+                            <field name="line_ids"
+                                   readonly="state != 'draft'">
+
+                                <list editable="bottom">
+                                    <field name="product_id"
+                                           options="{'no_create': True}"/>
+
+                                    <field name="lot_id"
+                                           options="{'no_create': True}"
+                                           groups="stock.group_production_lot"/>
+
+                                    <field name="system_qty" readonly="1"/>
+                                    <field name="counted_qty"/>
+                                    <field name="difference_qty"
+                                           readonly="1"
+                                           decoration-danger="difference_qty &lt; 0"
+                                           decoration-success="difference_qty &gt; 0"/>
+                                    
+                                    <field name="unit_cost" optional="show"/>
+                                    <field name="subtotal_value" 
+                                           decoration-danger="subtotal_value &lt; 0"
+                                           decoration-success="subtotal_value &gt; 0"
+                                           sum="Total Valuation Change"/>
+                                </list>
+
+                            </field>
+                        </page>
+
+
+                    </notebook>
+
+                    <group class="oe_subtotal_footer oe_right">
+                         <field name="currency_id" invisible="1"/>
+                         <field name="total_value_change" 
+                                widget="monetary" 
+                                decoration-danger="total_value_change &lt; 0"
+                                decoration-success="total_value_change &gt; 0"
+                                class="oe_subtotal_footer_separator"/>
+                    </group>
+                    <div class="oe_clear"/>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_adjustment_request_list" model="ir.ui.view">
+        <field name="name">stock.adjustment.request.list</field>
+        <field name="model">stock.adjustment.request</field>
+        <field name="arch" type="xml">
+            <list string="Inventory Adjustments"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'approved'"
+                  decoration-success="state == 'done'">
+
+                <field name="name"/>
+                <field name="location_id"/>
+                <field name="total_value_change" widget="monetary" sum="Total"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state in ('store_manager', 'finance_approver')"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+
+</odoo>

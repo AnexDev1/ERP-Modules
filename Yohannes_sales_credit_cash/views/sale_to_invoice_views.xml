@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Reusable list View for To Invoice -->
+    <record id="view_sale_order_to_invoice_tree" model="ir.ui.view">
+        <field name="name">sale.order.to.invoice.list</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <list string="Sales Orders" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="state" 
+                       widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-primary="state == 'sent'" 
+                       decoration-success="state == 'sale'" 
+                       decoration-warning="state == 'done'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="date_order"/>
+                <field name="sale_type"/>
+                <field name="amount_total"/>
+                <field name="invoice_status" 
+                       widget="badge" 
+                       decoration-info="invoice_status == 'to invoice'" 
+                       decoration-success="invoice_status == 'invoiced'" 
+                       decoration-warning="invoice_status == 'upselling'" 
+                       decoration-muted="invoice_status == 'no'"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_cash_to_invoice" model="ir.actions.act_window">
+        <field name="name">Cash To Invoices</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_order_to_invoice_tree"/>
+        <!--field name="domain">
+            [('sale_type', '=', 'cash'),
+            ('state', 'in', ('sale', 'done'))],
+            ('invoice_status', '=','to invoice')
+        </field-->
+        <field name="domain">
+            [('sale_type', '=', 'cash'),
+            ('state', 'in', ('sale', 'done')),
+            ('invoice_status', '=', 'to invoice'),
+            ('is_manual_sale', '=', False)]
+        </field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+
+    <record id="action_credit_to_invoice" model="ir.actions.act_window">
+        <field name="name">Credit To Invoices</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_order_to_invoice_tree"/>
+        <!--field name="domain">
+            [('sale_type', '=', 'credit'),
+            ('state', 'in', ('sale', 'done'))],
+            ('invoice_status', '=', 'to invoice')
+        </field-->
+        <field name="domain">
+            [('sale_type', '=', 'credit'),
+            ('state', 'in', ('sale', 'done')),
+            ('invoice_status', '=', 'to invoice'),
+            ('is_manual_sale', '=', False)]
+        </field>
+        <field name="context">{'create': False}</field>
+    </record>
+    </data>
+</odoo>

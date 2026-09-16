@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_transaction_type_list" model="ir.ui.view">
+        <field name="name">transaction.type.list</field>
+        <field name="model">transaction.type</field>
+        <field name="arch" type="xml">
+            <list string="Transaction Types">
+                <field name="short_code" string="Short Code"/>
+                <field name="name" string="Transaction Type"/>
+                <field name="assignment" string="Assignment"/>
+                <field name="active" string="Active"/>
+                <field name="company_id" string="Company" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_transaction_type_form" model="ir.ui.view">
+        <field name="name">transaction.type.form</field>
+        <field name="model">transaction.type</field>
+        <field name="arch" type="xml">
+            <form string="Transaction Type">
+                <sheet>
+                    <group name="header_group">
+                        <group name="basic_info">
+                            <field name="short_code" placeholder="e.g., WH" required="1"/>
+                            <field name="assignment"/>
+                            <field name="transaction_type"/>
+                        </group>
+                        <group name="additional_info">
+                            <field name="description"/>
+                            <field name="payment_method"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Posting Cycle">
+                           <field name="sequence_ids">
+                                <list>
+                                    <field name="fiscal_year"/>
+                                    <field name="sequence_name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <!--record id="view_transaction_type_search" model="ir.ui.view">
+        <field name="name">transaction.type.search</field>
+        <field name="model">transaction.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Transaction Types">
+                <field name="name" string="Transaction Type"/>
+                <field name="short_code" string="Short Code"/>
+                <field name="description" string="Description"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="automatic" string="Automatic" domain="[('assignment', '=', 'automatic')]"/>
+                <filter name="manual" string="Manual" domain="[('assignment', '=', 'manual')]"/>
+                <separator/>
+                <filter name="purchase" string="Purchase" domain="[('category', '=', 'purchase')]"/>
+                <filter name="sales" string="Sales" domain="[('category', '=', 'sales')]"/>
+                <filter name="withholding" string="Withholding" domain="[('category', '=', 'withholding')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_by_assignment" string="Assignment" context="{'group_by': 'assignment'}"/>
+                    <filter name="group_by_company" string="Company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record-->
+
+    <!-- Action -->
+    <record id="action_transaction_type" model="ir.actions.act_window">
+        <field name="name">Transaction Types</field>
+        <field name="res_model">transaction.type</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="view_transaction_type_search"/> -->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first transaction type
+            </p>
+            <p>
+                Transaction types help categorize different types of business transactions
+                like purchases, sales, payments, and withholding.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_transaction_type"
+              name="Transaction Types"
+              parent="account.menu_finance_configuration"
+              action="action_transaction_type"
+              sequence="50"/>
+</odoo>

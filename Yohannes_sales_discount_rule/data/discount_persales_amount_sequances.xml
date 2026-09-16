@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_discount_per_sales_amount" model="ir.sequence">
+        <field name="name">Discount Per Sales Amount</field>
+        <field name="code">discount.per.sales.amount.seq</field>
+        <field name="prefix">DPA/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rrg_building_user,rrg.building.user,model_rrg_building,base.group_user,1,1,1,1
+access_rrg_meter_user,rrg.meter.user,model_rrg_meter,base.group_user,1,1,1,1
+access_material_purchase_requisition_user,material.purchase.requisition.user,model_material_purchase_requisition,base.group_user,1,1,1,1
+access_material_purchase_requisition_line_user,material.purchase.requisition.line.user,model_material_purchase_requisition_line,base.group_user,1,1,1,1

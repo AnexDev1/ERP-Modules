@@ -1,0 +1,30 @@
+{
+    'name': 'Sales Discount Rule',
+    'version': '19.0.1.0.0',
+    'category': 'Sales',
+    'summary': 'Sales Discount Rules management',
+    'author': 'eden',
+    'license': 'AGPL-3',
+    'depends': ['sale', 'crm', 'stock', 'account', 'mail', 'yohannes_sale_approval_workflow'],
+    'data': [
+        'security/sales_discount_security.xml',
+        'security/ir.model.access.csv',
+        'data/discount_per_customer_sequances.xml',
+        'data/discount_persales_amount_sequances.xml',
+        'data/discount_per_quantity_order_sequances.xml',
+        'data/discount_per_customer_and_product_sequances.xml',
+        'views/sales_discount_per_customer_type.xml',
+        'views/sales_discount_per_sales_amount_views.xml',
+        'views/sales_discount_per_quantity_order_views.xml',
+        'views/sales_discount_per_customer_and_product_views.xml',
+        'views/sales_discount_action_views.xml',
+        'views/sales_discount_menu.xml',
+        # 'views/sales_order_views.xml',
+        'views/product_views.xml',
+'wizard/sales_discount_wizard_line_views.xml',
+        'wizard/sales_discount_wizard_views.xml',  # main wizard form
+        
+    ],
+    'installable': True,
+    'application': False,
+}

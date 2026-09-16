@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="view_sale_order_report_search" model="ir.ui.view">
+        <field name="name">sale.order.report.search</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="sale_type"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+
+                <!-- Filters for Sales Type -->
+                <filter string="Cash Sales" name="filter_cash" domain="[('sale_type','=','cash')]"/>
+                <filter string="Credit Sales" name="filter_credit" domain="[('sale_type','=','credit')]"/>
+
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_partner" context="{'group_by':'partner_id'}"/>
+                    <filter string="Sales Type" name="group_sale_type" context="{'group_by':'sale_type'}"/>
+                    <filter string="Order Date (Month)" name="group_month" context="{'group_by':'date_order:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!-- Custom list View for Sale Order -->
+    <record id="view_sale_order_report_list" model="ir.ui.view">
+        <field name="name">sale.order.report.list</field>
+        <field name="model">sale.order</field>
+        <!--field name="search_id" ref="view_sale_order_report_search"/-->
+        <field name="arch" type="xml">
+            <list string="Sales Orders">
+                <field name="name" string="Order Reference"/>
+                <field name="partner_id" string="Customer" filter_domain="[['partner_id', 'ilike', self]]"/>
+                <field name="sale_type" string="Sale Type" filter_domain="[['sale_type', '=', self]]"/>
+                <field name="date_order" string="Order Date" filter_domain="[['date_order', '>=', self]]"/>
+                <field name="amount_total" string="Total" widget="monetary"/>
+                <field name="state" string="Status"/>
+                <!--button name="action_print_report" string="Print Report" type="object" class="oe_highlight"/-->
+            </list>
+        </field>
+    </record>
+
+    <!--record id="action_sales_order_report" model="ir.actions.act_window">
+        <field name="name">Sales Orders Report</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sale_order_report_list"/>
+        <field name="domain">[('state', 'in', ['sale', 'done'])]</field>
+        <field name="context">{'search_default_group_by_partner_id': 1, 'search_default_group_by_sale_type': 1}</field>
+    </record-->
+
+
+
+    <!-- Action to Open list View -->
+    <record id="action_sales_order_report" model="ir.actions.act_window">
+        <field name="name">Sales Orders Report</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sale_order_report_list"/>
+        <field name="domain">[('state', 'in', ['sale', 'done'])]</field>
+        <!--field name="context">{'search_default_group_by_partner_id': 1}</field-->
+        <field name="context">
+            {
+                'search_default_group_by_sale_type': 1,
+                'search_view_ref': 'customer_credit_limit.view_sale_order_report_search'
+            }
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem
+            id="menu_sales_order_report"
+            name="Sales Orders Report"
+            parent="sale.menu_sale_report"
+            action="action_sales_order_report"
+            sequence="0"/>
+
+    <!-- Report Definition -->
+    <report
+            id="action_report_sales_credit"
+            string="Sales Credit Report"
+            model="sales.credit.report"
+            report_type="qweb-pdf"
+            name="customer_credit_limit.report_sales_credit"
+            file="customer_credit_limit.report_sales_credit"
+    />
+    </data>
+</odoo>

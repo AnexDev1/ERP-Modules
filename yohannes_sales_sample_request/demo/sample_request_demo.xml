@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Sample Request -->
+        <record id="demo_sample_request_1" model="free.sample.request">
+            <field name="partner_id" ref="base.res_partner_3"/>
+            <field name="issue_type">free</field>
+            <field name="issue_date" eval="datetime.now()"/>
+            <field name="remarks">Demo free sample request for testing.</field>
+            <field name="state">draft</field>
+        </record>
+
+        <!-- Demo Sample Line -->
+        <record id="demo_sample_line_1" model="free.sample.request.line">
+            <field name="request_id" ref="demo_sample_request_1"/>
+            <field name="product_id" ref="product.product_product_3"/>
+            <field name="quantity_requested">2</field>
+        </record>
+    </data>
+</odoo>

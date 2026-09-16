@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form view for the wizard -->
+        <record id="view_credit_limit_import_form" model="ir.ui.view">
+            <field name="name">yohannes.credit.limit.import.wizard.form</field>
+            <field name="model">yohannes.credit.limit.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import Credit Limits">
+                    <p class="oe_grey">
+                        Use this wizard to mass-import or update customer credit limits from an Excel sheet.
+                        <br/>
+                        If you don't have a template, you can <button name="action_download_template" type="object" string="Download One Here" class="btn-link" style="padding: 0; vertical-align: baseline;"/>.
+                    </p>
+                    
+                    <group>
+                        <field name="file" filename="file_name" widget="binary"/>
+                        <field name="file_name" invisible="1"/>
+                    </group>
+                    
+                    <group invisible="not import_log">
+                        <field name="import_log" widget="text" nolabel="1" colspan="2" readonly="1"/>
+                    </group>
+                    
+                    <footer>
+                        <!-- If log is present, we ran it already. Switch to close button -->
+                        <button name="action_import" string="Import" type="object" class="oe_highlight" invisible="import_log"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open wizard -->
+        <record id="action_credit_limit_import" model="ir.actions.act_window">
+            <field name="name">Import Credit Limits</field>
+            <field name="res_model">yohannes.credit.limit.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

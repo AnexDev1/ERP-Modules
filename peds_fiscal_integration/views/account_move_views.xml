@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_peds_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.peds.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_peds_fiscal"
+                        string="Print Fiscal Invoice"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="is_manual_invoice or state not in ('draft', 'posted') or peds_printed or move_type not in ('out_invoice', 'out_refund')"
+                        groups="yohannes_sale_approval_workflow.group_sales_cashier"/>
+            </xpath>
+            <xpath expr="//button[@name='action_post'][2]" position="attributes">
+                <attribute name="invisible">hide_post_button or move_type == 'entry' or display_inactive_currency_warning or (not is_manual_invoice and move_type in ('out_invoice', 'out_refund'))</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_reference']" position="after">
+                <field name="is_manual_invoice" readonly="1"/>
+
+                <field name="manual_receipt_reference" 
+                       invisible="not is_manual_invoice" 
+                       required="is_manual_invoice" 
+                       readonly="state != 'draft'"/>
+                <field name="peds_printed" readonly="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="FS Info" name="fs_info" invisible="not (peds_printed or is_manual_invoice)">
+                    <group invisible="not is_manual_invoice" string="Manual Fiscal Receipt Info">
+                        <group>
+                            <field name="fs_no" readonly="state != 'draft'"/>
+                            <field name="machine_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="manual_receipt_reference" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group invisible="not peds_printed" string="PEDS Fiscal Printer Info">
+                        <group>
+                            <field name="peds_fp_machine_id"/>
+                            <field name="peds_fs_invoice_number"/>
+                        </group>
+                        <group>
+                            <field name="peds_ej_number"/>
+                            <field name="peds_time_stamp"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

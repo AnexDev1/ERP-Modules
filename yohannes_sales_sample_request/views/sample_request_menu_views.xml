@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <menuitem id="menu_request" name="Requests"
+              parent="sale.sale_menu_root"
+              sequence="21"/>
+    <menuitem id="menu_issues_request" name="Issues"
+              parent="menu_request"
+              sequence="1"/>
+    <menuitem id="menu_free_sample_request" name=" Free Sample Requests"
+              parent="menu_issues_request"
+              action="action_free_sample_request"
+              sequence="1"/>
+      <menuitem id="menu_return_sample_request" name=" Return Sample Requests"
+              parent="menu_issues_request"
+              action="action_reternd_sample_request"
+              sequence="2"/>
+    <menuitem id="menu_return_request" name="Return"
+              parent="menu_request"
+              sequence="2"/>
+     <menuitem id="menu_return_sample" name=" Return Sample"
+              parent="menu_return_request"
+              action="action_return_sample"
+              sequence="1"/>
+
+
+    </data>
+</odoo>

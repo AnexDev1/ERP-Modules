@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_custom" inherit_id="sale.report_saleorder_document">
+        
+        <!-- Fix Taxes Column: Show actual tax name instead of tax_label -->
+        <xpath expr="//td[@name='td_product_taxes']/span" position="replace">
+            <span t-out="', '.join(line.tax_ids.mapped('name')) if line.tax_ids else ''">Tax 15%</span>
+        </xpath>
+
+        <!-- Rename Description to Product and Add Item Code column -->
+        <xpath expr="//th[@name='th_description']" position="replace">
+            <th name="th_item_code" class="text-start">Item Code</th>
+            <th name="th_description" class="text-start">Product</th>
+        </xpath>
+        
+        <!-- Replace product name cell: show Item Code separately, then Product Name only -->
+        <xpath expr="//td[@name='td_product_name']" position="replace">
+            <td name="td_item_code" class="text-start">
+                <span t-out="line.product_id.default_code or ''"/>
+            </td>
+            <td name="td_product_name" t-att-class="padding_class">
+                <span t-out="line.product_id.name or line.name"/>
+                <p t-if="line.name and line.product_id.name and line.name != line.product_id.name and not line.name.startswith('[')">
+                    <span t-out="line.name" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+        </xpath>
+        
+        <!-- Add Amount in Words inside total summary table -->
+        <xpath expr="//div[@id='total']//table" position="inside">
+            <tr>
+                <td colspan="2" class="text-start pt-3">
+                    <strong>Amount in Words: </strong>
+                    <span t-esc="doc.currency_id.amount_to_text(doc.amount_total)"/>
+                </td>
+            </tr>
+        </xpath>
+        
+        <!-- Reduce overall font size for proforma printout -->
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <style>
+                /* Match invoice attachment font sizes */
+                .page, .page p, .page span, .page li {
+                    font-size: 14px !important;
+                }
+                .page table, .page td, .page th {
+                    font-size: 15px !important;
+                }
+                .page h2 { font-size: 25px !important; }
+                .page h3 { font-size: 18px !important; }
+                .page h4, .page h5 { font-size: 14px !important; }
+                .page strong { font-size: inherit !important; }
+            </style>
+        </xpath>
+
+        <!-- Add Stamp/Signature beside Remarks after the total summary block -->
+        <xpath expr="//div[@name='so_total_summary']" position="after">
+            <div class="row mt-3" name="company_proforma_remarks" style="page-break-inside: avoid;">
+                <div class="col-6 text-start">
+                    <span t-if="not is_html_empty(doc.note)" t-out="doc.note"/>
+                    <span t-elif="not is_html_empty(doc.company_id.proforma_remarks)" t-out="doc.company_id.proforma_remarks"/>
+                </div>
+                <div class="col-6 text-center" t-if="doc.company_id.stamp_signature" name="company_stamp_signature">
+                    <img t-att-src="image_data_uri(doc.company_id.stamp_signature)" style="max-height: 100px; max-width: 220px;"/><br/>
+                </div>
+            </div>
+        </xpath>
+        
+        <!-- Hide the default order_note since we moved it above the signature -->
+        <xpath expr="//span[@name='order_note']" position="replace">
+            <span name="order_note" class="d-none"/>
+        </xpath>
+        <!-- Print Lot and Expiry Date as Columns -->
+        <xpath expr="//th[@name='th_quantity']" position="before">
+            <th name="th_lot" class="text-start">Lot/Serial</th>
+            <th name="th_expiry" class="text-start">Expiry Date</th>
+        </xpath>
+        
+        <xpath expr="//td[@name='td_product_quantity']" position="before">
+            <td name="td_lot">
+                <span t-out="line.lot_id.name if line.lot_id else ''"/>
+            </td>
+            <td name="td_expiry">
+                <span t-out="line.expiry_date" t-options="{'widget': 'date'}" t-if="line.expiry_date"/>
+            </td>
+        </xpath>
+        
+    </template>
+</odoo>

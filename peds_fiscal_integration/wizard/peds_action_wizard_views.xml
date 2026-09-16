@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="peds_action_wizard_view_form" model="ir.ui.view">
+        <field name="name">peds.action.wizard.form</field>
+        <field name="model">peds.action.wizard</field>
+        <field name="arch" type="xml">
+            <form string="PEDS Fiscal Printer Operations">
+                <group>
+                    <field name="action_type"/>
+                </group>
+                <group invisible="action_type not in ('printfullfiscalreportbyz', 'printsummaryfiscalreportbyz')">
+                    <field name="from_z" required="action_type in ('printfullfiscalreportbyz', 'printsummaryfiscalreportbyz')"/>
+                    <field name="to_z" required="action_type in ('printfullfiscalreportbyz', 'printsummaryfiscalreportbyz')"/>
+                </group>
+                <group invisible="action_type not in ('printfullfiscalreportbydate', 'printsummaryfiscalreportbydate')">
+                    <field name="date_from" required="action_type in ('printfullfiscalreportbydate', 'printsummaryfiscalreportbydate')"/>
+                    <field name="date_to" required="action_type in ('printfullfiscalreportbydate', 'printsummaryfiscalreportbydate')"/>
+                </group>
+                <group invisible="action_type not in ('GetInvoicePrintStatus', 'SetInvoiceAsPrinted')">
+                    <field name="move_id" placeholder="Select Invoice to Autofill..."/>
+                    <field name="transaction_id" required="action_type in ('GetInvoicePrintStatus', 'SetInvoiceAsPrinted')"/>
+                </group>
+                <group invisible="action_type != 'SetInvoiceAsPrinted'">
+                    <field name="fp_machine_id" required="action_type == 'SetInvoiceAsPrinted'"/>
+                    <field name="fs_invoice_number" required="action_type == 'SetInvoiceAsPrinted'"/>
+                    <field name="ej_number" required="action_type == 'SetInvoiceAsPrinted'"/>
+                    <field name="date_printed" required="action_type == 'SetInvoiceAsPrinted'"/>
+                </group>
+                <footer>
+                    <button name="action_execute" string="Execute" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_peds_operations_wizard" model="ir.actions.act_window">
+        <field name="name">Fiscal Printer Operations</field>
+        <field name="res_model">peds.action.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="peds_license_wizard_view_form" model="ir.ui.view">
+        <field name="name">peds.license.wizard.form</field>
+        <field name="model">peds.license.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register License Keys">
+                <group>
+                    <field name="license_keys"/>
+                </group>
+                <footer>
+                    <button name="action_execute" string="Register Keys" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_peds_license_wizard" model="ir.actions.act_window">
+        <field name="name">Register License Keys</field>
+        <field name="res_model">peds.license.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

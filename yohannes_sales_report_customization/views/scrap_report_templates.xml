@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- SCRAP ORDER PRINTOUT                                         -->
+    <!-- Displays: product, qty, lot, reason tags, origin, location,  -->
+    <!-- date, and company stamp — following delivery report style     -->
+    <!-- ============================================================ -->
+
+    <!-- Report Action registered on stock.scrap -->
+    <record id="action_report_stock_scrap" model="ir.actions.report">
+        <field name="name">Scrap Document</field>
+        <field name="model">stock.scrap</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">yohannes_sales_report_customization.report_stock_scrap_document</field>
+        <field name="report_file">yohannes_sales_report_customization.report_stock_scrap_document</field>
+        <field name="print_report_name">'Scrap Document - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Main Scrap Report Template -->
+    <template id="report_stock_scrap_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Title -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <h2 class="fw-bold">Scrap Document</h2>
+                            </div>
+                        </div>
+
+                        <!-- Header Info Block -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="fw-bold" style="width:40%;">Reference:</td>
+                                        <td><span t-field="o.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Date:</td>
+                                        <td>
+                                            <t t-if="o.state == 'done'">
+                                                <span t-field="o.date_done" t-options="{'widget': 'date'}"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span>Draft</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <t t-if="o.origin">
+                                        <tr>
+                                            <td class="fw-bold">Source Document:</td>
+                                            <td><span t-field="o.origin"/></td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.picking_id">
+                                        <tr>
+                                            <td class="fw-bold">Related Transfer:</td>
+                                            <td><span t-field="o.picking_id.name"/></td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <t t-if="o.location_id">
+                                        <tr>
+                                            <td class="fw-bold" style="width:40%;">From Location:</td>
+                                            <td><span t-field="o.location_id"/></td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.scrap_location_id">
+                                        <tr>
+                                            <td class="fw-bold">Scrap Location:</td>
+                                            <td><span t-field="o.scrap_location_id"/></td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Scrap Reason Tags -->
+                        <t t-if="o.scrap_reason_tag_ids">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <strong>Scrap Reason(s): </strong>
+                                    <span t-esc="', '.join(o.scrap_reason_tag_ids.mapped('name'))"/>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Product Table -->
+                        <table class="table table-sm table-bordered mt-2">
+                            <thead style="background-color: #f0f0f0;">
+                                <tr>
+                                    <th class="text-start">Item Code</th>
+                                    <th class="text-start">Product</th>
+                                    <th class="text-start" groups="stock.group_production_lot">Lot / Serial No.</th>
+                                    <th class="text-start" groups="stock.group_production_lot">Expiry Date</th>
+                                    <th class="text-end">Quantity</th>
+                                    <th class="text-start">Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-esc="o.product_id.default_code or ''"/></td>
+                                    <td><span t-field="o.product_id"/></td>
+                                    <td groups="stock.group_production_lot">
+                                        <t t-if="o.lot_id">
+                                            <span t-field="o.lot_id.name"/>
+                                        </t>
+                                    </td>
+                                    <td groups="stock.group_production_lot">
+                                        <t t-if="o.lot_id and o.lot_id.expiration_date">
+                                            <span t-field="o.lot_id.expiration_date" t-options="{'widget': 'date'}"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-end"><span t-field="o.scrap_qty"/></td>
+                                    <td><span t-field="o.product_uom_id"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Signature / Approval Section -->
+                        <div class="row mt-5 align-items-center">
+                            <div class="col-6 text-center">
+                                <span class="fw-bold fs-5">Validated By: </span>
+                                <span t-if="o.write_uid" t-field="o.write_uid.name" class="fs-5 ms-2 text-decoration-underline"/>
+                            </div>
+                            <div class="col-6 text-center">
+                                <t t-if="o.company_id.stamp_signature">
+                                    <img t-att-src="image_data_uri(o.company_id.stamp_signature)"
+                                         style="max-height: 100px; max-width: 200px;"/>
+                                </t>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

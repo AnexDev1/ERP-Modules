@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="sale.sale_order_menu" model="ir.ui.menu">
+             <field name="active" eval="False"/>
+         </record>
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+             <field name="active" eval="False"/>
+         </record>
+    <!--record id="sale.menu_sale_invoicing" model="ir.ui.menu">
+             <field name="active" eval="False"/>
+         </record-->
+    <!-- Deactivate the default Quotations submenu -->
+    <!--record id="sale.menu_quotations" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record-->
+
+    <!-- Deactivate the default Customers submenu -->
+    <!--record id="sale.menu_customers" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record-->
+
+    <!-- Deactivate the default Sales Teams submenu -->
+    <!--record id="sale.menu_sales_team" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record-->
+    </data>
+</odoo>

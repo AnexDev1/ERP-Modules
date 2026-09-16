@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_store_requisition"
+        name="Store Requisition"
+        parent="inventory_operations.menu_inventory_operations"
+        action="procurement_store_requisition.action_store_requisition"
+        sequence="10"/>
+</odoo>

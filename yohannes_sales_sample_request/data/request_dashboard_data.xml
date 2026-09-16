@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="request_dashboard_free_sample" model="request.dashboard">
+            <field name="name">Free Sample Requests</field>
+            <field name="code">free_sample</field>
+            <field name="color">2</field>
+        </record>
+        
+        <record id="request_dashboard_return_sample_request" model="request.dashboard">
+            <field name="name">Sample to be Returned</field>
+            <field name="code">return_sample_request</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="request_dashboard_sample_return" model="request.dashboard">
+            <field name="name">Sample Return</field>
+            <field name="code">sample_return</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="request_dashboard_consignment_issue" model="request.dashboard">
+            <field name="name">Consignment Issue</field>
+            <field name="code">consignment_issue</field>
+            <field name="color">5</field>
+        </record>
+        
+        <record id="request_dashboard_consignment_receive" model="request.dashboard">
+            <field name="name">Consignment Receive</field>
+            <field name="code">consignment_receive</field>
+            <field name="color">6</field>
+        </record>
+    </data>
+</odoo>

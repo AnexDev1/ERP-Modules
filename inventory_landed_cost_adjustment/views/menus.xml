@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Placed under Accounting → Accounting → Landed Cost Adjustments -->
+    <menuitem id="menu_lca_root"
+              name="Landed Cost Adjustments"
+              action="action_lca_main"
+              parent="account.menu_finance_entries"
+              sequence="25"
+              groups="account.group_account_user"/>
+</odoo>

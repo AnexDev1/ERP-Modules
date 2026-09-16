@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cash Sale Order -->
+        <record id="demo_cash_sale_order" model="sale.order">
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="sale_type">cash</field>
+            <field name="date_order" eval="datetime.now()"/>
+            <field name="order_line" eval="[
+                (0, 0, {
+                    'product_id': ref('product.product_product_4'),
+                    'product_uom_qty': 1,
+                    'price_unit': 500.0,
+                })
+            ]"/>
+        </record>
+
+        <!-- Credit Sale Order -->
+        <record id="demo_credit_sale_order" model="sale.order">
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="sale_type">credit</field>
+            <field name="payment_term_id" ref="account.account_payment_term_30days"/>
+            <field name="date_order" eval="datetime.now()"/>
+            <field name="order_line" eval="[
+                (0, 0, {
+                    'product_id': ref('product.product_product_5'),
+                    'product_uom_qty': 2,
+                    'price_unit': 1200.0,
+                })
+            ]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_procurement_price_update_tree" model="ir.ui.view">
+        <field name="name">procurement.price.update.list</field>
+        <field name="model">procurement.price.update</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'" decoration-success="state == 'confirmed'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="source_type"/>
+                <field name="local_po_id" column_invisible="context.get('default_source_type') != 'local'"/>
+                <field name="foreign_po_id" column_invisible="context.get('default_source_type') != 'foreign'"/>
+                <field name="picking_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_procurement_price_update_form" model="ir.ui.view">
+        <field name="name">procurement.price.update.form</field>
+        <field name="model">procurement.price.update</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm &amp; Apply Prices" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="source_type" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="local_po_id" 
+                                   readonly="state != 'draft'"
+                                   invisible="source_type != 'local'"
+                                   required="source_type == 'local'"/>
+                            <field name="foreign_po_id" 
+                                   readonly="state != 'draft'"
+                                   invisible="source_type != 'foreign'"
+                                   required="source_type == 'foreign'"/>
+                            <field name="picking_id" 
+                                   readonly="state != 'draft'"
+                                   invisible="source_type == 'manual'"
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Prices" name="product_prices">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create': True}"/>
+                                    <field name="uom_id"/>
+                                    <field name="cost_price"/>
+                                    <field name="current_wholesale_price"/>
+                                    <field name="wholesale_margin_percent"/>
+                                    <field name="new_wholesale_price"/>
+                                    <field name="current_retail_price"/>
+                                    <field name="retail_margin_percent"/>
+                                    <field name="new_retail_price"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="note" placeholder="Add optional internal notes here..." readonly="state != 'draft'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_procurement_price_update_search" model="ir.ui.view">
+        <field name="name">procurement.price.update.search</field>
+        <field name="model">procurement.price.update</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_type"/>
+                <field name="local_po_id"/>
+                <field name="foreign_po_id"/>
+                <field name="picking_id"/>
+            </search>
+        </field>
+    </record>
+</odoo>

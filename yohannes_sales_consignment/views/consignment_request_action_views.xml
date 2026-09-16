@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="action_consignment_request" model="ir.actions.act_window">
+        <field name="name">Consignment Requests</field>
+        <field name="res_model">consignment.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+     <record id="action_consignment_return" model="ir.actions.act_window">
+        <field name="name">Consignment Return</field>
+        <field name="res_model">consignment.return</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <menuitem id="menu_consignment_request" name=" consignment Requests"
+              parent="yohannes_sales_sample_request.menu_issues_request"
+              action="action_consignment_request"
+              sequence="3"/>
+    <menuitem id="menu_consignment_return" name=" consignment Return"
+              parent="yohannes_sales_sample_request.menu_return_request"
+              action="action_consignment_return"
+              sequence="2"/>
+    </data>
+</odoo>

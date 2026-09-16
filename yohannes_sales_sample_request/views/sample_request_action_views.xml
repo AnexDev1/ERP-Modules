@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="action_free_sample_request" model="ir.actions.act_window">
+        <field name="name">Free Sample Requests</field>
+        <field name="res_model">free.sample.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+     <record id="action_reternd_sample_request" model="ir.actions.act_window">
+        <field name="name">Return Sample Requests</field>
+        <field name="res_model">return.sample.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_return_sample" model="ir.actions.act_window">
+        <field name="name">Return Sample</field>
+        <field name="res_model">return.sample</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    </data>
+</odoo>

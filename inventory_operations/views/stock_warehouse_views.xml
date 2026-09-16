@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warehouse_form_inherit_inventory_operations" model="ir.ui.view">
+        <field name="name">stock.warehouse.form.inherit.inventory.operations</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='int_type_id']" position="after">
+                <field name="mtov_type_id"/>
+                <field name="mtiv_type_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

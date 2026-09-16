@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consolidated Reporting Actions -->
+    <record id="action_store_requisition_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">Store Requisition Analysis</field>
+        <field name="res_model">store.requisition</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <record id="action_local_purchase_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">Local Purchase Analysis</field>
+        <field name="res_model">local.purchase.requisition</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <record id="action_payment_request_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">Payment Request Analysis</field>
+        <field name="res_model">local.payment.request</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <record id="action_direct_procurement_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">Direct Procurement Analysis</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('local_purchase_request_id', '!=', False), ('local_rfq_id', '=', False)]</field>
+    </record>
+
+    <record id="action_rfq_procurement_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">RFQ Procurement Analysis</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('local_rfq_id', '!=', False)]</field>
+    </record>
+
+    <record id="action_foreign_procurement_analysis_consolidated" model="ir.actions.act_window">
+        <field name="name">Foreign Procurement Analysis</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('request_type', '=', 'foreign')]</field>
+    </record>
+
+    <record id="action_local_purchase_a_to_z_consolidated" model="ir.actions.act_window">
+        <field name="name">Local Purchase A to Z</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('request_type', '=', 'local')]</field>
+    </record>
+
+    <!-- Foreign Purchase A to Z (Life Cycle Report) -->
+    <record id="action_foreign_purchase_a_to_z_consolidated" model="ir.actions.act_window">
+        <field name="name">Foreign Purchase Life Cycle</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_purchase_order_foreign_life_cycle_list"/>
+        <field name="domain">[('request_type', '=', 'foreign')]</field>
+    </record>
+</odoo>

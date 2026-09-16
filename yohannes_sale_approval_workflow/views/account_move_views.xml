@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_return_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.return.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Add approval status bar for Credit Notes -->
+            <xpath expr="//header" position="inside">
+                <field name="is_return_approval_required" invisible="1"/>
+                <field name="approval_state" widget="statusbar" 
+                       statusbar_visible="draft,manager_approval,approved" 
+                       invisible="not is_return_approval_required or state == 'cancel'"/>
+            </xpath>
+
+            <!-- Add approval buttons -->
+            <xpath expr="//header" position="inside">
+                <button name="action_submit_return_approval" string="Request Return Approval" 
+                        type="object" class="btn-primary" 
+                        invisible="not is_return_approval_required or approval_state != 'draft' or state != 'draft'"/>
+                
+                <button name="action_approve_return_manager" string="Approve Return (Manager)" 
+                        type="object" class="btn-primary" 
+                        invisible="not is_return_approval_required or approval_state != 'manager_approval'"
+                        groups="yohannes_sale_approval_workflow.group_operational_manager"/>
+
+                <button name="action_approve_return_gm" string="Approve Return (GM)" 
+                        type="object" class="btn-primary" 
+                        invisible="not is_return_approval_required or approval_state != 'gm_approval'"
+                        groups="yohannes_sale_approval_workflow.group_price_change_approver"/>
+
+                <button name="action_approve_return_ceo" string="Approve Return (CEO)" 
+                        type="object" class="btn-primary" 
+                        invisible="not is_return_approval_required or approval_state != 'ceo_approval'"
+                        groups="yohannes_sale_approval_workflow.group_price_change_approver"/>
+            </xpath>
+
+            <!-- The 1st action_post button is the "Post" button (for journal entries) -->
+            <xpath expr="//button[@name='action_post'][1]" position="attributes">
+                <attribute name="invisible">hide_post_button or move_type != 'entry' or state != 'draft' or (move_type == 'out_refund' and approval_state != 'approved')</attribute>
+            </xpath>
+
+            <!-- The 2nd action_post button is the "Confirm" button (for invoices) -->
+            <xpath expr="//button[@name='action_post'][2]" position="attributes">
+                <attribute name="invisible">hide_post_button or move_type == 'entry' or display_inactive_currency_warning or state != 'draft' or (move_type == 'out_refund' and approval_state != 'approved')</attribute>
+            </xpath>
+
+            <!-- Hide Register Payment button from Cashiers -->
+            <xpath expr="//button[@id='account_invoice_payment_btn']" position="attributes">
+                <attribute name="groups">yohannes_sale_approval_workflow.group_finance_approver,account.group_account_manager</attribute>
+            </xpath>
+
+            <!-- Make analytic distribution readonly on Invoice Lines and Journal Items -->
+            <xpath expr="//field[@name='invoice_line_ids']//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.procurement.price.update</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="procurement_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='procurement_settings']" position="after">
+                <block title="Price Update Margins" name="price_update_margins">
+                    <setting title="Local Procurement Margins" help="Default wholesale and retail margins for local price updates.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="local_wholesale_margin" class="col-lg-3 o_light_label"/>
+                                <field name="local_wholesale_margin" class="oe_inline"/>
+                            </div>
+                            <div class="row">
+                                <label for="local_retail_margin" class="col-lg-3 o_light_label"/>
+                                <field name="local_retail_margin" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting title="Foreign Procurement Margins" help="Default wholesale and retail margins for foreign price updates.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="foreign_wholesale_margin" class="col-lg-3 o_light_label"/>
+                                <field name="foreign_wholesale_margin" class="oe_inline"/>
+                            </div>
+                            <div class="row">
+                                <label for="foreign_retail_margin" class="col-lg-3 o_light_label"/>
+                                <field name="foreign_retail_margin" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

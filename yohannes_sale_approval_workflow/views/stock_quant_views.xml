@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- New Action for Products by Lot (Stock Quants) -->
+    <record id="action_products_by_lot_overview" model="ir.actions.act_window">
+        <field name="name">Products by Lot</field>
+        <field name="res_model">stock.quant</field>
+        <field name="view_mode">list,form,pivot</field>
+        <field name="domain">[('location_id.usage', '=', 'internal')]</field>
+        <field name="context">{'search_default_productgroup': 1, 'hide_standard_actions': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No stock found in internal locations.
+            </p><p>
+                This view shows all products in stock, grouped by product. Click on a product to see its individual lots, expiry dates, and quantities.
+            </p>
+        </field>
+    </record>
+
+    <!-- 100% Custom Isolated Tree View for Products by Lot -->
+    <record id="view_stock_quant_tree_products_by_lot" model="ir.ui.view">
+        <field name="name">stock.quant.tree.products.by.lot</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <list string="Products by Lot" create="false" edit="false" export_xlsx="0">
+                <field name="product_id"/>
+                <field name="item_code"/>
+                <field name="wholesale_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="retail_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="lot_id"/>
+                <field name="expiration_date"/>
+                <field name="expiry_state" 
+                       widget="badge" 
+                       decoration-danger="expiry_state == 'expired'" 
+                       decoration-warning="expiry_state == 'expiring_soon'" 
+                       decoration-success="expiry_state == 'valid'"/>
+                <field name="location_id"/>
+                <field name="quantity" string="On Hand" sum="Total On Hand"/>
+                <field name="available_quantity" string="Available" sum="Total Available"/>
+                <field name="expired_quantity" string="Expired" sum="Total Expired"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Specific action-view linkage so the action uses ONLY our custom tree view -->
+    <record id="action_products_by_lot_overview_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_stock_quant_tree_products_by_lot"/>
+        <field name="act_window_id" ref="action_products_by_lot_overview"/>
+    </record>
+
+    <!-- Menu Item under Sales / Products -->
+    <!-- Assuming we want it in the Sales app under Products, similar to where they were looking -->
+    <menuitem id="menu_products_by_lot_sales"
+              name="Products With Lot"
+              parent="sale.product_menu_catalog"
+              action="action_products_by_lot_overview"
+              sequence="3"/>
+              
+    <!-- Menu Item under Inventory / Products (as a fallback/standard location) -->
+    <menuitem id="menu_products_by_lot_inventory"
+              name="Products With Lot"
+              parent="stock.menu_stock_inventory_control"
+              action="action_products_by_lot_overview"
+              sequence="105"/>
+</odoo>

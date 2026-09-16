@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_contribution_register_user,hr.contribution.register.user,model_hr_contribution_register,base.group_user,1,1,1,1
+access_hr_salary_rule_category_user,hr.salary.rule.category.user,model_hr_salary_rule_category,base.group_user,1,1,1,1
+access_hr_rule_input_user,hr.rule.input.user,model_hr_rule_input,base.group_user,1,1,1,1
+access_hr_salary_rule_user,hr.salary.rule.user,model_hr_salary_rule,base.group_user,1,1,1,1
+access_hr_payroll_structure_user,hr.payroll.structure.user,model_hr_payroll_structure,base.group_user,1,1,1,1
+access_hr_payroll_structure_type_user,hr.payroll.structure.type.user,model_hr_payroll_structure_type,base.group_user,1,1,1,1
+access_hr_payslip_input_user,hr.payslip.input.user,model_hr_payslip_input,base.group_user,1,1,1,1
+access_hr_payslip_worked_days_user,hr.payslip.worked.days.user,model_hr_payslip_worked_days,base.group_user,1,1,1,1
+access_hr_payslip_line_user,hr.payslip.line.user,model_hr_payslip_line,base.group_user,1,1,1,1
+access_hr_payslip_user,hr.payslip.user,model_hr_payslip,base.group_user,1,1,1,1
+access_hr_payslip_run_user,hr.payslip.run.user,model_hr_payslip_run,base.group_user,1,1,1,1
+access_hr_payslip_employees_user,hr.payslip.employees.user,model_hr_payslip_employees,base.group_user,1,1,1,1
+access_hr_payslip_change_state_user,hr.payslip.change.state.user,model_hr_payslip_change_state,base.group_user,1,1,1,1
+access_payslip_lines_contribution_register_user,payslip.lines.contribution.register.user,model_payslip_lines_contribution_register,base.group_user,1,1,1,1

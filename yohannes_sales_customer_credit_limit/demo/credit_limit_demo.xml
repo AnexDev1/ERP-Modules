@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Customer Credit Limit -->
+        <record id="demo_customer_credit_1" model="customer.credit">
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="maximum_credit">10000.0</field>
+            <field name="state">validated</field>
+        </record>
+    </data>
+</odoo>

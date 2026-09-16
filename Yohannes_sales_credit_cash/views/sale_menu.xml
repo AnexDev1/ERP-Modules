@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Parent Menu for Orders -->
+    <menuitem id="menu_sale_orders_parent" name="Orders"
+              parent="sale.sale_menu_root" sequence="10"/>
+    <menuitem id="menu_quotations" name="Quotations"
+              parent="menu_sale_orders_parent"
+              action="sale.action_quotations_with_onboarding"
+              sequence="1"/>
+    <menuitem id="menu_orders_nested" name="Orders"
+              parent="menu_sale_orders_parent" sequence="2"/>
+    <menuitem id="menu_cash_orders" name="Cash Sales"
+              parent="menu_orders_nested" action="action_cash_orders"
+              sequence="1"/>
+    <menuitem id="menu_credit_orders" name="Credit Sales"
+              parent="menu_orders_nested" action="action_credit_orders"
+              sequence="2"/>
+    <menuitem id="menu_customers" name="Customers"
+              parent="menu_sale_orders_parent"
+              action="base.action_partner_customer_form" sequence="3"/>
+    <menuitem id="menu_sales_teams" name="Sales Teams"
+              parent="menu_sale_orders_parent"
+              action="sales_team.crm_team_action_sales" sequence="4"/>
+    <menuitem id="menu_sale_to_invoice_parent"
+              name="Orders to Invoice"
+              parent="sale.sale_menu_root" sequence="20"/>
+    <menuitem id="menu_sale_to_invoice_parent_nested" name="Orders to Invoice"
+              parent="menu_sale_to_invoice_parent" sequence="20"/>
+    <menuitem id="menu_cash_to_invoice" name="Cash to Invoice"
+              parent="menu_sale_to_invoice_parent_nested"
+              action="action_cash_to_invoice" sequence="1"/>
+    <menuitem id="menu_credit_to_invoice" name="Credit to Invoice"
+              parent="menu_sale_to_invoice_parent_nested"
+              action="action_credit_to_invoice" sequence="2"/>
+    <menuitem id="menu_sale_to_upsell_nested" name="Orders to Upsell"
+              parent="menu_sale_to_invoice_parent" sequence="30"/>
+    <menuitem id="menu_cash_to_upsell" name="Cash to Upsell"
+              parent="menu_sale_to_upsell_nested"
+              action="action_cash_to_upsell" sequence="1"/>
+    <menuitem id="menu_credit_to_upsell" name="Credit to Upsell"
+              parent="menu_sale_to_upsell_nested"
+              action="action_credit_to_upsell" sequence="2"/>
+    <!-- <menuitem id="sale.menu_sale_order" name="Orders"
+              groups="" sequence="20"/> -->
+    </data>
+</odoo>

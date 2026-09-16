@@ -1,0 +1,92 @@
+<odoo>
+    <data>
+    <record id="view_order_form_inherit_customer_credit_limit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.customer.credit.limit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="30"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_type" readonly="1" invisible="1" force_save="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Credit Information" invisible="sale_type != 'credit'">
+                    <group>
+                        <group>
+                            <field name="is_credit_positive"/>
+                            <field name="is_credit_negative"/>
+
+                            <field name="credit" widget="monetary" decoration-danger="is_credit_positive"
+                                   decoration-success="is_credit_negative"/>
+                        </group>
+                        <group>
+                            <field name="maximum_credit" widget="monetary"/>
+                            <field name="matured_amount" widget="monetary"/>
+                            <field name="payment_terms"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Hide duplicate sale_type that might be added by other modules -->
+    <record id="view_order_form_hide_duplicate_sale_type" model="ir.ui.view">
+        <field name="name">sale.order.form.hide.duplicate.sale.type</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="Yohannes_sales_credit_cash.view_order_form_inherit_credit_cash"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_cash_orders_list" model="ir.ui.view">
+        <field name="name">sale.order.cash.list</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_credit_orders_list" model="ir.ui.view">
+        <field name="name">sale.order.credit.list</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_cash_orders" model="ir.actions.act_window">
+        <field name="name">Cash Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_cash_orders_list"/>
+        <field name="domain">[('sale_type', '=', 'cash'), ('state', 'not in', ('draft', 'sent'))]</field>
+    </record>
+
+    <record id="action_credit_orders" model="ir.actions.act_window">
+        <field name="name">Credit Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_credit_orders_list"/>
+        <field name="domain">[('sale_type', '=', 'credit'), ('state', 'not in', ('draft', 'sent'))]</field>
+    </record>
+
+    <menuitem id="menu_cash_orders" name="Cash Orders" parent="sale.sale_order_menu" action="action_cash_orders"/>
+    <menuitem id="menu_credit_orders" name="Credit Orders" parent="sale.sale_order_menu" action="action_credit_orders"/>
+    </data>
+</odoo>

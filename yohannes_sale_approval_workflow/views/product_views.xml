@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Deactivate corrupted orphaned views from previous runs -->
+    <record id="product_template_form_view_inherit_pricing_v2" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.pricing.v2.deactivated</field>
+        <field name="model">product.template</field>
+        <field name="active" eval="False"/>
+        <field name="arch" type="xml"><form/></field>
+    </record>
+
+    <record id="product_template_form_view_inherit_pricing_v3" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.pricing.v3.deactivated</field>
+        <field name="model">product.template</field>
+        <field name="active" eval="False"/>
+        <field name="arch" type="xml"><form/></field>
+    </record>
+
+    <!-- 1. Product Template: Add our prices and hide the base list_price -->
+    <record id="product_template_form_view_inherit_pricing" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.pricing</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Insert our custom prices before the standard label -->
+            <xpath expr="//label[@for='list_price']" position="before">
+                <field name="is_sales_price_updator" invisible="1"/>
+                <label string="Wholesale Price" for="wholesale_price"/>
+                <div name="wholesale_price_div">
+                    <field name="wholesale_price" class="oe_inline" widget="monetary"
+                           readonly="not is_sales_price_updator"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                </div>
+                <label string="Retail Price" for="retail_price"/>
+                <div name="retail_price_div">
+                    <field name="retail_price" class="oe_inline" widget="monetary"
+                           readonly="not is_sales_price_updator"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                </div>
+            </xpath>
+
+            <!-- Hide the standard list_price label and div safely -->
+            <xpath expr="//label[@for='list_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[@name='list_price_uom']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- 2. Product Variant: Hide the variant-specific lst_price which Odoo injects -->
+    <record id="product_product_form_view_inherit_pricing" model="ir.ui.view">
+        <field name="name">product.product.form.inherit.pricing</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Product variant form replaces the list_price label with lst_price. Hide it. -->
+            <xpath expr="//label[@for='lst_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Hide the field as well if it's placed outside the invisible div -->
+            <xpath expr="//field[@name='lst_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 3. Product Template: List view — replace Sales Price with Wholesale & Retail Price -->
+    <record id="product_template_list_view_inherit_pricing" model="ir.ui.view">
+        <field name="name">product.template.list.inherit.pricing</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Hide the standard Sales Price column -->
+            <xpath expr="//field[@name='list_price']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <!-- Add Wholesale Price and Retail Price columns after the product name -->
+            <xpath expr="//field[@name='list_price']" position="after">
+                <field name="wholesale_price" string="Wholesale Price" widget="monetary"
+                       options="{'currency_field': 'currency_id'}" optional="show"/>
+                <field name="retail_price" string="Retail Price" widget="monetary"
+                       options="{'currency_field': 'currency_id'}" optional="show"/>
+                <field name="qty_available" string="On Hand" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- 4. Product Template: Kanban view — replace Sales Price with Wholesale & Retail Price -->
+    <record id="product_template_kanban_view_inherit_pricing" model="ir.ui.view">
+        <field name="name">product.template.kanban.inherit.pricing</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+            <!-- Replace the standard Sales Price display with two clean rows.
+                 Fields referenced inside are auto-fetched by Odoo. -->
+            <xpath expr="//field[@name='list_price']" position="replace">
+                <div class="o_field_widget o_field_monetary" style="margin-right: 12px;">
+                    <span class="o_stat_text">Wholesale: </span>
+                    <field name="wholesale_price" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+                </div>
+                <div class="o_field_widget o_field_monetary">
+                    <span class="o_stat_text">Retail: </span>
+                    <field name="retail_price" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <!-- 5. Hide the default Pricelists menu in Sales -->
+    <record id="sale.menu_product_pricelist_main" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+</odoo>

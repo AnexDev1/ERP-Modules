@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_register_form_inherit_withholding" model="ir.ui.view">
+        <field name="name">account.payment.register.form.inherit.withholding</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_bank_id']" position="after">
+                <field name="apply_withholding_tax" widget="boolean_toggle"/>
+            </xpath>
+            <xpath expr="//footer" position="before">
+                <notebook>
+                    <page string="Withholding Info" name="withholding_info" invisible="not apply_withholding_tax">
+                        <field name="withholding_line_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="tax_type"/>
+                                <field name="reference"/>
+                                <field name="date"/>
+                                <field name="before_value"/>
+                                <field name="withholding_amount"/>
+                                <field name="withholding_account_id" options="{'no_create': True}"/>
+                                <field name="currency_id" column_invisible="True"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

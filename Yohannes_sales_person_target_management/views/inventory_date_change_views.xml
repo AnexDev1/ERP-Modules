@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inventory Date Change Tree View -->
+        <record id="view_yohannes_inventory_date_change_tree" model="ir.ui.view">
+            <field name="name">yohannes.inventory.date.change.tree</field>
+            <field name="model">yohannes.inventory.date.change</field>
+            <field name="arch" type="xml">
+                <list string="Change Transaction Date" editable="top">
+                    <field name="id" string="ID" readonly="1"/>
+                    <field name="picking_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'processed'"/>
+                    <button name="action_change_date" string="CHANGE DATE" type="object" class="btn-primary" invisible="state == 'processed'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Inventory Date Change Action -->
+        <record id="action_inventory_date_changes" model="ir.actions.act_window">
+            <field name="name">Inventory Date Changes</field>
+            <field name="res_model">yohannes.inventory.date.change</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Plan Inventory Date Changes
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item (under existing Reports parent) -->
+        <menuitem id="menu_inventory_date_changes"
+                  name="Inventory Date Changes"
+                  parent="Yohannes_sales_person_target_management.menu_accounting_reports_customers"
+                  action="action_inventory_date_changes"
+                  sequence="50"/>
+    </data>
+</odoo>

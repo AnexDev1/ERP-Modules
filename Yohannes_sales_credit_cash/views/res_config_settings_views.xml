@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- View emptied because the fields were moved to res.partner -->
+    <record id="res_config_settings_view_form_inherit_credit_cash" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.credit.cash</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='account']" position="inside">
+                <block title="Default Accounting Fields" name="default_accounting_fields">
+                    <setting string="Trade Receivable Cash" help="Default account for standard/cash sales.">
+                        <field name="trade_default_rec_cash_id" />
+                    </setting>
+                    <setting string="Trade Receivable Credit" help="Default account for credit sales.">
+                        <field name="trade_default_rec_credit_id" />
+                    </setting>
+                    <setting string="Trade Payable" help="Default account for vendor bills.">
+                        <field name="trade_default_payable_id" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

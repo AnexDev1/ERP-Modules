@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Customer Type to Partner form, under Customer Tags (category_id) -->
+    <record id="res_partner_form_view_inherit_customer_type" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.customer.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="customer_rank"
+                       string="Customer Rank"
+                       invisible="context.get('res_partner_search_mode') == 'supplier' and customer_rank == 0"/>
+                <field name="supplier_rank"
+                       string="Vendor Rank"
+                       invisible="context.get('res_partner_search_mode') == 'customer' and supplier_rank == 0"/>
+                <field name="customer_type" string="Customer Type" invisible="context.get('res_partner_search_mode') == 'supplier' or supplier_rank &gt; 0"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="required">context.get('res_partner_search_mode') == 'customer' or customer_rank &gt; 0</attribute>
+            </xpath>
+
+            <!-- Add Customer Type to the contact creation wizard (child_ids) -->
+            <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="after">
+                <field name="customer_type" invisible="type != 'contact' or context.get('res_partner_search_mode') == 'supplier' or parent.supplier_rank &gt; 0"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

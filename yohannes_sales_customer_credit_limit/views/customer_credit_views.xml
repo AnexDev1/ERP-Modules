@@ -1,0 +1,77 @@
+<odoo>
+    <data>
+
+    <!-- list View for Customer Credit -->
+    <record id="view_customer_credit_list" model="ir.ui.view">
+        <field name="name">customer.credit.list</field>
+        <field name="model">customer.credit</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button name="%(yohannes_sales_customer_credit_limit.action_credit_limit_import)d" 
+                            type="action" string="Import Credit Limits" class="btn-primary" display="always"/>
+                </header>
+                <field name="partner_id" string="Name"/>
+                <field name="tin_no"/>
+                <field name="city_sub_city"/>
+                <field name="payment_term_credit" string="Payment terms"/>
+                <field name="maximum_credit" string="Credit limit"/>
+                <field name="credit" string="Unsettled amount"/>
+                <field name="matured_amount" string="Credit balance"/>
+                <field name="due_date" invisible="1"/>
+                <field name="payment_date" invisible="1"/>
+                <field name="notification_sent" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View for Customer Credit -->
+    <record id="view_customer_credit_form" model="ir.ui.view">
+        <field name="name">customer.credit.form</field>
+        <field name="model">customer.credit</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" required="1"/>
+                            <field name="tin_no"/>
+                            <field name="city_sub_city"/>
+                            <field name="maximum_credit"/>
+                            <field name="credit" readonly="1"/>
+                            <field name="matured_amount" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="payment_term_credit"/>
+                            <field name="due_date" readonly="1"/>
+                            <field name="payment_date" readonly="1"/>
+                            <field name="notification_sent" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Customer Credit -->
+    <record id="action_customer_credit" model="ir.actions.act_window">
+        <field name="name">Credit limit</field>
+        <field name="res_model">customer.credit</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage credit limits and payment schedules for customers.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_customer_credit"
+              name="Credit limit"
+              parent="account.account_invoicing_menu"
+              action="action_customer_credit"
+              sequence="4"/>
+
+    </data>
+</odoo>

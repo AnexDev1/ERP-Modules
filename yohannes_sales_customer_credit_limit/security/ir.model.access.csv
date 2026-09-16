@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customer_credit,access.customer.credit,model_customer_credit,base.group_user,1,1,1,1
+access_credit_payment,access.credit.payment,model_credit_payment,base.group_user,1,1,1,1
+access_sale_order,access.sale.order,model_sale_order,base.group_user,1,1,1,0
+access_res_partner_credit,access.res.partner.credit,model_res_partner,base.group_user,1,1,1,0
+access_sales_credit_report,access_sales_credit_report,model_sales_credit_report,base.group_user,1,1,1,1
+access_yohannes_credit_limit_wizard,access.yohannes.credit.limit.import.wizard,model_yohannes_credit_limit_import_wizard,base.group_user,1,1,1,1

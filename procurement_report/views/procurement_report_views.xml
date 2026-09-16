@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Store Requisition Analysis Views -->
+    <record id="view_store_requisition_pivot_report" model="ir.ui.view">
+        <field name="name">store.requisition.pivot.report</field>
+        <field name="model">store.requisition</field>
+        <field name="arch" type="xml">
+            <pivot string="Store Requisition Analysis">
+                <field name="date_requisition" type="row"/>
+                <field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_store_requisition_graph_report" model="ir.ui.view">
+        <field name="name">store.requisition.graph.report</field>
+        <field name="model">store.requisition</field>
+        <field name="arch" type="xml">
+            <graph string="Store Requisition Analysis">
+                <field name="date_requisition"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Local Purchase Requisition Analysis Views -->
+    <record id="view_local_purchase_requisition_pivot_report" model="ir.ui.view">
+        <field name="name">local.purchase.requisition.pivot.report</field>
+        <field name="model">local.purchase.requisition</field>
+        <field name="arch" type="xml">
+            <pivot string="Local Purchase Analysis">
+                <field name="date_requisition" type="row"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_local_purchase_requisition_graph_report" model="ir.ui.view">
+        <field name="name">local.purchase.requisition.graph.report</field>
+        <field name="model">local.purchase.requisition</field>
+        <field name="arch" type="xml">
+            <graph string="Local Purchase Analysis">
+                <field name="date_requisition"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Payment Request Analysis Views -->
+    <record id="view_local_payment_request_pivot_report" model="ir.ui.view">
+        <field name="name">local.payment.request.pivot.report</field>
+        <field name="model">local.payment.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Payment Request Analysis">
+                <field name="request_date" type="row"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_local_payment_request_graph_report" model="ir.ui.view">
+        <field name="name">local.payment.request.graph.report</field>
+        <field name="model">local.payment.request</field>
+        <field name="arch" type="xml">
+            <graph string="Payment Request Analysis">
+                <field name="request_date"/>
+                <field name="total_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Foreign Purchase Life Cycle List View -->
+    <record id="view_purchase_order_foreign_life_cycle_list" model="ir.ui.view">
+        <field name="name">purchase.order.foreign.life.cycle.list</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <list string="Foreign Purchase Life Cycle" create="false">
+                <field name="name" string="Order Reference"/>
+                <field name="foreign_purchase_request_id" string="Requisition"/>
+                <field name="requisition_ref" string="Requisition Ref"/>
+                <field name="requested_by_report" string="Requested By"/>
+                <field name="proforma_invoice_no_report" string="PI Number"/>
+                <field name="date_rfq_report" string="RFQ Date"/>
+                <field name="currency_id" string="Currency"/>
+                <field name="lc_number_report" string="LC Number"/>
+                <field name="lc_issue_date_report" string="LC Issue Date"/>
+                <field name="lc_status_report" string="LC Status"/>
+                <field name="etd" string="ETD"/>
+                <field name="eta" string="ETA"/>
+                <field name="actual_arrival_date" string="Port Arrival"/>
+                <field name="clearance_date" string="Clearance Date"/>
+                <field name="warehouse_arrival_date" string="Warehouse Arrival"/>
+                <field name="state" string="PO Status"/>
+            </list>
+        </field>
+    </record>
+</odoo>

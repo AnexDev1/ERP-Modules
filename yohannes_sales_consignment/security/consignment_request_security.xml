@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="consignment_request_category" model="ir.module.category">
+        <field name="name">Consignment Request</field>
+        <field name="sequence">13</field>
+    </record>
+    <record id="consignment_request_initiator_privilege" model="res.groups.privilege">
+        <field name="name">Consignment Request Initiator</field>
+        <field name="category_id" ref="consignment_request_category"/>
+    </record>
+     <record id="group_consignment_request_initiator" model="res.groups">
+        <field name="name">Consignment Request Initiator</field>
+        <field name="privilege_id" ref="consignment_request_initiator_privilege"/>
+    </record>
+    <record id="consignment_request_approver_privilege" model="res.groups.privilege">
+        <field name="name">Consignment Request Approver</field>
+        <field name="category_id" ref="consignment_request_category"/>
+    </record>
+     <record id="group_consignment_request_approver" model="res.groups">
+        <field name="name">Consignment Request Approver</field>
+        <field name="privilege_id" ref="consignment_request_approver_privilege"/>
+    </record>
+    </data>
+    <data noupdate="1">
+        <!-- Multi-Company Rules for Consignment Models -->
+        <record id="consignment_request_comp_rule" model="ir.rule">
+            <field name="name">Consignment Request Multi-Company</field>
+            <field name="model_id" ref="model_consignment_request"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="consignment_return_comp_rule" model="ir.rule">
+            <field name="name">Consignment Return Multi-Company</field>
+            <field name="model_id" ref="model_consignment_return"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

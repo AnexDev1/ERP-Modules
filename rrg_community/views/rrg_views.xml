@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rrg_building_list" model="ir.ui.view">
+        <field name="name">rrg.building.list</field>
+        <field name="model">rrg.building</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="street"/>
+                <field name="city"/>
+                <field name="analytic_count"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_rrg_building_form" model="ir.ui.view">
+        <field name="name">rrg.building.form</field>
+        <field name="model">rrg.building</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_units" type="object" class="oe_stat_button" icon="fa-building">
+                            <field name="analytic_count" widget="statinfo" string="Units"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="street"/>
+                            <field name="street2"/>
+                        </group>
+                        <group>
+                            <field name="city"/>
+                            <field name="zip"/>
+                            <field name="country_id"/>
+                            <field name="state_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_rrg_building" model="ir.actions.act_window">
+        <field name="name">Buildings</field>
+        <field name="res_model">rrg.building</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_rrg_meter_list" model="ir.ui.view">
+        <field name="name">rrg.meter.list</field>
+        <field name="model">rrg.meter</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="currency_id"/>
+                <field name="building_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_rrg_meter" model="ir.actions.act_window">
+        <field name="name">Meter Rates</field>
+        <field name="res_model">rrg.meter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_rrg_unit_list" model="ir.ui.view">
+        <field name="name">account.analytic.account.property.list</field>
+        <field name="model">account.analytic.account</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="x_property_building_id"/>
+                <field name="x_property_type"/>
+                <field name="x_studio_floor_no"/>
+                <field name="x_rental_contract_id"/>
+                <field name="x_invoice_status"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_rrg_unit_form" model="ir.ui.view">
+        <field name="name">account.analytic.account.property.form</field>
+        <field name="model">account.analytic.account</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="plan_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="x_is_property"/>
+                            <field name="x_property_building_id"/>
+                            <field name="x_property_type"/>
+                            <field name="x_studio_floor_no"/>
+                            <field name="x_property_address"/>
+                            <field name="x_rental_contract_id"/>
+                            <field name="x_invoice_status"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_rrg_unit" model="ir.actions.act_window">
+        <field name="name">Property Units</field>
+        <field name="res_model">account.analytic.account</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('x_is_property', '=', True)]</field>
+        <field name="context">{'default_x_is_property': True}</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_rrg_unit_list')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_rrg_unit_form')})]"/>
+    </record>
+
+    <record id="view_rrg_requisition_list" model="ir.ui.view">
+        <field name="name">material.purchase.requisition.list</field>
+        <field name="model">material.purchase.requisition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_rrg_requisition_form" model="ir.ui.view">
+        <field name="name">material.purchase.requisition.form</field>
+        <field name="model">material.purchase.requisition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="reason" placeholder="Reason"/>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="description"/>
+                            <field name="qty"/>
+                            <field name="uom"/>
+                            <field name="requisition_type"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_rrg_requisition" model="ir.actions.act_window">
+        <field name="name">Store Requisitions</field>
+        <field name="res_model">material.purchase.requisition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_rrg_root" name="Properties" sequence="45"/>
+    <menuitem id="menu_rrg_building" name="Buildings" parent="menu_rrg_root" action="action_rrg_building" sequence="10"/>
+    <menuitem id="menu_rrg_unit" name="Units" parent="menu_rrg_root" action="action_rrg_unit" sequence="20"/>
+    <menuitem id="menu_rrg_meter" name="Meter Rates" parent="menu_rrg_root" action="action_rrg_meter" sequence="30"/>
+    <menuitem id="menu_rrg_requisition" name="Store Requisitions" parent="menu_rrg_root" action="action_rrg_requisition" sequence="40"/>
+</odoo>

@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+    <!-- Single sequence for all request types -->
+    <record id="seq_general_request" model="ir.sequence">
+        <field name="name">General Request</field>
+        <field name="code">general.request</field>
+        <field name="prefix">GEN/REQ/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range">True</field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ============================================================
+             Group: DCS AI Chatbot / User
+             Assign this group to any user who should see the chatbot.
+        ============================================================ -->
+        <record id="group_dcs_ai_chatbot_user" model="res.groups">
+            <field name="name">DCS AI Chatbot User</field>
+            <field name="comment">
+                Members of this group can see and use the DCS AI Chatbot
+                widget in the Odoo backend.
+            </field>
+        </record>
+
+    </data>
+</odoo>

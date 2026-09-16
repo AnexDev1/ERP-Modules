@@ -1,0 +1,121 @@
+<odoo>
+    <data>
+        <record id="view_invoice_form_inherit_custom" model="ir.ui.view">
+            <field name="name">account.move.form.inherit.custom</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='button_set_checked']" position="after">
+
+                    <button type="object"
+                            name="update_accounting_date"
+                            string="Update Accounting Date"
+                            class="btn-secondary"/>
+
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="category_id" widget="many2many_tags" invisible="move_type not in ('out_invoice', 'in_invoice')"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']/../.." position="inside">
+                    <field name="sale_type" string="Sales Type" readonly="1" invisible="move_type != 'out_invoice'"/>
+                    <field name="received_name" string="Name" invisible="move_type not in ('out_invoice', 'in_invoice')"/>
+                    <field name="delivery_purpose" string="Purpose" invisible="move_type not in ('out_invoice', 'in_invoice')"/>
+                    <field name="card_no" string="Card No" invisible="move_type not in ('out_invoice', 'in_invoice')"/>
+                </xpath>
+                 <xpath expr="//field[@name='ref']" position="after">
+                            <!--field name="transaction_type" options="{'no_create': True, 'no_open': True}"
+                                   readonly="transaction_no != 'New'" invisible="move_type in ('in_invoice', 'in_refund', 'in_receipt', 'out_invoice')"/>
+                            <field name="transaction_no" readonly="1" invisible="move_type in ('in_invoice', 'in_refund', 'in_receipt', 'out_invoice')"/-->
+
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Delivery Slip" name="delivery_slip" invisible="move_type not in ('out_invoice', 'in_invoice')">
+                        <field name="picking_ids" readonly="1">
+                            <list>
+                                <field name="name" string="Reference"/>
+                                <field name="location_id" string="From"/>
+                                <field name="location_dest_id" string="To"/>
+                                <field name="partner_id" string="Contact"/>
+                                <field name="scheduled_date"/>
+                                <field name="origin" string="Source Document"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="state" widget="badge" decoration-success="state == 'done'"
+                                       decoration-info="state not in ('done', 'cancel', 'draft')"
+                                       decoration-muted="state == 'draft'"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="CRV" name="crv" invisible="1">
+                        <field name="crv_line_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="crv_reference"/>
+                                <field name="amount"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="payment_description"/>
+                                <field name="document_printed"/>
+                                <button name="action_print_crv" string="Report" type="object" icon="fa-list"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <page string="FS Info" name="fs_info" invisible="1">
+                        <group>
+                            <field name="fs_no"/>
+                            <field name="machine_id"/>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//page[@name='other_info']/group" position="inside">
+                    <group string="Print Settings">
+                        <field name="show_stamp_signature"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_out_invoice_tree_inherit_custom" model="ir.ui.view">
+            <field name="name">account.out.invoice.tree.inherit.custom</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="city" optional="show"/>
+                    <field name="stock_move_ref" optional="show"/>
+                    <field name="stock_valuation" optional="show" sum="Total Valuation"/>
+                    <field name="state_id" optional="show"/>
+                    <field name="fs_no" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_date']" position="after">
+                    <field name="timestamp" optional="show"/>
+                    <field name="tin_no" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total_in_currency_signed']" position="after">
+                    <field name="sales_cost" optional="show" sum="Total Cost"/>
+                    <field name="core_amount" optional="show" sum="Total Core"/>
+                    <field name="non_core_amount" optional="show" sum="Total Non-core"/>
+                    <field name="total_in_birr" optional="show" sum="Total in Birr"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_update_accounting_date_wizard_form" model="ir.ui.view">
+            <field name="name">update.accounting.date.wizard.form</field>
+            <field name="model">update.accounting.date.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Accounting Date">
+                    <group>
+                        <field name="move_id" readonly="1" invisible="1"/>
+                        <field name="accounting_date"/>
+                    </group>
+                    <footer>
+                        <button name="action_update_date" string="Update" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

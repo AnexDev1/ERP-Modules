@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="credit_cash_sales_category" model="ir.module.category">
+        <field name="name">Credit Cash Sales </field>
+        <field name="sequence">12</field>
+    </record>
+    <!--record id="group_credit_cash_sales_user" model="res.groups">
+        <field name="name">Credit Cash Sales User</field>
+        <field name="privilege_id" ref="credit_cash_approval_sales_user_privilege"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="group_credit_cash_sales_manager" model="res.groups">
+        <field name="name">Credit Cash Sales Manager</field>
+        <field name="privilege_id" ref="credit_cash_approval_sales_manager_privilege"/>
+        <field name="implied_ids" eval="[(4, ref('yohannes_sales_credit_cash.group_credit_cash_sales_user')),(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record-->
+    <record id="credit_cash_approval_sales_user_privilege" model="res.groups.privilege">
+        <field name="name">Credit Cash Sales User</field>
+        <field name="category_id" ref="credit_cash_sales_category"/>
+    </record>
+
+    <record id="group_credit_cash_sales_user" model="res.groups">
+        <field name="name">Credit Cash Sales User</field>
+        <field name="privilege_id" ref="credit_cash_approval_sales_user_privilege"/>
+    </record>
+     <record id="credit_cash_approval_sales_manager_privilege" model="res.groups.privilege">
+        <field name="name">Credit Cash Sales Manager</field>
+        <field name="category_id" ref="credit_cash_sales_category"/>
+    </record>
+
+    <record id="group_credit_cash_sales_manager" model="res.groups">
+        <field name="name">Credit Cash Sales Manager</field>
+        <field name="privilege_id" ref="credit_cash_approval_sales_manager_privilege"/>
+    </record>
+    </data>
+</odoo>

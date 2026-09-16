@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_picking_form_inherit_approval" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.approval</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <field name="requires_approval" invisible="1"/>
+                <field name="is_store_manager" invisible="1"/>
+                <!-- Approve button: visible only to Store Managers on pending receipts -->
+                <button name="action_approve" string="Approve" type="object"
+                        class="oe_highlight"
+                        invisible="not requires_approval or approval_state != 'pending' or not is_store_manager"/>
+            </xpath>
+
+            <xpath expr="//sheet" position="before">
+                <field name="is_proforma_delivery" invisible="1"/>
+                <field name="sale_invoice_count" invisible="1"/>
+                <div class="alert alert-warning text-center" role="alert" invisible="not is_proforma_delivery or sale_invoice_count &gt; 0">
+                    <strong>Proforma Delivery:</strong> You cannot validate this delivery until an invoice is created for the Sales Order.
+                </div>
+            </xpath>
+
+            <!-- For receipts: hide native Validate buttons when waiting for or already approved -->
+            <!-- Also hide when it is a proforma delivery without an invoice -->
+            <xpath expr="//button[@name='button_validate'][1]" position="attributes">
+                <attribute name="invisible" separator=" or " add="(requires_approval and approval_state != 'draft') or (is_proforma_delivery and sale_invoice_count == 0)"/>
+            </xpath>
+            <xpath expr="//button[@name='button_validate'][2]" position="attributes">
+                <attribute name="invisible" separator=" or " add="(requires_approval and approval_state != 'draft') or (is_proforma_delivery and sale_invoice_count == 0)"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <field name="picking_display_state" widget="statusbar"
+                       statusbar_visible="draft,ready,store_manager,done"
+                       invisible="not requires_approval"
+                       readonly="1"/>
+            </xpath>
+
+            <!-- Hide ALL standard state statusbars on receipts safely using attributes -->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="invisible" separator=" or " add="requires_approval"/>
+            </xpath>
+
+            <!-- Prevent adding/deleting lines in Operations tab for Odoo 17 -->
+            <xpath expr="//field[@name='move_ids']//list" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="delete">0</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Hide 'New' button on Picking list (Deliveries/Receipts) -->
+    <record id="view_picking_tree_inherit_no_create" model="ir.ui.view">
+        <field name="name">stock.picking.tree.no.create</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Hide 'New' button on Picking form -->
+    <record id="view_picking_form_inherit_no_create" model="ir.ui.view">
+        <field name="name">stock.picking.form.no.create</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- Hide 'New' button on Picking kanban -->
+    <record id="view_picking_kanban_inherit_no_create" model="ir.ui.view">
+        <field name="name">stock.picking.kanban.no.create</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Hide 'New' button on Picking calendar -->
+    <record id="view_picking_calendar_inherit_no_create" model="ir.ui.view">
+        <field name="name">stock.picking.calendar.no.create</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.stock_picking_calendar"/>
+        <field name="arch" type="xml">
+            <xpath expr="//calendar" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

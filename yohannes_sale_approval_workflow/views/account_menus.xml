@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inventory Menu in Accounting App -->
+    <menuitem id="menu_finance_inventory"
+              name="Inventory"
+              parent="account.menu_finance"
+              sequence="50"/>
+
+    <!-- Stock Menu (Default Inventory Report) -->
+    <menuitem id="menu_finance_inventory_stock"
+              name="Stock"
+              parent="menu_finance_inventory"
+              action="stock.action_product_stock_view"
+              sequence="10"/>
+
+    <!-- Move History -->
+    <menuitem id="menu_finance_inventory_moves"
+              name="Move History"
+              parent="menu_finance_inventory"
+              action="stock.stock_move_line_action"
+              sequence="20"/>
+
+    <!-- ==================================================== -->
+    <!-- MANUAL SALES AND MANUAL INVOICES (FOR ACCOUNTANTS)   -->
+    <!-- ==================================================== -->
+
+    <!-- Action for Manual Invoices -->
+    <record id="action_manual_account_moves" model="ir.actions.act_window">
+        <field name="name">Manual Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('is_manual_invoice', '=', True)]</field>
+        <field name="context">{
+            'default_move_type': 'out_invoice',
+            'default_is_manual_invoice': True,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Manual Invoice
+            </p>
+            <p>
+                Manual Invoices are physical paper receipts entered directly by Accounting.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for Manual Sales Orders -->
+    <record id="action_manual_sales_orders" model="ir.actions.act_window">
+        <field name="name">Manual Sales Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_manual_sale', '=', True)]</field>
+        <field name="context">{
+            'default_is_manual_sale': True,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Manual Sales Order
+            </p>
+            <p>
+                Manual Sales Orders represent physical sales receipts entered directly by Accounting.
+            </p>
+        </field>
+    </record>
+
+    <!-- Manual Invoices Menu Item under Accounting -> Customers -->
+    <menuitem id="menu_finance_manual_invoices"
+              name="Manual Invoices"
+              parent="account.menu_finance_receivables"
+              action="action_manual_account_moves"
+              groups="account.group_account_user,account.group_account_manager"
+              sequence="2"/>
+
+    <!-- Manual Sales Orders Menu Item under Accounting -> Customers -->
+    <menuitem id="menu_finance_manual_sales"
+              name="Manual Sales Orders"
+              parent="account.menu_finance_receivables"
+              action="action_manual_sales_orders"
+              groups="account.group_account_user,account.group_account_manager"
+              sequence="3"/>
+
+    <!-- Manual Sales Orders Menu Item also under Sales -> Orders (Restricted to Accountants) -->
+    <menuitem id="menu_sales_manual_orders"
+              name="Manual Sales Orders"
+              parent="sale.sale_order_menu"
+              action="action_manual_sales_orders"
+              groups="account.group_account_user,account.group_account_manager"
+              sequence="15"/>
+</odoo>

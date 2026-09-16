@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu under Customers -> Fiscal Reports -->
+    <menuitem id="menu_peds_fiscal_reports" 
+              name="Fiscal Reports" 
+              parent="account.menu_finance_receivables" 
+              action="action_peds_operations_wizard" 
+              sequence="100"/>
+              
+    <!-- Menu under Configuration -->
+    <menuitem id="menu_peds_license_keys" 
+              name="Register Fiscal License" 
+              parent="account.menu_finance_configuration" 
+              action="action_peds_license_wizard" 
+              sequence="100"/>
+</odoo>

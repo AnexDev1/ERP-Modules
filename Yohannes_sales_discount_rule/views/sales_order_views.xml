@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_line_form_inherit_discount_display" model="ir.ui.view">
+        <field name="name">sale.order.line.form.inherit.discount.display</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='discount']" position="after">
+                <field name="is_manual_discount" widget="boolean_toggle"/>
+                <field name="discount_rule_display" readonly="1"
+                       force_save="1" invisible="is_manual_discount"/>
+            </xpath>
+            <xpath expr="//field[@name='discount']" position="attributes">
+                <attribute name="readonly">not is_manual_discount</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

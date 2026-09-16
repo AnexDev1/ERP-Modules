@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Invoice Extension Tree View -->
+        <record id="view_yohannes_invoice_extension_tree" model="ir.ui.view">
+            <field name="name">yohannes.invoice.extension.tree</field>
+            <field name="model">yohannes.invoice.extension</field>
+            <field name="arch" type="xml">
+                <list string="Invoice Extensions" editable="top">
+                    <field name="move_id"/>
+                    <field name="extension_days"/>
+                    <field name="new_due_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Invoice Extension Action -->
+        <record id="action_invoice_extensions" model="ir.actions.act_window">
+            <field name="name">Invoice Extensions</field>
+            <field name="res_model">yohannes.invoice.extension</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Track Invoice Date Extensions
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item (under existing Reports parent) -->
+        <menuitem id="menu_invoice_extensions"
+                  name="Invoice Date Extensions"
+                  parent="Yohannes_sales_person_target_management.menu_accounting_reports_customers"
+                  action="action_invoice_extensions"
+                  sequence="60"/>
+    </data>
+</odoo>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="custom_dcs_ai_chatbot_19.ChatbotWidget" owl="1">
+    <t t-if="state.hasAccess">
+        <div class="dcs-cb-container" t-att-class="{
+            'dcs-cb-container--light': state.theme === 'light',
+            'dcs-cb-container--fullpage': state.panelSize === 'full' and state.isOpen
+        }">
+
+            <!-- ============== FLOATING BUBBLE BUTTON ============== -->
+            <button class="dcs-cb-fab" t-on-click="toggleChat"
+                    t-att-class="{
+                        'dcs-cb-fab--open': state.isOpen,
+                        'dcs-cb-fab--hidden': state.panelSize === 'full' and state.isOpen
+                    }">
+                <div t-if="!state.isOpen" class="dcs-cb-fab-icon-wrap">
+                    <svg width="70" height="82" viewBox="0 0 70 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_fab)">
+                        <path d="M9.35741 71.4278C-7.61726 53.4485 -0.607413 22.3681 23.1801 14.4226C32.3898 11.3554 41.1398 14.3737 48.9048 12.3832C55.6027 10.6538 55.9803 -1.14206 64.2378 0.0815754C67.2913 0.5384 68.8344 2.70832 69.1792 5.62873C70.4104 16.0052 70.1149 40.4942 69.1463 51.148C66.5525 80.0422 29.3199 92.5722 9.35741 71.4278Z" fill="#1D8CCC"/>
+                        <path d="M15.9404 40.7063C10.5722 35.8118 18.4193 27.8337 23.5577 32.7608C28.6961 37.688 21.5877 45.8456 15.9404 40.7063Z" fill="white"/>
+                        <path d="M53.7312 40.739C48.7406 46.5635 40.1384 37.5738 45.917 32.9729C51.0718 28.8452 58.2129 35.5181 53.7312 40.739Z" fill="white"/>
+                        <path d="M23.9353 48.8476C23.8039 52.7469 26.3649 56.6462 29.9437 58.2125C36.0999 60.9045 43.3068 57.3804 44.5544 50.7565C44.6529 50.2181 44.538 48.9455 44.8335 48.7334L54.2237 48.6518C54.3715 53.2037 52.6806 57.7883 49.8077 61.3124C48.4615 62.9602 46.2946 64.8365 44.4559 65.8969C30.8959 73.6956 14.348 63.9881 14.3644 48.6518L23.9353 48.8476Z" fill="white"/>
+                        </g>
+                        <defs><clipPath id="clip0_fab"><rect width="70" height="82" fill="white"/></clipPath></defs>
+                    </svg>
+                </div>
+                <svg t-if="state.isOpen" class="dcs-cb-fab-icon" viewBox="0 0 24 24" fill="none" stroke="#1D8CCC" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+
+            <!-- ============== CHAT PANEL ============== -->
+            <div class="dcs-cb-panel" t-att-class="{
+                'dcs-cb-panel--open': state.isOpen,
+                'dcs-cb-panel--broad': state.panelSize === 'broad',
+                'dcs-cb-panel--full': state.panelSize === 'full'
+            }">
+
+                <!-- Header -->
+                <div class="dcs-cb-header">
+                    <div class="dcs-cb-header-info">
+                        <div class="dcs-cb-avatar">
+                            <svg width="24" height="28" viewBox="0 0 70 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.35741 71.4278C-7.61726 53.4485 -0.607413 22.3681 23.1801 14.4226C32.3898 11.3554 41.1398 14.3737 48.9048 12.3832C55.6027 10.6538 55.9803 -1.14206 64.2378 0.0815754C67.2913 0.5384 68.8344 2.70832 69.1792 5.62873C70.4104 16.0052 70.1149 40.4942 69.1463 51.148C66.5525 80.0422 29.3199 92.5722 9.35741 71.4278Z" fill="#1D8CCC"/>
+                                <path d="M15.9404 40.7063C10.5722 35.8118 18.4193 27.8337 23.5577 32.7608C28.6961 37.688 21.5877 45.8456 15.9404 40.7063Z" fill="white"/>
+                                <path d="M53.7312 40.739C48.7406 46.5635 40.1384 37.5738 45.917 32.9729C51.0718 28.8452 58.2129 35.5181 53.7312 40.739Z" fill="white"/>
+                                <path d="M23.9353 48.8476C23.8039 52.7469 26.3649 56.6462 29.9437 58.2125C36.0999 60.9045 43.3068 57.3804 44.5544 50.7565C44.6529 50.2181 44.538 48.9455 44.8335 48.7334L54.2237 48.6518C54.3715 53.2037 52.6806 57.7883 49.8077 61.3124C48.4615 62.9602 46.2946 64.8365 44.4559 65.8969C30.8959 73.6956 14.348 63.9881 14.3644 48.6518L23.9353 48.8476Z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="dcs-cb-title">DCS AI Assistance</h3>
+                            <span class="dcs-cb-status">
+                                <span class="dcs-cb-status-dot"/>
+                                Online
+                            </span>
+                        </div>
+                    </div>
+                    <div class="dcs-cb-header-actions">
+                        <!-- Panel Size Toggle -->
+                        <button class="dcs-cb-btn-icon" t-on-click="cyclePanelSize" t-att-title="panelSizeTitle">
+                            <!-- Expand icon (compact → broad) -->
+                            <svg t-if="panelSizeIcon === 'expand'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <polyline points="15 3 21 3 21 9"/>
+                                <polyline points="9 21 3 21 3 15"/>
+                                <line x1="21" y1="3" x2="14" y2="10"/>
+                                <line x1="3" y1="21" x2="10" y2="14"/>
+                            </svg>
+                            <!-- Maximize icon (broad → full) -->
+                            <svg t-if="panelSizeIcon === 'maximize'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
+                            </svg>
+                            <!-- Minimize icon (full → compact) -->
+                            <svg t-if="panelSizeIcon === 'minimize'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <polyline points="4 14 10 14 10 20"/>
+                                <polyline points="20 10 14 10 14 4"/>
+                                <line x1="14" y1="10" x2="21" y2="3"/>
+                                <line x1="3" y1="21" x2="10" y2="14"/>
+                            </svg>
+                        </button>
+                        <!-- Theme Toggle -->
+                        <button class="dcs-cb-btn-icon" t-on-click="toggleTheme" t-att-title="state.theme === 'dark' ? 'Light Mode' : 'Dark Mode'">
+                            <!-- Sun icon (currently dark → switch to light) -->
+                            <svg t-if="state.theme === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="5"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                <line x1="1" y1="12" x2="3" y2="12"/>
+                                <line x1="21" y1="12" x2="23" y2="12"/>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                            </svg>
+                            <!-- Moon icon (currently light → switch to dark) -->
+                            <svg t-if="state.theme === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                            </svg>
+                        </button>
+                        <!-- Clear Chat -->
+                        <button class="dcs-cb-btn-icon" t-on-click="clearChat" title="Clear chat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                        </button>
+                        <!-- Close -->
+                        <button class="dcs-cb-btn-icon" t-on-click="closeChat" title="Close">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Proactive Insights Card -->
+                <div class="dcs-cb-insights" t-if="state.insights">
+                    <div class="dcs-cb-insight-item">
+                        <span class="dcs-cb-insight-icon">📦</span>
+                        <div class="dcs-cb-insight-data">
+                            <span class="dcs-cb-insight-value" t-esc="state.insights.draftOrders"/>
+                            <span class="dcs-cb-insight-label">Draft SO</span>
+                        </div>
+                    </div>
+                    <div class="dcs-cb-insight-item dcs-cb-insight-item--warn">
+                        <span class="dcs-cb-insight-icon">⚠️</span>
+                        <div class="dcs-cb-insight-data">
+                            <span class="dcs-cb-insight-value" t-esc="state.insights.overdueInvoices"/>
+                            <span class="dcs-cb-insight-label">Overdue</span>
+                        </div>
+                    </div>
+                    <div class="dcs-cb-insight-item">
+                        <span class="dcs-cb-insight-icon">✅</span>
+                        <div class="dcs-cb-insight-data">
+                            <span class="dcs-cb-insight-value" t-esc="state.insights.openTasks"/>
+                            <span class="dcs-cb-insight-label">Open Tasks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="dcs-cb-messages">
+                    <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
+                        <div class="dcs-cb-msg" t-att-class="{
+                            'dcs-cb-msg--user': msg.role === 'user',
+                            'dcs-cb-msg--bot': msg.role === 'bot',
+                            'dcs-cb-msg--error': msg.isError
+                        }">
+                            <div class="dcs-cb-msg-avatar" t-if="msg.role === 'bot'">
+                                <svg width="16" height="18" viewBox="0 0 70 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.35741 71.4278C-7.61726 53.4485 -0.607413 22.3681 23.1801 14.4226C32.3898 11.3554 41.1398 14.3737 48.9048 12.3832C55.6027 10.6538 55.9803 -1.14206 64.2378 0.0815754C67.2913 0.5384 68.8344 2.70832 69.1792 5.62873C70.4104 16.0052 70.1149 40.4942 69.1463 51.148C66.5525 80.0422 29.3199 92.5722 9.35741 71.4278Z" fill="#1D8CCC"/>
+                                    <path d="M15.9404 40.7063C10.5722 35.8118 18.4193 27.8337 23.5577 32.7608C28.6961 37.688 21.5877 45.8456 15.9404 40.7063Z" fill="white"/>
+                                    <path d="M53.7312 40.739C48.7406 46.5635 40.1384 37.5738 45.917 32.9729C51.0718 28.8452 58.2129 35.5181 53.7312 40.739Z" fill="white"/>
+                                    <path d="M23.9353 48.8476C23.8039 52.7469 26.3649 56.6462 29.9437 58.2125C36.0999 60.9045 43.3068 57.3804 44.5544 50.7565C44.6529 50.2181 44.538 48.9455 44.8335 48.7334L54.2237 48.6518C54.3715 53.2037 52.6806 57.7883 49.8077 61.3124C48.4615 62.9602 46.2946 64.8365 44.4559 65.8969C30.8959 73.6956 14.348 63.9881 14.3644 48.6518L23.9353 48.8476Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div class="dcs-cb-msg-content">
+                                <div class="dcs-cb-msg-bubble" t-att-class="{
+                                    'dcs-cb-msg-bubble--user': msg.role === 'user',
+                                    'dcs-cb-msg-bubble--bot': msg.role === 'bot'
+                                }">
+                                    <t t-out="msg.html"/>
+                                </div>
+                                <div class="dcs-cb-msg-actions">
+                                    <span class="dcs-cb-msg-time" t-esc="msg.time"/>
+                                    <!-- Export CSV button for table messages -->
+                                    <button class="dcs-cb-export-btn" t-if="msg.hasTable" t-on-click="() => this.exportCSV(msg.id)" title="Export as CSV">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                            <polyline points="7 10 12 15 17 10"/>
+                                            <line x1="12" y1="15" x2="12" y2="3"/>
+                                        </svg>
+                                        <span>CSV</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Loading indicator -->
+                    <div class="dcs-cb-msg dcs-cb-msg--bot" t-if="state.isLoading">
+                        <div class="dcs-cb-msg-avatar">
+                            <svg width="16" height="18" viewBox="0 0 70 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.35741 71.4278C-7.61726 53.4485 -0.607413 22.3681 23.1801 14.4226C32.3898 11.3554 41.1398 14.3737 48.9048 12.3832C55.6027 10.6538 55.9803 -1.14206 64.2378 0.0815754C67.2913 0.5384 68.8344 2.70832 69.1792 5.62873C70.4104 16.0052 70.1149 40.4942 69.1463 51.148C66.5525 80.0422 29.3199 92.5722 9.35741 71.4278Z" fill="#1D8CCC"/>
+                                <path d="M15.9404 40.7063C10.5722 35.8118 18.4193 27.8337 23.5577 32.7608C28.6961 37.688 21.5877 45.8456 15.9404 40.7063Z" fill="white"/>
+                                <path d="M53.7312 40.739C48.7406 46.5635 40.1384 37.5738 45.917 32.9729C51.0718 28.8452 58.2129 35.5181 53.7312 40.739Z" fill="white"/>
+                                <path d="M23.9353 48.8476C23.8039 52.7469 26.3649 56.6462 29.9437 58.2125C36.0999 60.9045 43.3068 57.3804 44.5544 50.7565C44.6529 50.2181 44.538 48.9455 44.8335 48.7334L54.2237 48.6518C54.3715 53.2037 52.6806 57.7883 49.8077 61.3124C48.4615 62.9602 46.2946 64.8365 44.4559 65.8969C30.8959 73.6956 14.348 63.9881 14.3644 48.6518L23.9353 48.8476Z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dcs-cb-msg-content">
+                            <div class="dcs-cb-msg-bubble dcs-cb-msg-bubble--bot dcs-cb-typing">
+                                <span class="dcs-cb-dot"/>
+                                <span class="dcs-cb-dot"/>
+                                <span class="dcs-cb-dot"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div t-ref="messagesEnd"/>
+                </div>
+
+                <!-- Quick Action Chips -->
+                <div class="dcs-cb-quick-actions" t-if="state.showQuickActions">
+                    <t t-foreach="quickActions" t-as="action" t-key="action.label">
+                        <button class="dcs-cb-quick-chip" t-on-click="() => this.onQuickAction(action.prompt)" t-att-disabled="state.isLoading">
+                            <t t-esc="action.label"/>
+                        </button>
+                    </t>
+                </div>
+
+                <!-- Input Area -->
+                <div class="dcs-cb-input-area">
+                    <input type="text"
+                           class="dcs-cb-input"
+                           t-ref="chatInput"
+                           t-model="state.inputText"
+                           t-on-keydown="onInputKeydown"
+                           placeholder="Ask Droga AI anything..."
+                           t-att-disabled="state.isLoading"/>
+                    <button class="dcs-cb-send-btn"
+                            t-on-click="sendMessage"
+                            t-att-disabled="state.isLoading || !state.inputText.trim()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </t>
+    </t>
+</templates>

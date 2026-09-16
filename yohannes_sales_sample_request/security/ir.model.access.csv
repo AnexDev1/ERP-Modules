@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_free_sample_request,free.sample.request,model_free_sample_request,,1,1,1,1
+access_free_sample_request_line,free.sample.request.line,model_free_sample_request_line,,1,1,1,1
+access_return_sample_request,return.sample.request,model_return_sample_request,,1,1,1,1
+access_return_sample_request_line,return.sample.request.line,model_return_sample_request_line,,1,1,1,1
+access_return_sample,return.sample,model_return_sample,,1,1,1,1
+access_return_sample_line,return.sample.line,model_return_sample_line,,1,1,1,1
+access_request_dashboard,request.dashboard,model_request_dashboard,,1,1,1,1

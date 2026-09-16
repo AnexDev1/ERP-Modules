@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lca_user,stock.landed.cost.adjustment.user,model_stock_landed_cost_adjustment,base.group_user,1,0,0,0
+access_lca_accountant,stock.landed.cost.adjustment.accountant,model_stock_landed_cost_adjustment,account.group_account_user,1,1,1,0
+access_lca_manager,stock.landed.cost.adjustment.manager,model_stock_landed_cost_adjustment,account.group_account_manager,1,1,1,1
+access_lca_line_user,stock.landed.cost.adjustment.line.user,model_stock_landed_cost_adjustment_line,base.group_user,1,0,0,0
+access_lca_line_accountant,stock.landed.cost.adjustment.line.accountant,model_stock_landed_cost_adjustment_line,account.group_account_user,1,1,1,1
+access_lca_line_manager,stock.landed.cost.adjustment.line.manager,model_stock_landed_cost_adjustment_line,account.group_account_manager,1,1,1,1

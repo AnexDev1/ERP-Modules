@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_crv" model="ir.actions.report">
+        <field name="name">Cash Receipt Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Yohannes_sales_person_target_management.report_crv</field>
+        <field name="report_file">Yohannes_sales_person_target_management.report_crv</field>
+        <field name="print_report_name">'CRV - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- CRV Report Template -->
+    <template id="report_crv">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.html_container">
+                <div class="page" style="padding: 20px; font-family: 'Times New Roman', serif;">
+                    <div class="oe_structure"/>
+
+                    <!-- Header with Company Logo -->
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-12 text-center">
+                            <h2 style="margin-bottom: 5px;">Cash Receipt Voucher</h2>
+                            <hr style="border-top: 2px solid #000; margin: 5px 0;"/>
+                        </div>
+                    </div>
+
+                    <!-- From Section (Company Details) -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-6" style="border: 1px solid #000; padding: 10px;">
+                            <strong>ከ:- / From:</strong><br/>
+                            <span t-field="doc.company_id.name"/><br/>
+                            <span t-field="doc.company_id.partner_id.street"/><br/>
+                            <span t-field="doc.company_id.partner_id.city"/><br/>
+                            <strong>የታክስ ከፋይ መ.ቁ:</strong> <span t-field="doc.company_id.partner_id.vat"/><br/>
+                            <strong>የተ.እ.ታ ቁጥር:</strong> <span t-field="doc.company_id.vat"/><br/>
+                            <strong>የተመዘገበበት ቀን:</strong> <span t-field="doc.company_id.create_date" t-options='{"format": "date"}'/>
+                        </div>
+                        <div class="col-6" style="border: 1px solid #000; padding: 10px;">
+                            <strong>Voucher Details:</strong><br/>
+                            <strong>Voucher No:</strong> <span t-field="doc.name"/><br/>
+                            <strong>Date:</strong> <span t-field="doc.invoice_date"/><br/>
+                            <!--strong>Transaction Type:</strong> <span t-field="doc.transaction_type_id.name"/><br/-->
+                            <!--strong>Transaction No:</strong> <span t-field="doc.transaction_no"/><br/-->
+                            <strong>Reference:</strong> <span t-field="doc.ref"/>
+                        </div>
+                    </div>
+
+                    <!-- To Section (Customer Details) -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-12" style="border: 1px solid #000; padding: 10px;">
+                            <strong>ለ:- / To:</strong><br/>
+                            <span t-field="doc.partner_id.name"/><br/>
+                            <span t-field="doc.partner_id.street"/><br/>
+                            <span t-field="doc.partner_id.city"/><br/>
+                            <strong>የተ.እ.ታ ቁጥር:</strong> <span t-field="doc.partner_id.vat"/><br/>
+                            <strong>የታክስ ከፋይ መ.ቁ:</strong> <span t-field="doc.partner_id.vat"/><br/>
+                            <strong>የተመዘገበበት ቀን:</strong> <span t-field="doc.partner_id.create_date" t-options='{"format": "date"}'/>
+                        </div>
+                    </div>
+
+                    <!-- Payment Description -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-12" style="border: 1px solid #000; padding: 10px;">
+                            <strong>የክፍያው ምክንያት / Payment Description:</strong><br/>
+                            <span t-field="doc.memo_note" t-options='{"widget": "text"}'/>
+                            <span t-if="not doc.memo_note">_________________________</span>
+                        </div>
+                    </div>
+
+                    <!-- CRV Lines Table -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-12">
+                            <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f0f0f0;">
+                                        <th style="border: 1px solid #000; padding: 8px;">#</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">Description</th>
+                                        <th style="border: 1px solid #000; padding: 8px; text-align: right;">Amount (Birr)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.crv_line_ids" t-as="line">
+                                        <tr>
+                                            <td style="border: 1px solid #000; padding: 8px;"><span t-esc="line_index+1"/></td>
+                                            <td style="border: 1px solid #000; padding: 8px;"><span t-field="line.payment_description"/></td>
+                                            <td style="border: 1px solid #000; padding: 8px; text-align: right;"><span t-field="line.amount"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="not doc.crv_line_ids">
+                                        <td colspan="3" style="border: 1px solid #000; padding: 8px; text-align: center;">
+                                            <t t-foreach="doc.invoice_line_ids" t-as="line">
+                                                <span t-field="line.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #f9f9f9;">
+                                        <td colspan="2" style="border: 1px solid #000; padding: 8px;">
+                                            <strong>Total Amount:</strong>
+                                        </td>
+                                        <td style="border: 1px solid #000; padding: 8px; text-align: right;">
+                                            <strong><span t-field="doc.amount_total"/></strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.withholding_amount > 0">
+                                        <td colspan="2" style="border: 1px solid #000; padding: 8px;">
+                                            <strong>Withholding Amount:</strong>
+                                        </td>
+                                        <td style="border: 1px solid #000; padding: 8px; text-align: right;">
+                                            <strong><span t-field="doc.withholding_amount"/></strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.withholding_amount > 0">
+                                        <td colspan="2" style="border: 1px solid #000; padding: 8px;">
+                                            <strong>Net Amount:</strong>
+                                        </td>
+                                        <td style="border: 1px solid #000; padding: 8px; text-align: right;">
+                                            <strong><span t-esc="doc.amount_total - doc.withholding_amount"/></strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Amount in Words -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-12" style="border: 1px solid #000; padding: 10px;">
+                            <strong>የገንዘብ ልክ በፊደል / Amount in Words:</strong><br/>
+                            <span t-field="doc.amount_in_words"/>
+                        </div>
+                    </div>
+
+                    <!-- Mode of Payment -->
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-12" style="border: 1px solid #000; padding: 10px;">
+                            <strong>የክፍያ ሁኔታ / Mode of Payment:</strong><br/>
+                            <div style="margin-top: 5px;">
+                                <span style="margin-right: 20px;">
+                                    <t t-if="doc.sale_type == 'cash'">☑</t>
+                                    <t t-if="doc.sale_type != 'cash'">☐</t> በጥሬ / Cash
+                                </span>
+                                <span style="margin-right: 20px;">
+                                    <t t-if="doc.sale_type != 'cash'">☑</t>
+                                    <t t-if="doc.sale_type == 'cash'">☐</t> በቼክ / Cheque
+                                </span>
+                                <span t-if="doc.sale_type != 'cash'">
+                                    <strong>የቼክ ቁጥር / Cheque No:</strong>
+                                    <span t-field="doc.card_no"/>
+                                    <span t-if="not doc.card_no">____________________</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Withholding Information -->
+                    <div class="row" style="margin-bottom: 15px;" t-if="doc.withholding_invoice">
+                        <div class="col-12" style="border: 1px solid #000; padding: 10px; background-color: #f9f9f9;">
+                            <strong>Withholding Information:</strong><br/>
+                            <strong>Withholding No:</strong> <span t-field="doc.withholding_no"/><br/>
+                            <strong>Withholding Internal Ref:</strong> <span t-field="doc.withholding_internal_ref"/><br/>
+                            <strong>Withholding Amount:</strong> <span t-field="doc.withholding_amount"/>
+                        </div>
+                    </div>
+
+                    <!-- Signatures Section -->
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-4" style="text-align: center;">
+                            <strong>ያዘጋጀው ስምና ፊርማ<br/>Prepared By</strong><br/>
+                            <span t-field="doc.prepared_by"/><br/>
+                            <span t-if="not doc.prepared_by">_________________________</span><br/>
+                            <span style="border-top: 1px solid #000;">Signature  Date</span>
+                        </div>
+                        <div class="col-4" style="text-align: center;">
+                            <strong>የተቀባይ (የሸጭ) ስምና ፊርማ<br/>Cashier's Signature</strong><br/>
+                            <span t-field="doc.received_by"/><br/>
+                            <span t-if="not doc.received_by">_________________________</span><br/>
+                            <span style="border-top: 1px solid #000;">Signature Date</span>
+                        </div>
+                        <div class="col-4" style="text-align: center;">
+                            <strong>Approved By</strong><br/>
+                            <span t-field="doc.approved_by"/><br/>
+                            <span t-if="not doc.approved_by">_________________________</span><br/>
+                            <span style="border-top: 1px solid #000;">Signature &amp; Date</span>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-12 text-center">
+                            <hr style="border-top: 1px solid #000;"/>
+                            <small>This is a computer generated document - No signature required</small>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

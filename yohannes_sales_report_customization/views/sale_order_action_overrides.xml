@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Make Proforma Printout visible for everyone by removing the group restriction -->
+        <record id="sale.action_report_pro_forma_invoice" model="ir.actions.report">
+            <field name="group_ids" eval="[(6, 0, [])]"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Remove 'Accrued Revenue Entry' from Action Menu -->
+        <record id="sale.action_accrued_revenue_entry" model="ir.actions.act_window">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Generate a Payment Link' from Action Menu -->
+        <record id="sale.action_sale_order_generate_link" model="ir.actions.act_window">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Send an email' from Action Menu -->
+        <record id="sale.model_sale_order_send_mail" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- INVOICE ACTION OVERRIDES -->
+        <!-- ============================================== -->
+        
+        <!-- Remove 'Generate a Payment Link' from Invoice Action Menu -->
+        <record id="account_payment.action_invoice_order_generate_link" model="ir.actions.act_window">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Share' from Invoice Action Menu -->
+        <record id="account.model_account_move_action_share" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Switch into invoice/credit note' from Invoice Action Menu -->
+        <record id="account.action_move_switch_move_type" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove '(Un)Block Payment' from Invoice Action Menu -->
+        <record id="account.action_move_block_payment" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Mark Quotation as Sent' from Action Menu -->
+        <record id="sale.model_sale_order_action_quotation_sent" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Remove 'Share' from Action Menu -->
+        <record id="sale.model_sale_order_action_share" model="ir.actions.server">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+        <!-- Add My Invoices under Sales > Orders -->
+        <menuitem id="menu_sale_my_invoices"
+            name="My Invoices"
+            parent="sale.sale_order_menu"
+            action="account.action_move_out_invoice_type"
+            sequence="25"
+            groups="sales_team.group_sale_salesman"/>
+
+    </data>
+</odoo>

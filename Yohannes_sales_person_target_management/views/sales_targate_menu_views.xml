@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem
+                id="menu_sales_target_config"
+                name="Sales Targets"
+                parent="sale.menu_sale_config"
+                action="action_sales_target_config"
+                sequence="11"/>
+        <menuitem id="menu_sales_person_tracking"
+                  name="Sales Person Tracking "
+                  parent="sale.menu_sale_report"
+                  sequence="1"/>
+        <menuitem id="menu_daily_sales"
+                  name="Daily  Tracking "
+                  parent="menu_sales_person_tracking"
+                  action="action_daily_sales"
+                  sequence="1"/>
+
+        <menuitem id="menu_weekly_sales"
+                  name="Weekly Tracking"
+                  parent="menu_sales_person_tracking"
+                  action="action_weekly_sales"
+                  sequence="2"/>
+        <menuitem id="menu_monthly_sales"
+                  name="Monthly  Tracking"
+                  parent="menu_sales_person_tracking"
+                  action="action_monthly_sales"
+                  sequence="3"/>
+    </data>
+</odoo>

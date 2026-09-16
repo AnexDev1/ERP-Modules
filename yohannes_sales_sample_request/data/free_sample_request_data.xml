@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="seq_free_sample_request" model="ir.sequence">
+        <field name="name">Free Sample Request</field>
+        <field name="code">free.sample.request</field>
+        <field name="prefix">FS/ISSUE/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range">True</field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,65 @@
+<odoo>
+    <data>
+
+
+        <record id="view_monthly_sales_form" model="ir.ui.view">
+            <field name="name">monthly.sales.form</field>
+            <field name="model">monthly.sales</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="salesperson_id" required="1"/>
+                                <field name="month_start_date" required="1"/>
+                                <field name="month_end_date" required="1"/>
+                                <field name="month_name" readonly="1"/>
+                                <field name="year" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="monthly_target" readonly="1"/>
+                                <field name="monthly_achievement_percent" readonly="1"/>
+                                <field name="total_cash_sales" readonly="1"/>
+                                <field name="total_credit_sales" readonly="1"/>
+                                <field name="total_sales" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Weekly Entries">
+                                <field name="weekly_sales_ids" readonly="1">
+                                    <list>
+                                        <field name="week_number"/>
+                                        <field name="total_cash_sales"/>
+                                        <field name="total_credit_sales"/>
+                                        <field name="total_sales"/>
+                                        <field name="weekly_target"/>
+                                        <field name="weekly_achievement_percent"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_monthly_sales_list" model="ir.ui.view">
+            <field name="name">monthly.sales.list</field>
+            <field name="model">monthly.sales</field>
+            <field name="arch" type="xml">
+                <list string="Monthly Sales">
+                    <field name="month_name"/>
+                    <field name="year"/>
+                    <field name="salesperson_id"/>
+                    <field name="total_sales"/>
+                    <field name="monthly_target"/>
+                    <field name="week_1_sales" string="Week 1" optional="show"/>
+                    <field name="week_2_sales" string="Week 2" optional="show"/>
+                    <field name="week_3_sales" string="Week 3" optional="show"/>
+                    <field name="week_4_sales" string="Week 4" optional="show"/>
+                    <field name="monthly_achievement_percent"/>
+                </list>
+            </field>
+        </record>
+
+    </data>
+</odoo>

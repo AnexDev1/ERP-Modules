@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_release_expired_reservations" model="ir.cron">
+            <field name="name">Droga: Release Expired Sales Reservations</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_release_expired_reservations()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+        </record>
+    </data>
+</odoo>

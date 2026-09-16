@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_inventory_warehouse" model="ir.ui.view">
+        <field name="name">res.users.form.inventory.warehouse</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Warehouse Access" name="inventory_warehouse_access">
+                    <group string="Inventory Access Restrictions">
+                        <field name="allowed_warehouse_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

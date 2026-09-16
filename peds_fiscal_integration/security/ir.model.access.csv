@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_peds_action_wizard,peds.action.wizard,model_peds_action_wizard,account.group_account_invoice,1,1,1,1
+access_peds_license_wizard,peds.license.wizard,model_peds_license_wizard,account.group_account_manager,1,1,1,1

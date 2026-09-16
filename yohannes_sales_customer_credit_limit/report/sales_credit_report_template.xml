@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <template id="report_sales_credit">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .sales-report-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
+                        .sales-report-table th, .sales-report-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        .sales-report-table th { background-color: #f4f4f4; font-weight: bold; }
+                        .sales-report-table tr:nth-child(even) { background-color: #f9f9f9; }
+                        .sales-report-table tr:hover { background-color: #f1f1f1; }
+                        .summary-row { font-weight: bold; background-color: #e6e6e6; }
+                        .report-header { margin-bottom: 20px; }
+                        .filter-info { font-size: 11px; color: #555; }
+                    </style>
+                    <div class="report-header">
+                        <h2>Sales Credit Report</h2>
+                        <p class="filter-info">Generated on: <t t-esc="fields.Date.today()"/></p>
+                        <p class="filter-info" t-if="data.get('partner_id')">
+                            Customer: <t t-esc="doc.env['res.partner'].browse(data['partner_id']).name"/>
+                        </p>
+                        <p class="filter-info" t-if="data.get('sale_type')">
+                            Sale Type: <t t-esc="data['sale_type'].title()"/>
+                        </p>
+                        <p class="filter-info" t-if="data.get('date_from') or data.get('date_to')">
+                            Date Range:
+                            <t t-esc="data.get('date_from') or 'Any'"/> to
+                            <t t-esc="data.get('date_to') or 'Any'"/>
+                        </p>
+                    </div>
+                    <table class="sales-report-table">
+                        <thead>
+                            <tr>
+                                <th>Order Reference</th>
+                                <th>Customer</th>
+                                <th>Sale Type</th>
+                                <th>Order Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="records" t-value="doc.env['sale.order'].search(data.get('domain', []))"/>
+                            <t t-set="total_amount" t-value="sum(record.amount_total for record in records)"/>
+                            <t t-foreach="records" t-as="record">
+                                <tr>
+                                    <td><span t-field="record.name"/></td>
+                                    <td><span t-field="record.partner_id.name"/></td>
+                                    <td><span t-esc="record.sale_type or '-'"/></td>
+                                    <td><span t-field="record.date_order" t-options="{'widget': 'date'}"/></td>
+                                    <td><span t-field="record.amount_total" t-options="{'widget': 'monetary', 'currency_field': 'currency_id'}"/></td>
+                                    <td><span t-field="record.state"/></td>
+                                </tr>
+                            </t>
+                            <tr class="summary-row" t-if="records">
+                                <td colspan="4" style="text-align: right;">Total:</td>
+                                <td><t t-esc="total_amount" t-options="{'widget': 'monetary', 'currency_field': records and records[0].currency_id}"/></td>
+                                <td/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+    </data>
+</odoo>

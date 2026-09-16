@@ -1,0 +1,118 @@
+<odoo>
+    <data>
+        <template id="report_daily_sales">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <h3>Daily Sales Tracking</h3>
+                            </div>
+                            <table style="width: 100%; border: none;">
+                                <tr>
+                                    <td style="font-weight: bold; padding-left: 20px;">Date:</td>
+                                    <td>
+                                        <span t-field="o.date"/>
+                                    </td>
+                                    <td style="font-weight: bold; padding-left: 20px;">Salesperson:
+                                    </td>
+                                    <td>
+                                        <span t-field="o.salesperson_id.name"/>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-left: 20px;">Daily Sales target:
+                                    </td>
+                                    <td>
+                                        <span t-field="o.daily_sales_target"/>
+                                    </td>
+                                    <td style="padding-left: 20px;">Cash Sales:</td>
+                                    <td>
+                                        <span t-field="o.cash_sales"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;padding-left: 20px;">Credit Sales:</td>
+                                    <td>
+                                        <span t-field="o.credit_sales"/>
+                                    </td>
+
+                                    <td style="padding-left: 20px;">Total Sales:</td>
+                                    <td>
+                                        <span t-field="o.total_sales"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                                <thead>
+                                    <tr>
+                                        <th>Order Reference</th>
+                                        <th>Order date</th>
+                                        <th>Sales Type</th>
+                                        <th>Total Amount</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.sale_order_ids" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.date_order"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.sale_type"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.amount_total"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.state"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 30px;">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 20px;">Achievement %:</td>
+                                        <td>
+                                            <span t-field="o.achievement_percent"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 20px;">Sales Performance Note:</td>
+                                        <td>
+                                            <span t-if="o.achievement_percent &lt; 50">
+                                                Sales performance was low today.
+                                                Continued follow-up and team engagement are important to improve
+                                                results.
+                                            </span>
+                                            <span t-if="o.achievement_percent &gt;= 50 and o.achievement_percent &lt; 70">
+                                                Sales performance was moderate.
+                                                There is progress, but improvement is still needed.
+                                            </span>
+                                            <span t-if="o.achievement_percent &gt;= 70 and o.achievement_percent &lt; 100">
+                                                Excellent performance today!
+                                                Keep up the good work.
+                                            </span>
+
+                                            <span t-if="o.achievement_percent &gt;= 100">
+                                                Brilliant performance today!
+                                                Outstanding achievement beyond the target.
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

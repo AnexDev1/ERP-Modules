@@ -1,0 +1,1 @@
+# Fast login: show the form immediately and skip the heavy frontend lazy bundle.

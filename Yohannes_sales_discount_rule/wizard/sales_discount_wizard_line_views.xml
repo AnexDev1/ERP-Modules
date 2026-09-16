@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_discount_wizard_line_list" model="ir.ui.view">
+        <field name="name">sale.discount.wizard.line.list</field>
+        <field name="model">sale.discount.wizard.line</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="apply" widget="boolean_toggle"/>
+                <field name="reference"/>
+                <field name="percentage" sum="Total Discount %"/>
+                <!-- Optional: show number of lines it would affect -->
+                <!--field name="applicable_line_ids" widget="many2many_tags" readonly="1" optional="show"/-->
+                <field name="rule_model" invisible="1"/>
+                <field name="rule_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Optional: small form view if you open lines separately (rarely needed) -->
+    <record id="view_sale_discount_wizard_line_form" model="ir.ui.view">
+        <field name="name">sale.discount.wizard.line.form</field>
+        <field name="model">sale.discount.wizard.line</field>
+        <field name="arch" type="xml">
+            <form string="Discount Rule">
+                <group>
+                    <field name="reference"/>
+                    <field name="reason"/>
+                    <field name="percentage"/>
+                    <!--field name="apply"/-->
+                </group>
+                <group string="Applies to Lines">
+                    <field name="applicable_line_ids" nolabel="1" widget="many2many_tags"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

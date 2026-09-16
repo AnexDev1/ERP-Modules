@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Apply the watermark to the pdf report with mentioned specifications-->
+<odoo>
+    <template id="pdf_watermark_report"
+              inherit_id="web.external_layout_standard">
+        <xpath expr="//div[hasclass('row')][last()]" position="after">
+            <t t-if="company.watermark">
+                <div class="watermark-container"
+                     style="position:absolute; top:40%; left:50%; width:100%; text-align:center; transform: translate(-50%, -50%); z-index:-1;">
+                    <div name="watermark">
+                        <span t-attf-style="-webkit-transform:rotate(-{{company.rotating_angle}}deg);color:{{company.color_picker}};font-size:{{company.font_size}}px;opacity:0.25;white-space:nowrap;display:inline-block;">
+                            <t t-if="company.watermark_type == 'text'">
+                                <t t-esc="company.content_text"/>
+                            </t>
+                            <t t-if="company.watermark_type == 'image'">
+                                <img t-if="company.background_image"
+                                     t-att-src="image_data_uri(company.background_image)"
+                                     style="height:200px; width:300px; opacity: 1;"/>
+                            </t>
+                            <t t-if="company.watermark_type == 'logo'">
+                                <img t-if="company.logo"
+                                     t-att-src="image_data_uri(company.logo)"
+                                     style="height:200px; width:300px; opacity: 1;"/>
+                            </t>
+                        </span>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

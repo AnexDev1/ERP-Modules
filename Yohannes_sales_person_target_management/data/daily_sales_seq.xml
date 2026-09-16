@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <!-- Sequence for Local Purchase Request -->
+        <record id="seq_daily_sales" model="ir.sequence">
+            <field name="name">Daily Sales</field>
+            <field name="code">daily.sales</field>
+            <field name="prefix">DS-%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

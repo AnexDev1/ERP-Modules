@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Keep a single Payroll app: hide the leftover Work Entries root. -->
+    <record id="hr_work_entry_enterprise.menu_hr_payroll_root" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="hr_work_entry_enterprise.menu_hr_payroll_configuration" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="hr_work_entry_enterprise.menu_hr_payroll_work_entries_root" model="ir.ui.menu">
+        <field name="parent_id" ref="payroll.menu_payroll_root"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="True"/>
+    </record>
+    <record id="hr_work_entry_enterprise.menu_hr_work_entry_configuration" model="ir.ui.menu">
+        <field name="parent_id" ref="payroll.menu_payroll_config"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

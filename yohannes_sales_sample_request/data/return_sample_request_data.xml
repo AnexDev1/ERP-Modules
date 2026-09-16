@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="seq_return_sample_request" model="ir.sequence">
+        <field name="name">Return Sample Request</field>
+        <field name="code">return.sample.request</field>
+        <field name="prefix">RS/ISSUE/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+    </data>
+</odoo>

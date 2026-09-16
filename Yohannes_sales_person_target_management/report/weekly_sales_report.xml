@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="action_report_weekly_sales" model="ir.actions.report">
+            <field name="name">Weekly Sales Report</field>
+            <field name="model">weekly.sales</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">Yohannes_sales_person_target_management.report_weekly_sales</field>
+            <field name="report_file">Yohannes_sales_person_target_management.report_weekly_sales</field>
+            <field name="binding_model_id" ref="Yohannes_sales_person_target_management.model_weekly_sales"/>
+            <field name="print_report_name">'Weekly Sales Report - %s' % (object.week_start_date.strftime("%B %Y") if
+                object.week_start_date else 'Unknown')
+            </field>
+        </record>
+    </data>
+</odoo>
+

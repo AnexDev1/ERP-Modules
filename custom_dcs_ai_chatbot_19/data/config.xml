@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default n8n webhook URL for the DCS AI Assistant -->
+        <record id="config_dcs_ai_chatbot_webhook_url" model="ir.config_parameter">
+            <field name="key">dcs_ai_chatbot.n8n_webhook_url</field>
+            <field name="value">https://n8n.mafilink.com/webhook/30f7ab63-04fa-4d0d-91c2-1c1560ccef03kjjkfsnasknfkjsn</field>
+        </record>
+    </data>
+</odoo>

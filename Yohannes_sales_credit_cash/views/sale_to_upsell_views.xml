@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Reusable list View for To Upsell -->
+    <record id="view_sale_order_to_upsell_tree" model="ir.ui.view">
+        <field name="name">sale.order.to.upsell.list</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="sale_type"/>
+                <field name="amount_total"/>
+                <field name="invoice_status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action: Cash To Upsell -->
+    <record id="action_cash_to_upsell" model="ir.actions.act_window">
+        <field name="name">Cash To Upsell</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_order_to_upsell_tree"/>
+        <field name="domain">
+            [('sale_type', '=', 'cash'),
+            ('state', 'in', ('sale', 'done')),
+            ('invoice_status', '=', 'upselling')]
+        </field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Action: Credit To Upsell -->
+    <record id="action_credit_to_upsell" model="ir.actions.act_window">
+        <field name="name">Credit To Upsell</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sale_order_to_upsell_tree"/>
+        <field name="domain">
+            [('sale_type', '=', 'credit'),
+            ('state', 'in', ('sale', 'done')),
+            ('invoice_status', '=', 'upselling')]
+        </field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    </data>
+</odoo>

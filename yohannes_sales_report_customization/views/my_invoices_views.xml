@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_my_invoices_search" model="ir.ui.view">
+            <field name="name">account.move.my.invoices.search</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <!-- At Date exact date picker -->
+                <xpath expr="//search" position="inside">
+                    <field name="invoice_date"
+                           string="At Date"
+                           filter_domain="[('invoice_date', '=', self)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Custom Tree View: Disables Create (New) button and Upload -->
+        <record id="view_my_invoices_tree_no_create" model="ir.ui.view">
+            <field name="name">account.move.my.invoices.tree.no.create</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="import">0</attribute>
+                    <attribute name="js_class"></attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action: My Invoices (Salesman) filtered by current user -->
+        <record id="action_my_invoices_salesman" model="ir.actions.act_window">
+            <field name="name">My Invoices</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund')), ('create_uid', '=', uid)]</field>
+            <field name="context">{'default_move_type': 'out_invoice', 'search_default_posted': 1}</field>
+            <field name="search_view_id" ref="view_my_invoices_search"/>
+            <field name="view_id" ref="view_my_invoices_tree_no_create"/>
+        </record>
+
+        <!-- Deactivate the old generic My Invoices menu -->
+        <record id="menu_sale_my_invoices" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+        <!-- Menu: My Invoices for Salesman -->
+        <menuitem id="menu_my_invoices_salesman"
+            name="My Invoices"
+            parent="Yohannes_sales_credit_cash.menu_sale_to_invoice_parent"
+            action="action_my_invoices_salesman"
+            sequence="25"
+            groups="sales_team.group_sale_salesman"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+
+    <!-- Extend Partner Form View to Add Credit Information -->
+    <record id="view_partner_form_inherit_credit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.credit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_customer_credit"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-credit-card">
+                    <field name="customer_credit_id" widget="statinfo" string="Customer Credit"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook/page[@name='accounting']" position="after">
+                <page string="Credit Information">
+                    <group>
+                        <group string="Credit Details">
+                            <group>
+                                <field name="yohannes_credit_limit" widget="monetary" readonly="1"/>
+                                <field name="credit" widget="monetary" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1" readonly="1"/>
+                            </group>
+                        </group>
+                    </group>
+                    <group string="Credit Payments">
+                        <field name="credit_payment_ids" readonly="1">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="amount" widget="monetary"/>
+                                <field name="invoice_id"/>
+                                <field name="state"/>
+                                <field name="due_date"/>
+                                <field name="payment_date"/>
+                            </list>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consolidated Reporting Menu Structure (Inside standard Purchase Reporting) -->
+    <menuitem id="menu_store_requisition_analysis_rep"
+              name="Store Requisition Analysis"
+              parent="purchase.purchase_report"
+              action="action_store_requisition_analysis_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="10"/>
+
+    <menuitem id="menu_local_purchase_analysis_rep"
+              name="Local Purchase Analysis"
+              parent="purchase.purchase_report"
+              action="action_local_purchase_analysis_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="20"/>
+    <menuitem id="menu_direct_procurement_methods_rep"
+              name="Direct Procurement Methods"
+              parent="purchase.purchase_report"
+              action="action_direct_procurement_analysis_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="40"/>
+
+    <menuitem id="menu_rfq_procurement_methods_rep"
+              name="RFQ Procurement Methods"
+              parent="purchase.purchase_report"
+              action="action_rfq_procurement_analysis_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="50"/>
+
+    <menuitem id="menu_foreign_procurement_methods_rep"
+              name="Foreign Procurement Methods"
+              parent="purchase.purchase_report"
+              action="action_foreign_procurement_analysis_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="60"/>
+
+    <menuitem id="menu_foreign_lc_report_rep"
+              name="Foreign LC Report"
+              parent="purchase.purchase_report"
+              action="procurement_foreign_operations.action_foreign_lc"
+              groups="purchase.group_purchase_manager"
+              sequence="70"/>
+
+    <menuitem id="menu_proforma_invoice_report_rep"
+              name="Proforma Invoice Report"
+              parent="purchase.purchase_report"
+              action="purchase.action_purchase_order_report_all"
+              groups="purchase.group_purchase_manager"
+              sequence="80"/>
+
+    <menuitem id="menu_margin_analysis_rep"
+              name="Margin Analysis"
+              parent="purchase.purchase_report"
+              action="accounting_procurement.action_purchase_import_margin_accounting"
+              groups="purchase.group_purchase_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_purchase_reporting_rep"
+              name="Purchase"
+              parent="purchase.purchase_report"
+              action="purchase.action_purchase_order_report_all"
+              groups="purchase.group_purchase_manager"
+              sequence="100"/>
+
+    <menuitem id="menu_foreign_purchase_a_to_z_rep"
+              name="Foreign Purchase A to Z"
+              parent="purchase.purchase_report"
+              action="action_foreign_purchase_a_to_z_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="110"/>
+
+    <menuitem id="menu_local_purchase_a_to_z_rep"
+              name="Local Purchase A to Z"
+              parent="purchase.purchase_report"
+              action="action_local_purchase_a_to_z_consolidated"
+              groups="purchase.group_purchase_manager"
+              sequence="120"/>
+</odoo>

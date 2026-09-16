@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_inventory_transfer_custom_form" model="ir.ui.view">
+        <field name="name">inventory.transfer.custom.form</field>
+        <field name="model">inventory.transfer.custom</field>
+        <field name="arch" type="xml">
+            <form string="Store Transfer Request">
+                <header>
+                    <button name="action_submit" string="Submit to Manager" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve Request" type="object" class="oe_highlight" invisible="state != 'store_manager'" groups="stock.group_stock_manager"/>
+
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('received', 'cancelled')"/>
+                    <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,store_manager,requested,received"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_pickings" type="object" class="oe_stat_button" icon="fa-truck" invisible="picking_count == 0">
+                            <field name="picking_count" widget="statinfo" string="Transfers"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="allowed_dest_location_ids" invisible="1"/>
+                            <field name="destination_location_id" options="{'no_create': True}" readonly="state != 'draft'" domain="[('id', 'in', allowed_dest_location_ids)]"/>
+                        </group>
+                        <group>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details" name="product_details">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create': True}"/>
+                                    <field name="uom_id"/>
+                                    <field name="source_warehouse_id" optional="show" domain="[('company_id', '=', parent.company_id)]"/>
+                                    <field name="qty_available" string="Available" readonly="1"/>
+                                    <field name="qty_requested" string="Request"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_inventory_transfer_custom_tree" model="ir.ui.view">
+        <field name="name">inventory.transfer.custom.list</field>
+        <field name="model">inventory.transfer.custom</field>
+        <field name="arch" type="xml">
+            <list string="Store Transfer Requests" decoration-info="state == 'draft'" decoration-warning="state == 'store_manager'" decoration-success="state == 'received'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="source_warehouse_id" string="Default Source" context="{'transfer_global_warehouses': True}"/>
+                <field name="destination_location_id"/>
+                <field name="picking_count" string="Pickings"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'store_manager'"
+                       decoration-success="state == 'received'"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_inventory_transfer_custom_search" model="ir.ui.view">
+            <field name="name">inventory.transfer.custom.search</field>
+            <field name="model">inventory.transfer.custom</field>
+            <field name="arch" type="xml">
+                <search string="Search Store Transfer Request">
+                    <field name="name" string="Reference"/>
+                    <field name="source_warehouse_id" string="Source Warehouse" context="{'transfer_global_warehouses': True}"/>
+                    <field name="destination_location_id" string="Destination Location"/>
+                    
+                    <filter string="My Requests" name="my_requests" domain="[('create_uid', '=', uid)]"/>
+                    
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="To Approve" name="to_approve" domain="[('state', '=', 'store_manager')]"/>
+                    <filter string="Requested" name="requested" domain="[('state', '=', 'requested')]"/>
+                    <filter string="Received" name="received" domain="[('state', '=', 'received')]"/>
+                    
+                    <group>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Source Warehouse" name="group_source" context="{'group_by': 'source_warehouse_id'}"/>
+                        <filter string="Destination" name="group_dest" context="{'group_by': 'destination_location_id'}"/>
+                        <filter string="Request Date" name="group_date" context="{'group_by': 'request_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+</odoo>

@@ -1,0 +1,112 @@
+<odoo>
+    <data>
+        <template id="report_monthly_sales">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page" style="text-align: center; margin-bottom: 20px;">
+                            <h3>Monthly Sales Tracking</h3>
+                        </div>
+                        <table style="width: 100%; border: none;">
+                            <tr>
+
+                                <td style="font-weight: bold; padding-left: 20px;">Salesperson:
+                                </td>
+                                <td>
+                                    <span t-field="o.salesperson_id.name"/>
+                                </td>
+                                <td style="font-weight: bold; padding-left: 20px;">Month Start Date:</td>
+                                <td>
+                                    <span t-field="o.month_start_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold; padding-left: 20px;">Month End Date:
+                                </td>
+                                <td>
+                                    <span t-field="o.month_end_date"/>
+                                </td>
+                                <td style="padding-left: 20px;">Month</td>
+                                <td>
+                                    <span t-field="o.month_name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;padding-left: 20px;">Monthly Target:</td>
+                                <td>
+                                    <span t-field="o.monthly_target"/>
+                                </td>
+
+                                <td style="padding-left: 20px;">Monthly Achievement %:</td>
+                                <td>
+                                    <span t-field="o.monthly_achievement_percent"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;padding-left: 20px;">Total Cash Sales:</td>
+                                <td>
+                                    <span t-field="o.total_cash_sales"/>
+                                </td>
+
+                                <td style="padding-left: 20px;">Total Credit Sales:</td>
+                                <td>
+                                    <span t-field="o.total_credit_sales"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px;">Total Monthly Sales:</td>
+                                <td>
+                                    <span t-field="o.total_sales"/>
+                                </td>
+                                <td style="padding-left: 20px;">Year:</td>
+                                <td>
+                                    <span t-field="o.year"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                            <h4 style="background-color: #f8f9fa; padding: 8px; border-left: 4px solid #dc3545;">
+                                Weekly sales
+                            </h4>
+                            <thead>
+                                <tr>
+
+                                    <th>Week Number</th>
+                                    <th>Cash sales</th>
+                                    <th>Credit Sales</th>
+                                    <th>Total sales</th>
+                                    <th>Weekly Target</th>
+                                    <th>Achievement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.weekly_sales_ids" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.week_number"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.total_cash_sales"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.total_credit_sales"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.total_sales"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.weekly_target"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.weekly_achievement_percent"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

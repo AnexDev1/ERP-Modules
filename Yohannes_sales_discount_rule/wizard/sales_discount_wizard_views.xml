@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_discount_wizard_form" model="ir.ui.view">
+        <field name="name">sale.discount.wizard.form</field>
+        <field name="model">sale.discount.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Available Discount Rules">
+                <field name="line_ids" nolabel="1">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="apply" widget="boolean_toggle"/>
+                        <field name="reference" readonly="1"/>
+                        <field name="percentage" sum="Total %"/>
+                        <field name="reason" readonly="1"/>                   <!-- new -->
+                        <!--field name="applicable_line_ids" widget="many2many_tags" optional="show" readonly="1"/-->
+                    </list>
+                </field>
+                <footer>
+                    <button name="validate" string="Apply Selected Discounts" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Optional: Action to open the wizard (you can call it from button or server action) -->
+    <record id="action_sale_discount_wizard" model="ir.actions.act_window">
+        <field name="name">Apply Discounts</field>
+        <field name="res_model">sale.discount.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

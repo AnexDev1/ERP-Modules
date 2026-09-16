@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         LIST VIEW
+    ════════════════════════════════════════════════════════════════════ -->
+    <record id="view_lca_list" model="ir.ui.view">
+        <field name="name">stock.landed.cost.adjustment.list</field>
+        <field name="model">stock.landed.cost.adjustment</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'"
+                  decoration-success="state == 'posted'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="picking_id"/>
+                <field name="fiscal_year_id"/>
+                <field name="total_additional_cost" sum="Total Additional Cost"/>
+                <field name="total_cogs_adjustment" sum="Total COGS Adjustment"/>
+                <field name="total_remaining_stock_value" sum="Remaining in Stock"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'posted'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         FORM VIEW
+    ════════════════════════════════════════════════════════════════════ -->
+    <record id="view_lca_form" model="ir.ui.view">
+        <field name="name">stock.landed.cost.adjustment.form</field>
+        <field name="model">stock.landed.cost.adjustment</field>
+        <field name="arch" type="xml">
+            <form string="Landed Cost Retroactive Adjustment">
+                <header>
+                    <!-- Load Products -->
+                    <button name="action_load_receipt_products"
+                            string="Load Receipt Products"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft' or not picking_id"
+                            help="Populate lines from the validated receipt and compute sold quantities."/>
+
+                    <!-- Refresh Sold Qty -->
+                    <button name="action_refresh_sold_quantities"
+                            string="Refresh Sold Qty"
+                            type="object"
+                            invisible="state != 'draft' or not line_ids"
+                            help="Re-scan all fiscal-year deliveries and update the sold quantity on each line."/>
+
+                    <!-- Post -->
+                    <button name="action_post"
+                            string="Post Adjustment"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"
+                            confirm="This will post an Additional Valuation entry AND a COGS adjustment entry covering ALL fiscal-year sales of these products. Proceed?"
+                            groups="account.group_account_manager"/>
+
+                    <!-- Cancel -->
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            invisible="state != 'draft'"/>
+
+                    <!-- Reset to Draft -->
+                    <button name="action_reset_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,posted"/>
+                </header>
+
+                <sheet>
+                    <!-- Fiscal year warning banner -->
+                    <div class="alert alert-warning mb-0"
+                         role="alert"
+                         invisible="fiscal_year_is_open or state == 'posted' or not fiscal_year_id">
+                        <i class="fa fa-exclamation-triangle me-1"/>
+                        The fiscal year <strong><field name="fiscal_year_id" readonly="1" nolabel="1"/></strong>
+                        appears to be <strong>closed</strong>. Posting will be blocked.
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <!-- Header Fields -->
+                    <group>
+                        <group string="Source">
+                            <field name="picking_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="company_id" readonly="1"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Fiscal Year">
+                            <field name="fiscal_year_id" readonly="1"/>
+                            <field name="fiscal_year_is_open" readonly="1"
+                                   widget="boolean_toggle"/>
+                        </group>
+                    </group>
+
+                    <!-- Adjustment Lines -->
+                    <notebook>
+                        <page string="Product Adjustments" name="adjustments">
+                            <field name="line_ids"
+                                   readonly="state != 'draft'">
+                                <list editable="bottom"
+                                      decoration-danger="additional_cost &lt;= 0">
+                                    <field name="product_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="uom_id" readonly="1"/>
+                                    <field name="received_qty" readonly="1"/>
+                                    <field name="additional_cost"/>
+                                    <field name="cost_per_unit" readonly="1"/>
+                                    <field name="total_sold_qty" readonly="1"/>
+                                    <field name="cogs_adjustment_amount" readonly="1"/>
+                                    <field name="remaining_stock_adjustment" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Add internal notes…"
+                                   readonly="state == 'posted'"/>
+                        </page>
+                    </notebook>
+
+                    <!-- Summary -->
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="total_additional_cost" readonly="1"/>
+                        <field name="total_cogs_adjustment" readonly="1"/>
+                        <field name="total_remaining_stock_value" readonly="1"/>
+                    </group>
+
+                    <!-- Journal Entry Smart Buttons -->
+                    <div class="clearfix"/>
+                    <group invisible="state != 'posted'" string="Journal Entries">
+                        <group>
+                            <field name="valuation_move_id" readonly="1"
+                                   options="{'no_open': False}"/>
+                        </group>
+                        <group>
+                            <field name="cogs_move_id" readonly="1"
+                                   options="{'no_open': False}"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <!-- Smart Buttons -->
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_valuation_move"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            invisible="not valuation_move_id">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Valuation</span>
+                            <span class="o_stat_text">Entry</span>
+                        </div>
+                    </button>
+                    <button name="action_view_cogs_move"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-book"
+                            invisible="not cogs_move_id">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">COGS</span>
+                            <span class="o_stat_text">Entry</span>
+                        </div>
+                    </button>
+                </div>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         SEARCH VIEW
+    ════════════════════════════════════════════════════════════════════ -->
+    <record id="view_lca_search" model="ir.ui.view">
+        <field name="name">stock.landed.cost.adjustment.search</field>
+        <field name="model">stock.landed.cost.adjustment</field>
+        <field name="arch" type="xml">
+            <search string="Landed Cost Adjustments">
+                <field name="name"/>
+                <field name="picking_id"/>
+                <field name="fiscal_year_id"/>
+                <separator/>
+                <filter string="Draft" name="draft"
+                        domain="[('state','=','draft')]"/>
+                <filter string="Posted" name="posted"
+                        domain="[('state','=','posted')]"/>
+                <filter string="Cancelled" name="cancelled"
+                        domain="[('state','=','cancelled')]"/>
+                <separator/>
+                <filter string="Open Fiscal Year" name="fy_open"
+                        domain="[('fiscal_year_is_open','=',True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Fiscal Year" name="group_fy"
+                            context="{'group_by': 'fiscal_year_id'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         WINDOW ACTION
+    ════════════════════════════════════════════════════════════════════ -->
+    <record id="action_lca_main" model="ir.actions.act_window">
+        <field name="name">Landed Cost Adjustments</field>
+        <field name="res_model">stock.landed.cost.adjustment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lca_search"/>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No landed cost adjustments yet
+            </p>
+            <p>
+                Create a new adjustment to post additional valuation and COGS
+                correction entries when extra landed costs are identified after
+                a receipt has been validated.
+            </p>
+        </field>
+    </record>
+
+</odoo>

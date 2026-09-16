@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="seq_consignment_request" model="ir.sequence">
+        <field name="name">Consignment Request</field>
+        <field name="code">consignment.request</field>
+        <field name="prefix">CON/ISSUE/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range">True</field>
+    </record>
+    </data>
+</odoo>

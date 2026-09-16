@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_discount_per_customer_type" model="ir.actions.act_window">
+        <field name="name">Discount Per Customer Type</field>
+        <field name="res_model">discount.per.customer.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_discount_per_sales_amount" model="ir.actions.act_window">
+        <field name="name">Discount Per sales Amount</field>
+        <field name="res_model">discount.per.sales.amount</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_discount_per_quantity_order" model="ir.actions.act_window">
+        <field name="name">Discount Per Quantity Order</field>
+        <field name="res_model">discount.per.quantity.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_discount_per_customer_and_product" model="ir.actions.act_window">
+        <field name="name">Discount Per Customer And Product</field>
+        <field name="res_model">discount.per.customer.and.product</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

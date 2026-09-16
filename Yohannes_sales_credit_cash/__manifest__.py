@@ -1,0 +1,21 @@
+{
+    'name': 'Credit and Cash Sales',
+    'version': '19.0.1.0.0',
+    'category': 'Sales',
+    'author': 'eden',
+    'summary': 'Classify sales order as Cash or Credit with custom menu views',
+    'depends': ['base', 'sale', 'account'],
+    'data': [
+        'security/group.xml',
+        'security/ir.model.access.csv',
+        'views/sale_order_views.xml',
+        'views/sale_to_invoice_views.xml',
+        'views/sale_to_upsell_views.xml',
+        'views/sale_menu.xml',
+        'views/res_config_settings_views.xml',
+        'views/res_partner_views.xml',
+        'data/hide_default_menu.xml',
+    ],
+    'installable': True,
+    'application': False,
+}

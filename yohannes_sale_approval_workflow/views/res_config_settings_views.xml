@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_yohannes_sale_approval" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.yohannes.sale.approval</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='quotation_order_setting_container']" position="after">
+                <block title="Order Source" name="order_source_setting_container">
+                    <setting id="enable_order_source_setting" help="Require and show Order Source on Sales Orders for this company.">
+                        <field name="enable_order_source"/>
+                    </setting>
+                </block>
+
+                <block title="Sales Order Sequence Limit" name="manual_sequence_setting_container">
+                    <setting id="so_manual_sequence_setting" help="Set manual sequence limit for Sales Orders. Automatic sales order numbers will start from limit + 1.">
+                        <field name="use_so_manual_sequence_limit"/>
+                        <div class="content-group" invisible="not use_so_manual_sequence_limit">
+                            <div class="mt16">
+                                <label for="so_manual_sequence_limit" string="Last Manual SO Number"/>
+                                <field name="so_manual_sequence_limit" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+                <block title="Manual Discounts" name="manual_discount_setting_container">
+
+                    <setting id="enable_manual_discount_setting" help="Enable manual discount fields and workflows on sales orders.">
+                        <field name="group_allow_manual_discount"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

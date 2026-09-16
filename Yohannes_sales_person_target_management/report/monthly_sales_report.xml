@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record id="action_report_monthly_sales" model="ir.actions.report">
+            <field name="name">Monthly Sales Report</field>
+            <field name="model">monthly.sales</field> <!-- still based on daily.sales but grouped by month -->
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">Yohannes_sales_person_target_management.report_monthly_sales</field>
+            <field name="report_file">Yohannes_sales_person_target_management.report_monthly_sales</field>
+            <field name="binding_model_id" ref="Yohannes_sales_person_target_management.model_monthly_sales"/>
+            <field name="print_report_name">'Monthly Sales Report - %s' % (object.month_start_date.strftime("%B %Y") if
+                object.month_start_date else 'Unknown')
+            </field>
+        </record>
+    </data>
+</odoo>

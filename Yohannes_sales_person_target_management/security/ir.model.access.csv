@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_yohannes_inventory_date_change,access_yohannes_inventory_date_change,model_yohannes_inventory_date_change,,1,1,1,1
+access_yohannes_invoice_extension,access_yohannes_invoice_extension,model_yohannes_invoice_extension,,1,1,1,1
+access_sale_order_custom,sale.order.custom,model_sale_order,base.group_user,1,1,1,1
+access_daily_sales,daily.sales,model_daily_sales,base.group_user,1,1,1,1
+access_weekly_sales,weekly.sales,model_weekly_sales,base.group_user,1,1,1,1
+access_monthly_sales,monthly.sales,model_monthly_sales,base.group_user,1,1,1
+access_sale_order_report,sale.order.report,model_sale_order,base.group_user,1,0,0,0
+access_sales_target_config,sales.target.config,model_sales_target_config,base.group_user,1,1,1,1
+access_sales_target_config_line,sales.target.config.line,model_sales_target_config_line,base.group_user,1,1,1,1
+access_account_move_crv,account.move.crv,model_account_move_crv,base.group_user,1,1,1,1
+access_account_move_withholding,account.move.withholding,model_account_move_withholding,base.group_user,1,1,1,1
+access_transaction_type_accountant,transaction.type.accountant,model_transaction_type,base.group_user,1,1,1,1
+access_transaction_type_sequence_accountant,transaction.type.sequence.accountant,model_transaction_type_sequence,base.group_user,1,1,1,1
+access_update_accounting_date_wizard,update.accounting.date.wizard,model_update_accounting_date_wizard,base.group_user,1,1,1,1

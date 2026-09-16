@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_delivery_document_custom" inherit_id="stock.report_delivery_document">
+        
+        <!-- Add Source and Destination Locations for Internal Transfers -->
+        <xpath expr="//div[@id='informations']" position="inside">
+            <div t-if="o.picking_type_id.code == 'internal'" class="col-auto mw-100 mb-2" name="div_source_location">
+                <strong>Source Location:</strong>
+                <p t-field="o.location_id" class="m-0"/>
+            </div>
+            <div t-if="o.picking_type_id.code == 'internal'" class="col-auto mw-100 mb-2" name="div_dest_location">
+                <strong>Destination Location:</strong>
+                <p t-field="o.location_dest_id" class="m-0"/>
+            </div>
+        </xpath>
+
+        <!-- Add Company Stamp/Signature at the bottom -->
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <div class="row mt-5" t-if="o.company_id.stamp_signature" name="company_stamp_signature">
+                <div class="col-5 offset-7 text-center">
+                    <img t-att-src="image_data_uri(o.company_id.stamp_signature)" style="max-height: 120px; max-width: 250px; margin-top: 10px;"/><br/>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- Add Item Code Headers -->
+        <xpath expr="//th[@name='th_sm_product']" position="before">
+            <th name="th_sm_item_code" class="text-start">Item Code</th>
+        </xpath>
+        <xpath expr="//th[@name='th_sml_product']" position="before">
+            <th name="th_sml_item_code" class="text-start">Item Code</th>
+        </xpath>
+        
+        <!-- Replace first td in Draft Moves: add Item Code then clean Product name -->
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr/td[1]" position="replace">
+            <td name="td_sm_item_code">
+                <span t-out="move.product_id.default_code or ''"/>
+            </td>
+            <td>
+                <span t-out="move.product_id.name"/>
+                <p t-if="move.description_picking and move.description_picking != move.product_id.name and move._get_report_description_picking()">
+                    <span t-out="move._get_report_description_picking()" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+        </xpath>
+
+        <!-- Replace the conditional Lot/Ordered column header for DONE moves -->
+        <xpath expr="//th[@name='th_sml_qty_ordered']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//th[@name='lot_serial']" position="attributes">
+            <attribute name="t-if">False</attribute>
+            <attribute name="t-else">False</attribute>
+        </xpath>
+        
+        <!-- Add Lot and Expiry Date Headers before Delivered -->
+        <xpath expr="//th[@name='th_sml_quantity']" position="before">
+            <th name="th_sml_qty_ordered" class="text-end">Ordered</th>
+            <th name="th_lot" class="text-start">Lot/Serial</th>
+            <th name="th_expiry" class="text-start">Expiry Date</th>
+        </xpath>
+
+        <!-- Add Lot and Expiry Date Headers for DRAFT moves -->
+        <xpath expr="//th[@name='th_sm_quantity']" position="before">
+            <th name="th_lot" class="text-start">Lot/Serial</th>
+            <th name="th_expiry" class="text-start">Expiry Date</th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr/td[hasclass('o_td_quantity')][2]" position="before">
+            <td name="td_lot">
+                <span t-esc="', '.join(filter(None, move.move_line_ids.mapped('lot_id.name') + move.move_line_ids.mapped('lot_name')))"/>
+            </td>
+            <td name="td_expiry">
+                <span t-esc="', '.join(filter(None, [str(d.date()) for d in move.move_line_ids.mapped('lot_id.expiration_date') if d]))"/>
+            </td>
+        </xpath>
+        
+    </template>
+
+    <!-- Customizing the row templates to match the new columns -->
+    <template id="stock_report_delivery_has_serial_move_line_custom" inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <!-- Replace first product td: show Item Code + clean Product Name -->
+        <xpath expr="//td[1]" position="replace">
+            <td name="td_sml_item_code">
+                <span t-out="move_line.product_id.default_code or ''"/>
+            </td>
+            <td>
+                <span t-out="move_line.product_id.name"/>
+                <t t-if="not description and description != ''">
+                    <t t-set="description" t-value="move_line.move_id.description_picking"/>
+                </t>
+                <p t-if="description != '' and description != move_line.product_id.display_name and description != move_line.product_id.name">
+                    <span t-out="description" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+        </xpath>
+        
+        <!-- Hide the original conditional lot column -->
+        <xpath expr="//t[@name='move_line_lot']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        
+        <!-- Add our unconditional Lot and Expiry columns -->
+        <xpath expr="//td[@name='move_line_lot_quantity']" position="before">
+            <td name="td_lot" class="text-start">
+                <t t-if="move_line.lot_id">
+                    <span t-field="move_line.lot_id.name"/>
+                </t>
+                <t t-elif="move_line.lot_name">
+                    <span t-field="move_line.lot_name"/>
+                </t>
+            </td>
+            <td name="td_expiry" class="text-start">
+                <span t-if="move_line.lot_id and move_line.lot_id.expiration_date" t-field="move_line.lot_id.expiration_date" t-options="{'widget': 'date'}"/>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_aggregated_move_lines_custom" inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <!-- Replace first td: show Item Code + clean Product Name -->
+        <xpath expr="//td[1]" position="replace">
+            <td name="td_aggregated_item_code">
+                <t t-set="agg_product" t-value="aggregated_lines[line].get('product')"/>
+                <span t-out="agg_product.default_code if agg_product else ''"/>
+            </td>
+            <td>
+                <t t-set="agg_product" t-value="aggregated_lines[line].get('product')"/>
+                <span t-out="agg_product.name if agg_product else aggregated_lines[line]['name']"/>
+                <p t-if="aggregated_lines[line]['description']">
+                    <span t-esc="aggregated_lines[line]['description']" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+        </xpath>
+        
+        <!-- Hide the original Ordered column -->
+        <xpath expr="//td[@name='move_line_aggregated_qty_ordered']" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+        
+        <!-- Add empty cells to align with Lot and Expiry headers -->
+        <xpath expr="//td[@name='move_line_aggregated_quantity']" position="before">
+            <t t-set="agg_product" t-value="aggregated_lines[line].get('product')"/>
+            <t t-set="agg_mls" t-value="o.move_line_ids.filtered(lambda ml: ml.product_id.id == agg_product.id) if agg_product else o.env['stock.move.line']"/>
+            <td name="td_lot">
+                <span t-esc="', '.join(filter(None, agg_mls.mapped('lot_id.name') + agg_mls.mapped('lot_name')))"/>
+            </td>
+            <td name="td_expiry">
+                <span t-esc="', '.join(filter(None, [str(d.date()) for d in agg_mls.mapped('lot_id.expiration_date') if d]))"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

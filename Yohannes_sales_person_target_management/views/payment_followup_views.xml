@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_payment_followup_list" model="ir.ui.view">
+            <field name="name">payment.followup.list</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <list string="Payment Followup" default_order="invoice_date desc, id desc" create="false">
+                    <field name="name" string="Invoice" decoration-bf="1"/>
+                    <field name="partner_id" string="Partner"/>
+                    <field name="category_id" widget="many2many_tags" string="Customer Tag" optional="show"/>
+                    <field name="city" string="City" optional="show"/>
+                    <field name="sale_type" string="Sales Channel" optional="show"/>
+                    <field name="sale_type" string="Sales Type" optional="show"/>
+                    <field name="invoice_user_id" string="Sales Initiator" optional="show" widget="many2one_avatar_user"/>
+                    <field name="invoice_date_due" string="Due Date" optional="show"/>
+                    <field name="payment_followup_paid_date" string="Paid Date" optional="show"/>
+                    <field name="amount_total" string="Total Amount" sum="Total" decoration-bf="1" optional="show"/>
+                    <field name="payment_followup_paid_amount" string="Paid Amount" sum="Total Paid" optional="show"/>
+                    <field name="payment_followup_settled_amount" string="Settled Amount" sum="Total Settled" optional="show"/>
+                    <field name="payment_followup_due_days" string="Due Days" optional="show"/>
+                    <field name="state" string="Status" widget="badge" decoration-success="state == 'posted'" decoration-info="state == 'draft'" optional="hide"/>
+                    <field name="payment_state" string="Payment Status" widget="badge" decoration-danger="payment_state == 'not_paid'" decoration-warning="payment_state in ('partial', 'in_payment')" decoration-success="payment_state in ('paid', 'reversed')" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Window Action -->
+        <record id="action_payment_followup" model="ir.actions.act_window">
+            <field name="name">Payment Followup</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list</field>
+            <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+            <!--field name="context">{'search_default_posted': 1}</field-->
+            <field name="view_id" ref="view_payment_followup_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Invoices found for Payment Followup
+                </p>
+                <p>
+                    Ensure there are posted customer invoices in the system to view this report.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_payment_followup"
+                  name="Payment Followup"
+                  parent="Yohannes_sales_person_target_management.menu_accounting_reports_customers"
+                  action="action_payment_followup"
+                  sequence="5"/>
+    </data>
+</odoo>

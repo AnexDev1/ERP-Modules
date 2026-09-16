@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Record rule for credit payments (user access) -->
+        <record id="credit_payment_user_rule" model="ir.rule">
+            <field name="name">Credit Payment User Access</field>
+            <field name="model_id" ref="model_credit_payment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Multi-company record rule for Customer Credit -->
+        <record id="rule_customer_credit_multi_company" model="ir.rule">
+            <field name="name">Customer Credit: Multi Company</field>
+            <field name="model_id" ref="model_customer_credit"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Multi-company record rule for Credit Payment -->
+        <record id="rule_credit_payment_multi_company" model="ir.rule">
+            <field name="name">Credit Payment: Multi Company</field>
+            <field name="model_id" ref="model_credit_payment"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

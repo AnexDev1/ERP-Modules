@@ -4,6 +4,39 @@ This repository contains custom Odoo 19 addons and an automated CI/CD deployment
 
 ---
 
+## 📦 Custom Addons for `ease_backup` Database
+
+The `ease_backup` database uses 30 custom and community modules to run seamlessly on Odoo 19 Community without Enterprise dependencies:
+
+### 1. Core Payroll & HR Suite
+- **`payroll`**: Custom community payroll replacement compatible with restored Enterprise 19 data. Features salary rule engines, payslips, batches, contracts, access groups (`Officer: Manage Payroll`, `Manager: Payroll Administrator`), status workflow (*Draft*, *Verify*, *Done*, *Paid*), and built-in audit reports.
+- **`ease_visibility`**: Role and visibility control rules tailored for Ease Group operations.
+- **`esr_fast_login`**: Performance and fast authentication customizations.
+
+### 2. Accounting & Financial Management
+- **`base_accounting_kit`**: Full accounting package for Odoo Community (P&L, Balance Sheet, Asset Management, Bank Statements, Financial Reports).
+- **`base_account_budget`**: Budget management and budgetary positions tracking for community edition.
+
+### 3. Modern User Interface (MuK Web Suite)
+- **`muk_web_theme`**: Modern responsive theme and branding.
+- **`muk_web_appsbar`**: Quick app drawer and launcher bar.
+- **`muk_web_chatter`**: Enhanced chatter and communication interface.
+- **`muk_web_colors`**: Customizable UI accent and status colors.
+- **`muk_web_dialog`**: Improved modal dialogs and popups.
+- **`muk_web_group`**: Group view UI enhancements.
+- **`muk_web_refresh`**: Dynamic view refresh and auto-sync.
+
+### 4. Enterprise Compatibility Stubs
+These lightweight modules satisfy foreign key, view, and model dependencies inherited from Odoo Enterprise, allowing the database to operate stably on Community:
+- **`web_gantt`**, **`web_grid`**, **`web_map`**, **`web_cohort`**: View engine fallbacks (redirected cleanly to standard list/form views).
+- **`sale_enterprise`**, **`stock_enterprise`**: Sales and inventory enterprise view/reporting stubs.
+- **`hr_work_entry_enterprise`**, **`hr_work_entry_holidays_enterprise`**, **`hr_gantt`**, **`hr_holidays_gantt`**: Work entry and leave gantt compatibility layers.
+- **`contacts_enterprise`**, **`analytic_enterprise`**: Analytic and contact management extensions.
+- **`currency_rate_live`**, **`iap_extract`**, **`product_barcodelookup`**, **`ai_auto_install`**: Service and utility stubs.
+- **`spreadsheet_dashboard_purchase_stock`**, **`spreadsheet_dashboard_stock`**: Stock and purchase spreadsheet dashboards.
+
+---
+
 ## 🚀 Running Locally via Docker
 
 ### 1. Prerequisites

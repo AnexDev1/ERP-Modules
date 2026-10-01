@@ -28,8 +28,9 @@
                     <button name="action_payslip_verify" type="object" string="Verify" invisible="state != 'draft'"/>
                     <button name="action_payslip_done" type="object" string="Confirm" class="btn-primary" invisible="state not in ('draft', 'verify')"/>
                     <button name="action_payslip_draft" type="object" string="Set to Draft" invisible="state == 'draft'"/>
+                    <button name="action_payslip_paid" type="object" string="Mark as Paid" invisible="state != 'done'"/>
                     <button name="action_payslip_cancel" type="object" string="Cancel" invisible="state == 'cancel'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,verify,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verify,done,paid"/>
                 </header>
                 <sheet>
                     <group>
@@ -78,6 +79,7 @@
                 <field name="number"/>
                 <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
                 <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
             </search>
         </field>
     </record>
@@ -210,10 +212,17 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_payroll_root" name="Payroll" sequence="45"/>
+    <record id="action_hr_version_contracts" model="ir.actions.act_window">
+        <field name="name">Contracts</field>
+        <field name="res_model">hr.version</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_payroll_root" name="Payroll" sequence="45" web_icon="payroll,static/description/icon.png" groups="payroll.group_hr_payroll_user"/>
     <menuitem id="menu_hr_payslip" name="Employee Payslips" parent="menu_payroll_root" action="action_hr_payslip" sequence="1"/>
     <menuitem id="menu_hr_payslip_run" name="Payslip Batches" parent="menu_payroll_root" action="action_hr_payslip_run" sequence="2"/>
-    <menuitem id="menu_payroll_config" name="Configuration" parent="menu_payroll_root" sequence="100"/>
+    <menuitem id="menu_hr_version_contracts" name="Contracts" parent="menu_payroll_root" action="action_hr_version_contracts" sequence="3"/>
+    <menuitem id="menu_payroll_config" name="Configuration" parent="menu_payroll_root" sequence="100" groups="payroll.group_hr_payroll_manager"/>
     <menuitem id="menu_hr_payroll_structure" name="Salary Structures" parent="menu_payroll_config" action="action_hr_payroll_structure" sequence="1"/>
     <menuitem id="menu_hr_salary_rule" name="Salary Rules" parent="menu_payroll_config" action="action_hr_salary_rule" sequence="2"/>
 </odoo>

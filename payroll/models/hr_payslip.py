@@ -25,6 +25,7 @@ class HrPayslip(models.Model):
         ('draft', 'Draft'),
         ('verify', 'Waiting'),
         ('done', 'Done'),
+        ('paid', 'Paid'),
         ('cancel', 'Rejected'),
     ], default='draft', index=True, tracking=True)
     date_from = fields.Date(required=True, default=lambda self: date.today().replace(day=1))
@@ -175,6 +176,9 @@ class HrPayslip(models.Model):
                 slip.compute_sheet()
             slip.state = 'done'
             slip.paid = True
+
+    def action_payslip_paid(self):
+        self.write({'state': 'paid', 'paid': True})
 
     def action_payslip_cancel(self):
         self.write({'state': 'cancel', 'paid': False})
